@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.3.2",
     "axios": "^1.6.0",
     "date-fns": "^2.30.0",
+    "decap-cms": "^3.6.2",
     "firebase": "^10.5.2",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.344.0",
@@ -22,6 +23,7 @@
     "react-hook-form": "^7.47.0",
     "react-player": "^2.13.0",
     "react-router-dom": "^6.18.0",
+    "rm": "^0.1.8",
     "zod": "^3.22.4",
     "zustand": "^4.4.6"
   },
