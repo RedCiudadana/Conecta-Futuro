@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.3.2",
     "axios": "^1.6.0",
     "date-fns": "^2.30.0",
+    "decap-cms": "^3.6.2",
     "firebase": "^10.5.2",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.344.0",

@@ -1,0 +1,49 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "cursos"
+    label: "Cursos"
+    folder: "src/content/cursos"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Título del Curso", name: "title", widget: "string" }
+      - { label: "Descripción", name: "description", widget: "text" }
+      - label: "Sesiones"
+        name: "sesiones"
+        widget: "list"
+        label_singular: "Sesión"
+        fields:
+          - { label: "Nombre de la sesión", name: "nombre", widget: "string" }
+          - label: "Bienvenida / Video de Introducción"
+            name: "bienvenida"
+            widget: "object"
+            fields:
+              - { label: "Tipo", name: "tipo", widget: "hidden", default: "video" }
+              - { label: "URL del video", name: "contenido", widget: "string" }
+
+          - label: "Teoría / Texto"
+            name: "teoria"
+            widget: "object"
+            fields:
+              - { label: "Tipo", name: "tipo", widget: "hidden", default: "texto" }
+              - { label: "Contenido", name: "contenido", widget: "markdown" }
+
+          - label: "Video Zoom Sesión / Video de youtube"
+            name: "video_zoom"
+            widget: "object"
+            fields:
+              - { label: "Tipo", name: "tipo", widget: "hidden", default: "youtube" }
+              - { label: "URL del video", name: "contenido", widget: "string" }
+
+          - label: "Handout / PDF"
+            name: "handout"
+            widget: "object"
+            fields:
+              - { label: "Tipo", name: "tipo", widget: "hidden", default: "pdf" }
+              - { label: "Archivo PDF", name: "contenido", widget: "file", media_library: { allow_multiple: false }, required: false }
