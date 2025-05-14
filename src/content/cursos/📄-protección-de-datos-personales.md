@@ -23,4 +23,21 @@ sesiones:
       tipo: pdf
       contenido: /uploads/datos-personales-guatemala_sesión-1.pdf
     nombre: 📌 Módulo 1 – Introducción a la Protección de Datos Personales
+  - bienvenida:
+      tipo: video
+      contenido: https://youtu.be/j6wwBqfSk-o?feature=shared
+    teoria:
+      tipo: texto
+      contenido: |
+        📌 Módulo 2 – Principios y Derechos en Materia de Protección de Datos
+        Normativa internacional y nacional 🌐📘 (GDPR, Convenio 108)
+        Principios fundamentales: licitud, proporcionalidad, minimización ⚖️
+        Consentimiento y deberes institucionales 🤝🏽
+    video_zoom:
+      tipo: youtube
+      contenido: https://youtu.be/8N1l0MbM1OY?feature=shared
+    handout:
+      tipo: pdf
+      contenido: /uploads/protección-de-datos-guatemala-sesión-2.pdf
+    nombre: 📌 Módulo 2 – Principios y Derechos en Materia de Protección de Datos
 ---
