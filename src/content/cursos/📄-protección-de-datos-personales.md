@@ -14,8 +14,9 @@ sesiones:
       contenido: sssss
     video_zoom:
       tipo: youtube
-      contenido: https://youtu.be/sm7H8ECaQuU?feature=shared
+      contenido: https://youtu.be/UMv-9nqhFqY?feature=shared
     handout:
       tipo: pdf
+      contenido: /uploads/datos-personales-guatemala_sesión-1.pdf
     nombre: 📌 Módulo 1 – Introducción a la Protección de Datos Personales
 ---
