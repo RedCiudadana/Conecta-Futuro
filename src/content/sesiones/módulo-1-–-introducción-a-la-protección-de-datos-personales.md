@@ -1,5 +1,6 @@
 ---
 titulo: 📌 Módulo 1 – Introducción a la Protección de Datos Personales
+title: Módulo 1 – Introducción a la Protección de Datos Personales
 curso: Protección de Datos Personales
 bienvenida: https://youtu.be/sm7H8ECaQuU?feature=shared
 teoria: |-
