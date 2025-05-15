@@ -1,5 +1,5 @@
 ---
-title: 📄 Protección de Datos Personales
+title: Protección de Datos Personales
 description: Fortalecer las capacidades de los funcionarios públicos en el
   conocimiento, aplicación y promoción de buenas prácticas para la protección de
   los datos personales en el ejercicio de sus funciones, con base en estándares
