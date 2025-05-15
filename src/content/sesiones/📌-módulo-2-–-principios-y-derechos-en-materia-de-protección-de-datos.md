@@ -1,5 +1,5 @@
 ---
-title: 📌 Módulo 2 – Principios y Derechos en Materia de Protección de Datos
+title: Módulo 2 – Principios y Derechos en Materia de Protección de Datos
 curso: Protección de Datos Personales
 bienvenida: https://www.youtube.com/embed/I-VuonciKWk?si=yW2RZxKdnlEQGB3h
 teoria: |-
