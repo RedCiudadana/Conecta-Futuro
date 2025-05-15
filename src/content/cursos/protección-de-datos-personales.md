@@ -1,5 +1,6 @@
 ---
 titulo: Protección de Datos Personales
+title: Protección de Datos Personales
 descripcion: >+
   Curso completo sobre la protección de datos personales en el sector público,
   normativas internacionales y mejores prácticas.
@@ -8,5 +9,5 @@ nivel: Básico
 duracion: "4"
 enlace_contenido: https://redciudadana.org/
 enlace_registro: https://redciudadana.org/
-instructor: Edgar Cabrera
+instructor: Édgar Cabrera
 ---
