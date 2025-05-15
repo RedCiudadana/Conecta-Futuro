@@ -51,6 +51,7 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
+      - { label: "Nombre de la Sesión", name: "titulo", widget: "string" }
       - label: "Curso"
         name: "curso"
         widget: "relation"
@@ -58,7 +59,6 @@ collections:
         search_fields: ["titulo"]
         value_field: "titulo"
         display_fields: ["titulo"]
-      - { label: "Nombre de la Sesión", name: "nombre_sesion", widget: "string" }
       - { label: "Bienvenida / Video de Introducción", name: "bienvenida", widget: "string" }
       - { label: "Teoría / Texto", name: "teoria", widget: "markdown" }
       - { label: "Video Zoom Sesión / Video de YouTube", name: "video_zoom", widget: "string" }
