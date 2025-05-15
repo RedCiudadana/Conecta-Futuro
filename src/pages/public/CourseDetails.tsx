@@ -241,27 +241,6 @@ const CourseDetails: React.FC = () => {
                 <h3 className="text-xl font-semibold mb-4">
                   {session.title}
                 </h3>
-
-                <div className="flex flex-wrap gap-4">
-                  {(Object.keys(session) as (keyof SessionFM)[]).map(key => {
-                    const value = session[key];
-                    if (!value || ['title', 'curso'].includes(key as string)) {
-                      return null;
-                    }
-                    return (
-                      <a
-                        key={key}
-                        href={value as string}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center space-x-2 text-primary-600 hover:underline"
-                      >
-                        {getResourceIcon(key)}
-                        <span>{key.replace('_', ' ')}</span>
-                      </a>
-                    );
-                  })}
-                </div>
               </div>
             ))}
           </div>

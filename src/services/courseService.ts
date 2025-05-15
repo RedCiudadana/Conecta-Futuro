@@ -7,8 +7,14 @@ import type {
 
 function slugFromPath(path: string): string {
   const file = path.split('/').pop() || '';
-  return file.replace(/\.(md|json|ya?ml)$/, '');
+  const base = file.replace(/\.(md|json|ya?ml)$/, '');
+  return base
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9-]/g, '');
 }
+
 
 class DecapContentService {
   /* --- globs: ahora tipamos "attributes" --- */
