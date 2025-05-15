@@ -28,8 +28,8 @@ function App() {
           <Route path="course-sessions" element={<CourseSessions />} />
           <Route path="learning-paths" element={<LearningPaths />} />
           <Route path="mobile-api" element={<MobileApi />} />
-          <Route path="course/:courseId" element={<CourseDetails />} />
-          <Route path="course/:courseId/session" element={<CourseSession />} />
+          <Route path="course/:slug" element={<CourseDetails />} />
+          <Route path="course/:slug/session" element={<CourseSession />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="contact" element={<Contact />} />
           <Route path="documentation" element={<Documentation />} />

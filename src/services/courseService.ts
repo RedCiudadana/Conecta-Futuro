@@ -1,54 +1,75 @@
-import type { CourseFM, InstructorFM, SessionFM } from '../types/course';
+import type {
+  InstructorFM,
+  CourseFM,
+  SessionFM,
+  WithSlug,
+} from '../types/course';
+
+function slugFromPath(path: string): string {
+  const file = path.split('/').pop() || '';
+  return file.replace(/\.(md|json|ya?ml)$/, '');
+}
 
 class DecapContentService {
-  private instructors = import.meta.glob<
-    { metadata: InstructorFM }
+  /* --- globs: ahora tipamos "attributes" --- */
+  private instructorsFiles = import.meta.glob<
+    { attributes: InstructorFM }
   >('/src/content/instructores/*.md', { eager: true });
 
-  private courses = import.meta.glob<
-    { metadata: CourseFM; default: string }
+  private coursesFiles = import.meta.glob<
+    { attributes: CourseFM }
   >('/src/content/cursos/*.md', { eager: true });
 
-  private sessions = import.meta.glob<
-    { metadata: SessionFM }
+  private sessionsFiles = import.meta.glob<
+    { attributes: SessionFM }
   >('/src/content/sesiones/*.md', { eager: true });
 
-  // 🚀 Se cachean los resultados la primera vez
-  private _instructorList?: InstructorFM[];
-  private _courseList?: CourseFM[];
-  private _sessionList?: SessionFM[];
+  /* --- caché --- */
+  private _instructors?: WithSlug<InstructorFM>[];
+  private _courses?: WithSlug<CourseFM>[];
+  private _sessions?: WithSlug<SessionFM>[];
 
-  /* ----------- LECTURA DE DATOS ----------- */
-  async getInstructors(): Promise<InstructorFM[]> {
-    if (!this._instructorList) {
-      this._instructorList = Object.values(this.instructors).map(
-        m => m.metadata
+  /* --- lectores --- */
+  async getInstructors() {
+    if (!this._instructors) {
+      this._instructors = Object.entries(this.instructorsFiles).map(
+        ([path, mod]) => ({
+          ...((mod as any).attributes ?? (mod as any).metadata),
+          slug: slugFromPath(path),
+        }),
       );
     }
-    return this._instructorList;
+    return this._instructors;
   }
 
-  async getCourses(): Promise<CourseFM[]> {
-    if (!this._courseList) {
-      this._courseList = Object.values(this.courses).map(m => m.metadata);
+  async getCourses() {
+    if (!this._courses) {
+      this._courses = Object.entries(this.coursesFiles).map(([path, mod]) => ({
+        ...((mod as any).attributes ?? (mod as any).metadata),
+        slug: slugFromPath(path),
+      }));
     }
-    return this._courseList;
+    return this._courses;
   }
 
-  async getSessions(): Promise<SessionFM[]> {
-    if (!this._sessionList) {
-      this._sessionList = Object.values(this.sessions).map(m => m.metadata);
+  async getSessions() {
+    if (!this._sessions) {
+      this._sessions = Object.entries(this.sessionsFiles).map(
+        ([path, mod]) => ({
+          ...((mod as any).attributes ?? (mod as any).metadata),
+          slug: slugFromPath(path),
+        }),
+      );
     }
-    return this._sessionList;
+    return this._sessions;
   }
 
-  /* ----------- HELPERS ----------- */
-  /** Devuelve un curso con sus sesiones e instructor */
+  /* --- curso + instructor + sesiones --- */
   async getCourseBySlug(slug: string) {
-    const [courses, sessions, instructors] = await Promise.all([
+    const [courses, instructors, sessions] = await Promise.all([
       this.getCourses(),
+      this.getInstructors(),
       this.getSessions(),
-      this.getInstructors()
     ]);
 
     const course = courses.find(c => c.slug === slug);
@@ -56,8 +77,8 @@ class DecapContentService {
 
     return {
       ...course,
-      instructor: instructors.find(i => i.slug === course.instructor) || null,
-      sesiones: sessions.filter(s => s.curso === slug)
+      instructor: instructors.find(i => i.title === course.instructor) ?? null,
+      sesiones: sessions.filter(s => s.curso === course.title),
     };
   }
 }

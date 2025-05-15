@@ -1,5 +1,4 @@
 ---
-titulo: Protección de Datos Personales
 title: Protección de Datos Personales
 descripcion: >+
   Curso completo sobre la protección de datos personales en el sector público,

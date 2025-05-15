@@ -1,60 +1,127 @@
 import React from 'react';
-import { Clock, BookOpen, Award } from 'lucide-react';
-import { Course } from '../../types/course';
+import { Clock, BookOpen } from 'lucide-react';
 
-interface CourseCardProps {
-  course: Course;
+import type { CourseFM, WithSlug } from '@/types/course';
+import type { InstructorFM } from '@/types/instructor'; // si lo necesitas
+
+/* -------------------------------------------------------- */
+/*  Tipo flexible: admite propiedades adicionales opcionales */
+/* -------------------------------------------------------- */
+export type CourseCardData = WithSlug<CourseFM> & {
+  /** thumb opcional que podrías añadir en el front-matter */
+  thumbnail?: string;
+  /** categoría opcional en front-matter */
+  category?: string;
+  /** si ya resolviste las sesiones/módulos */
+  sesiones?: unknown[];
+  modules?: unknown[];      // compat. con el modelo anterior
+  /** instructor resuelto (no solo el string) */
+  instructorObj?: InstructorFM;
+};
+
+interface Props {
+  course: CourseCardData;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+const CourseCard: React.FC<Props> = ({ course }) => {
+  /* ---- Normalizar todos los campos que podrían venir vacíos ---- */
+  const {
+    title = 'Curso sin título',
+    nivel: level = 'Sin nivel',
+    duracion: duration = '',
+    thumbnail = '/placeholder.png', // ruta a una imagen por defecto
+    category = (course as any).category ?? '',
+  } = course;
+
+  const rawDesc =
+  (course as any).descripcion ??
+  (course as any).description ??
+  '';
+  const description = String(rawDesc).trim();
+
+
+  // Número de módulos o sesiones
+  const moduleCount =
+    (course.modules?.length ?? course.sesiones?.length ?? 0);
+
+  // Instructor (puede que solo tengas el string con el nombre)
+  const instructor =
+    course.instructorObj ??
+    { title: course.instructor ?? '', foto: '', especializacion: '' };
+
+  /* ------------------------ UI ------------------------ */
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full">
-      <img 
-        src={course.thumbnail} 
-        alt={course.title}
+      <img
+        src="https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg" //{thumbnail}
+        alt={title}
         className="w-full h-48 object-cover rounded-t-lg"
       />
+
       <div className="p-6">
+        {/* Etiquetas de nivel y categoría */}
         <div className="flex items-center space-x-2 mb-2">
-          <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded">
-            {course.level}
-          </span>
-          <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
-            {course.category}
-          </span>
+          {level && (
+            <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded">
+              {level}
+            </span>
+          )}
+          {category && (
+            <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+              {category}
+            </span>
+          )}
         </div>
-        
+
         <h3 className="text-xl font-semibold text-gray-900 mb-2">
-          {course.title}
+          {title}
         </h3>
-        
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {course.description}
-        </p>
-        
+
+        {description && (
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+            {description}
+          </p>
+        )}
+
+        {/* Duración y total de módulos (solo si hay datos) */}
         <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-          <div className="flex items-center">
-            <Clock className="w-4 h-4 mr-1" />
-            {course.duration}
-          </div>
-          <div className="flex items-center">
-            <BookOpen className="w-4 h-4 mr-1" />
-            {course.modules.length} módulos
-          </div>
+          {duration && (
+            <div className="flex items-center">
+              <Clock className="w-4 h-4 mr-1" />
+              {duration}
+            </div>
+          )}
+          {moduleCount > 0 && (
+            <div className="flex items-center">
+              <BookOpen className="w-4 h-4 mr-1" />
+              {moduleCount} módulos
+            </div>
+          )}
         </div>
-        
-        <div className="flex items-center space-x-3 mb-4">
-          <img
-            src={course.instructor.photoUrl}
-            alt={course.instructor.name}
-            className="w-8 h-8 rounded-full object-cover"
-          />
-          <div>
-            <p className="text-sm font-medium text-gray-900">{course.instructor.name}</p>
-            <p className="text-xs text-gray-500">{course.instructor.title}</p>
+
+        {/* Instructor (solo si tenemos algo más que el string) */}
+        {instructor.title && (
+          <div className="flex items-center space-x-3 mb-4">
+            {instructor.foto && (
+              <img
+                src={instructor.foto}
+                alt={instructor.title}
+                className="w-8 h-8 rounded-full object-cover"
+              />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">
+                {instructor.title}
+              </p>
+              {instructor.especializacion && (
+                <p className="text-xs text-gray-500">
+                  {instructor.especializacion}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-        
+        )}
+
         <button className="w-full text-center bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition-colors duration-200">
           Ver Curso
         </button>

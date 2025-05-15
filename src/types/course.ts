@@ -70,32 +70,34 @@ export interface Instructor {
   photoUrl: string;
 }
 
-// src/types/decap.ts
 export interface InstructorFM {
-  nombre: string;
+  title: string;
   especializacion: string;
   descripcion: string;
   foto?: string;
-  slug: string;
 }
 
+export type Nivel = 'Básico' | 'Intermedio' | 'Avanzado';
+
 export interface CourseFM {
-  titulo: string;
+  title: string;
+  thumbnail?: string;
   descripcion: string;
-  nivel: 'Básico' | 'Intermedio' | 'Avanzado';
+  nivel: Nivel;
   duracion: string;
   enlace_contenido: string;
   enlace_registro: string;
   instructor: string;
-  slug: string;
 }
 
 export interface SessionFM {
+  title: string;
   curso: string;
-  nombre_sesion: string;
-  bienvenida?: string;
   teoria?: string;
+  bienvenida?: string;
   video_zoom?: string;
   handout?: string;
-  slug: string;
 }
+
+/* --------- Helpers para el runtime --------- */
+export type WithSlug<T extends object> = T & { slug: string };

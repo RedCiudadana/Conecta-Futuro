@@ -1,5 +1,4 @@
 ---
-nombre: Edgar Cabrera
 title: Édgar Cabrera
 especializacion: Especialista en Excel y PowerBI
 descripcion: Es un profesor con mucha experiencia, trabaja en KINAL
