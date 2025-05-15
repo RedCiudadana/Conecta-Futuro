@@ -16,44 +16,50 @@ media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
+  - name: "instructores"
+    label: "Instructores"
+    folder: "src/content/instructores"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Nombre", name: "nombre", widget: "string" }
+      - { label: "Especialización", name: "especializacion", widget: "string" }
+      - { label: "Descripción General", name: "descripcion", widget: "text" }
+      - { label: "Foto", name: "foto", widget: "image", required: false }
   - name: "cursos"
     label: "Cursos"
     folder: "src/content/cursos"
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Título del Curso", name: "title", widget: "string" }
-      - { label: "Descripción", name: "description", widget: "text" }
-      - label: "Sesiones"
-        name: "sesiones"
-        widget: "list"
-        label_singular: "Sesión"
-        fields:
-          - { label: "Nombre de la sesión", name: "nombre", widget: "string" }
-          - label: "Bienvenida / Video de Introducción"
-            name: "bienvenida"
-            widget: "object"
-            fields:
-              - { label: "Tipo", name: "tipo", widget: "hidden", default: "video" }
-              - { label: "URL del video", name: "contenido", widget: "string" }
-
-          - label: "Teoría / Texto"
-            name: "teoria"
-            widget: "object"
-            fields:
-              - { label: "Tipo", name: "tipo", widget: "hidden", default: "texto" }
-              - { label: "Contenido", name: "contenido", widget: "markdown" }
-
-          - label: "Video Zoom Sesión / Video de youtube"
-            name: "video_zoom"
-            widget: "object"
-            fields:
-              - { label: "Tipo", name: "tipo", widget: "hidden", default: "youtube" }
-              - { label: "URL del video", name: "contenido", widget: "string" }
-
-          - label: "Handout / PDF"
-            name: "handout"
-            widget: "object"
-            fields:
-              - { label: "Tipo", name: "tipo", widget: "hidden", default: "pdf" }
-              - { label: "Archivo PDF", name: "contenido", widget: "file", media_library: { allow_multiple: false }, required: false }
+      - { label: "Título del Curso", name: "titulo", widget: "string" }
+      - { label: "Descripción", name: "descripcion", widget: "text" }
+      - { label: "Nivel", name: "nivel", widget: "select", options: ["Básico", "Intermedio", "Avanzado"] }
+      - { label: "Duración", name: "duracion", widget: "string" }
+      - { label: "Enlace de Contenido", name: "enlace_contenido", widget: "string" }
+      - { label: "Enlace de Registro", name: "enlace_registro", widget: "string" }
+      - label: "Instructor"
+        name: "instructor"
+        widget: "relation"
+        collection: "instructores"
+        search_fields: ["nombre"]
+        value_field: "nombre"
+        display_fields: ["nombre"]
+  - name: "sesiones"
+    label: "Sesiones"
+    folder: "src/content/sesiones"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - label: "Curso"
+        name: "curso"
+        widget: "relation"
+        collection: "cursos"
+        search_fields: ["titulo"]
+        value_field: "titulo"
+        display_fields: ["titulo"]
+      - { label: "Nombre de la Sesión", name: "nombre_sesion", widget: "string" }
+      - { label: "Bienvenida / Video de Introducción", name: "bienvenida", widget: "string" }
+      - { label: "Teoría / Texto", name: "teoria", widget: "markdown" }
+      - { label: "Video Zoom Sesión / Video de YouTube", name: "video_zoom", widget: "string" }
+      - { label: "Handout / PDF", name: "handout", widget: "file", media_library: { allow_multiple: false }, required: false }
