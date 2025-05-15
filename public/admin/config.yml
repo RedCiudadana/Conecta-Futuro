@@ -22,7 +22,7 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Nombre", name: "nombre", widget: "string" }
+      - { label: "Nombre", name: "title", widget: "string" }
       - { label: "Especialización", name: "especializacion", widget: "string" }
       - { label: "Descripción General", name: "descripcion", widget: "text" }
       - { label: "Foto", name: "foto", widget: "image", required: false }
@@ -32,7 +32,7 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Título del Curso", name: "titulo", widget: "string" }
+      - { label: "Título del Curso", name: "title", widget: "string" }
       - { label: "Descripción", name: "descripcion", widget: "text" }
       - { label: "Nivel", name: "nivel", widget: "select", options: ["Básico", "Intermedio", "Avanzado"] }
       - { label: "Duración", name: "duracion", widget: "string" }
@@ -42,23 +42,23 @@ collections:
         name: "instructor"
         widget: "relation"
         collection: "instructores"
-        search_fields: ["nombre"]
-        value_field: "nombre"
-        display_fields: ["nombre"]
+        search_fields: ["title"]
+        value_field: "title"
+        display_fields: ["title"]
   - name: "sesiones"
     label: "Sesiones"
     folder: "src/content/sesiones"
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Nombre de la Sesión", name: "titulo", widget: "string" }
+      - { label: "Nombre de la Sesión", name: "title", widget: "string" }
       - label: "Curso"
         name: "curso"
         widget: "relation"
         collection: "cursos"
-        search_fields: ["titulo"]
-        value_field: "titulo"
-        display_fields: ["titulo"]
+        search_fields: ["title"]
+        value_field: "title"
+        display_fields: ["title"]
       - { label: "Bienvenida / Video de Introducción", name: "bienvenida", widget: "string" }
       - { label: "Teoría / Texto", name: "teoria", widget: "markdown" }
       - { label: "Video Zoom Sesión / Video de YouTube", name: "video_zoom", widget: "string" }

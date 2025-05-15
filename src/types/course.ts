@@ -69,3 +69,33 @@ export interface Instructor {
   bio: string;
   photoUrl: string;
 }
+
+// src/types/decap.ts
+export interface InstructorFM {
+  nombre: string;
+  especializacion: string;
+  descripcion: string;
+  foto?: string;
+  slug: string;
+}
+
+export interface CourseFM {
+  titulo: string;
+  descripcion: string;
+  nivel: 'Básico' | 'Intermedio' | 'Avanzado';
+  duracion: string;
+  enlace_contenido: string;
+  enlace_registro: string;
+  instructor: string;
+  slug: string;
+}
+
+export interface SessionFM {
+  curso: string;
+  nombre_sesion: string;
+  bienvenida?: string;
+  teoria?: string;
+  video_zoom?: string;
+  handout?: string;
+  slug: string;
+}
