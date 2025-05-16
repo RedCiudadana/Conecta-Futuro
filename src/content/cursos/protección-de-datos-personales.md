@@ -5,7 +5,7 @@ descripcion: >+
   normativas internacionales y mejores prácticas.
 
 nivel: Básico
-duracion: "4"
+duracion: 12 horas
 enlace_contenido: https://redciudadana.org/
 enlace_registro: https://redciudadana.org/
 instructor: Édgar Cabrera
