@@ -59,7 +59,8 @@ collections:
         search_fields: ["title"]
         value_field: "title"
         display_fields: ["title"]
-      - { label: "Bienvenida / Video de Introducción", name: "bienvenida", widget: "string" }
-      - { label: "Teoría / Texto", name: "teoria", widget: "markdown" }
-      - { label: "Video Zoom Sesión / Video de YouTube", name: "video_zoom", widget: "string" }
+      - { label: "Bienvenida / Video de Introducción", name: "bienvenida", widget: "string", required: false }
+      - { label: "Teoría / Texto", name: "teoria", widget: "markdown", required: false }
+      - { label: "Video Zoom Sesión / Video de YouTube", name: "video_zoom", widget: "string", required: false }
       - { label: "Handout / PDF", name: "handout", widget: "file", media_library: { allow_multiple: false }, required: false }
+      - { label: "Órden de la sesión en el curso", name: "numero", widget: "number" }

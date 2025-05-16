@@ -97,6 +97,7 @@ export interface SessionFM {
   bienvenida?: string;
   video_zoom?: string;
   handout?: string;
+  numero: number;
 }
 
 /* --------- Helpers para el runtime --------- */

@@ -77,16 +77,18 @@ class DecapContentService {
       this.getInstructors(),
       this.getSessions(),
     ]);
-
+  
     const course = courses.find(c => c.slug === slug);
     if (!course) return null;
-
+  
     return {
       ...course,
       instructor: instructors.find(i => i.title === course.instructor) ?? null,
-      sesiones: sessions.filter(s => s.curso === course.title),
+      sesiones: sessions
+        .filter(s => s.curso === course.title)
+        .sort((a, b) => a.numero - b.numero),
     };
-  }
+  }  
 }
 
 export const decapContentService = new DecapContentService();

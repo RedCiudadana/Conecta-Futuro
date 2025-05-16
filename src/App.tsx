@@ -23,6 +23,7 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<PublicLayout />}>
+          {/* Nested routes */}
           <Route index element={<LandingPage />} />
           <Route path="courses" element={<CourseCatalog />} />
           <Route path="course-sessions" element={<CourseSessions />} />

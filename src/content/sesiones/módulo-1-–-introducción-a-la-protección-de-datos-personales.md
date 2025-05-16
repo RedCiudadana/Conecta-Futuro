@@ -9,4 +9,5 @@ teoria: |-
   Derechos ARCO: Acceso, Rectificación, Cancelación y Oposición ✅
 video_zoom: https://www.youtube.com/embed/UMv-9nqhFqY?si=3dJn6lOeVjkmJS6D
 handout: /uploads/datos-personales-guatemala_sesión-1.pdf
+numero: 1
 ---

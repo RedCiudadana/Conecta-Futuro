@@ -33,8 +33,7 @@ export default function CourseSession() {
       .getCourseBySlug(slug)
       .then(c => {
         if (!c) return navigate('/courses');
-        c.sesiones.sort((a, b) => a.slug.localeCompare(b.slug));
-        setCourse(c as FullCourse);
+        setCourse(c as unknown as FullCourse);
         setCurrentSection(firstSection(c.sesiones[0]));
       })
       .finally(() => setLoading(false));
@@ -185,6 +184,13 @@ export default function CourseSession() {
           {/* -------- Contenido principal -------- */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-sm p-6">
+              <button
+                onClick={() => navigate(`/course/${slug}`)}
+                className="inline-flex items-center text-sm text-primary-600 hover:text-primary-700 mb-4"
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Volver al curso
+              </button>
               <h1 className="text-2xl font-bold mb-6">{session.title}</h1>
 
               {/* subsección activa */}

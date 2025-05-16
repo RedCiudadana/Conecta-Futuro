@@ -79,7 +79,6 @@ const Navbar: React.FC = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center">
               <Logo className="h-10 w-auto" />
-              <span className="ml-2 text-xl font-bold text-primary-700">Conecta Futuro</span>
             </Link>
             
             {/* Desktop Navigation */}
