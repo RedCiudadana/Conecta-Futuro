@@ -1,7 +1,7 @@
 ---
 title: Cierre del curso
 curso: Protección de Datos Personales
-bienvenida: https://www.youtube.com/embed/sm7H8ECaQuU?si=PrCgt88XE0T6qW_-
+bienvenida: ""
 teoria: >+
   Fortalecer las capacidades de los funcionarios públicos en el conocimiento,
   aplicación y promoción de buenas prácticas para la protección de los datos
