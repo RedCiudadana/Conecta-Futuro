@@ -26,6 +26,14 @@ collections:
       - { label: "Especialización", name: "especializacion", widget: "string" }
       - { label: "Descripción General", name: "descripcion", widget: "text" }
       - { label: "Foto", name: "foto", widget: "image", required: false }
+  - name: "categorias"
+    label: "Categorías"
+    folder: "src/content/categorias"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Nombre", name: "title", widget: "string" }
+      - { label: "Descripción General", name: "descripcion", widget: "text" }
   - name: "cursos"
     label: "Cursos"
     folder: "src/content/cursos"
@@ -33,8 +41,16 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "Título del Curso", name: "title", widget: "string" }
+      - { label: "Thumbnail del Curso", name: "image", widget: "image" }
       - { label: "Descripción", name: "descripcion", widget: "text" }
       - { label: "Nivel", name: "nivel", widget: "select", options: ["Básico", "Intermedio", "Avanzado"] }
+      - label: "Categorías"
+        name: "categoria"
+        widget: "relation"
+        collection: "categorias"
+        search_fields: ["title"]
+        value_field: "title"
+        display_fields: ["title"]
       - { label: "Duración", name: "duracion", widget: "string" }
       - { label: "Enlace de Contenido", name: "enlace_contenido", widget: "string" }
       - { label: "Enlace de Registro", name: "enlace_registro", widget: "string" }
@@ -64,3 +80,20 @@ collections:
       - { label: "Video Zoom Sesión / Video de YouTube", name: "video_zoom", widget: "string", required: false }
       - { label: "Handout / PDF", name: "handout", widget: "file", media_library: { allow_multiple: false }, required: false }
       - { label: "Órden de la sesión en el curso", name: "numero", widget: "number" }
+  - name: "comunidad"
+    label: "Comnunidad"
+    folder: "src/content/comunidad"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Nombre", name: "title", widget: "string" }
+      - { label: "Thumbnail", name: "image", widget: "image" }
+      - { label: "Descripción General", name: "descripcion", widget: "text" }
+      - { name: "date", label: "Date", widget: "datetime" }
+      - { name: "body", label: "Body", widget: "markdown" }
+      - {
+          name: "highlight",
+          label: "Highlight",
+          widget: "boolean",
+          default: false,
+        }

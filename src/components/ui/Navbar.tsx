@@ -92,11 +92,14 @@ const Navbar: React.FC = () => {
               <Link to="/learning-paths" className="text-gray-700 hover:text-primary-600 font-medium">
                 Rutas de Aprendizaje
               </Link>
-              <Link to="/course-sessions" className="text-gray-700 hover:text-primary-600 font-medium">
+              {/* <Link to="/course-sessions" className="text-gray-700 hover:text-primary-600 font-medium">
                 Contenido
-              </Link>
+              </Link> */}
               <Link to="/community" className="text-gray-700 hover:text-primary-600 font-medium">
                 Comunidad
+              </Link>
+              <Link to="/contact" className="text-gray-700 hover:text-primary-600 font-medium">
+                Contacto
               </Link>
             </div>
             
@@ -123,11 +126,14 @@ const Navbar: React.FC = () => {
               <Link to="/learning-paths" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Rutas de Aprendizaje
               </Link>
-              <Link to="/course-sessions" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+              {/* <Link to="/course-sessions" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Contenido
-              </Link>
+              </Link> */}
               <Link to="/community" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Comunidad
+              </Link>
+              <Link to="/contact" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+                Contacto
               </Link>
               
               {/* Mobile Social Links */}

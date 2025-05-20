@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-black{
+  background-color: #232931;
+  transition: 0.5s all ease;
+}
+
+.bg-black:hover{
+  background-color: #000;
+}

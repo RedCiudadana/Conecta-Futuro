@@ -1,33 +1,64 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Users, Award, ArrowRight, CheckCircle, HelpCircle, Star } from 'lucide-react';
+import Fondo from '../../assets/slider/fondo.png';
+import Slider from '../../assets/slider/slider.png';
+import Icono1 from '../../assets/iconos/EC-23.png';
+import Icono2 from '../../assets/iconos/EC-24.png';
+import Icono3 from '../../assets/iconos/EC-25.png';
+import Icono4 from '../../assets/iconos/EC-26.png';
+import Icono5 from '../../assets/iconos/EC-27.png';
+import Icono6 from '../../assets/iconos/EC-28.png';
+import Icono7 from '../../assets/iconos/EC-29.png';
+import Icono8 from '../../assets/iconos/EC-30.png';
+import Icono9 from '../../assets/iconos/EC-31.png';
+import Icono10 from '../../assets/iconos/EC-32.png';
+import Icono11 from '../../assets/iconos/EC-33.png';
 
 const LandingPage: React.FC = () => {
   const features = [
     {
-      icon: BookOpen,
+      icon: Icono1,
       title: 'Cursos Especializados',
       description: 'Contenido diseñado específicamente para el sector público.'
     },
     {
-      icon: Users,
+      icon: Icono2,
       title: 'Instructores Expertos',
       description: 'Aprende de profesionales con amplia experiencia en gobierno.'
     },
     {
-      icon: Award,
+      icon: Icono3,
       title: 'Certificaciones',
       description: 'Obtén certificados avalados por Red Ciudadana.'
     }
   ];
 
   const highlights = [
-    'Innovación Pública',
-    'Transformación Digital',
-    'Inteligencia Artificial',
-    'Datos Abiertos',
-    'Gobierno Digital',
-    'Participación Ciudadana'
+    {
+      icon: Icono4,
+      title: 'Innovación Pública'
+    },
+    {
+      icon: Icono5,
+      title: 'Transformación Digital'
+    },
+    {
+      icon: Icono6,
+      title: 'Inteligencia Artificial'
+    },
+    {
+      icon: Icono7,
+      title: 'Datos Abiertos'
+    },
+    {
+      icon: Icono8,
+      title: 'Gobierno Digital'
+    },
+    {
+      icon: Icono9,
+      title: 'Participación Ciudadana'
+    }
   ];
 
   const testimonials = [
@@ -84,32 +115,50 @@ const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 text-white">
-        <div className="container mx-auto px-4 py-20 sm:py-28">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 font-heading">
-              Escuela de Innovación Pública
-            </h1>
-            <p className="text-xl sm:text-2xl mb-8 text-primary-100 max-w-2xl mx-auto">
-              Fortaleciendo las capacidades del sector público en América Latina
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link
-                to="/courses"
-                className="px-8 py-4 rounded-lg bg-white text-primary-800 font-semibold hover:bg-primary-50 transition-colors text-lg"
-              >
-                Ver Cursos
-              </Link>
-              <Link
-                to="/register"
-                className="px-8 py-4 rounded-lg bg-primary-700 text-white font-semibold hover:bg-primary-600 transition-colors text-lg border border-primary-600"
-              >
-                Registrarse
-              </Link>
+      <div
+        className="relative bg-cover bg-center text-white"
+        style={{ backgroundImage: `url(${Fondo})` }}
+      >
+
+        <div className="relative z-10 container mx-auto px-6 py-20 sm:py-28">
+          <div className="flex flex-col md:flex-row items-center">
+            
+            {/* Columna izquierda - Texto */}
+            <div className="md:w-1/2 text-left space-y-6">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading">
+                Escuela de Innovación Pública
+              </h1>
+              <p className="text-xl sm:text-2xl text-primary-100 max-w-md">
+                Fortaleciendo las capacidades del sector público en América Latina
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/courses"
+                  className="px-8 py-4 rounded-lg bg-black  text-white text-primary-800 font-semibold transition-colors text-lg"
+                >
+                  Ver Cursos
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-8 py-4 rounded-lg bg-black text-white font-semibold transition-colors text-lg border border-primary-600"
+                >
+                  Registrarse
+                </Link>
+              </div>
+            </div>
+
+            {/* Columna derecha - Imagen */}
+            <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center">
+              <img
+                src={Slider}
+                alt="Innovación"
+                className="max-w-xs md:max-w-md rounded-lg"
+              />
             </div>
           </div>
         </div>
       </div>
+
 
       {/* Features Section */}
       <div className="py-20 bg-white">
@@ -129,8 +178,8 @@ const LandingPage: React.FC = () => {
                 key={index}
                 className="p-8 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
               >
-                <div className="w-14 h-14 bg-primary-100 rounded-lg flex items-center justify-center mb-6">
-                  <feature.icon className="h-8 w-8 text-primary-600" />
+                <div className="w-20 h-20 rounded-lg flex items-center justify-center mb-6">
+                  <img src={feature.icon} alt={feature.title} />
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-heading">
                   {feature.title}
@@ -154,6 +203,7 @@ const LandingPage: React.FC = () => {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Explora nuestras áreas temáticas diseñadas para el sector público
             </p>
+            <img src={Icono11} className="w-100 h-auto mx-auto mt-4" alt="linea" />
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -162,8 +212,10 @@ const LandingPage: React.FC = () => {
                 key={index}
                 className="flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100"
               >
-                <CheckCircle className="h-6 w-6 text-primary-600 mr-3 flex-shrink-0" />
-                <span className="text-lg text-gray-800">{topic}</span>
+                <div className="w-14 h-14 mr-4 rounded-lg flex items-center justify-center">
+                  <img src={topic.icon} alt={topic.title}/>
+                </div>
+                <span className="text-lg text-gray-800">{topic.title}</span>
               </div>
             ))}
           </div>
@@ -171,7 +223,7 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* Testimonials Section */}
-      <div className="py-20 bg-white">
+      {/* <div className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 font-heading">
@@ -213,7 +265,7 @@ const LandingPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* FAQ Section */}
       <div className="py-20 bg-gray-50">
@@ -225,13 +277,14 @@ const LandingPage: React.FC = () => {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Resolvemos tus dudas sobre nuestra plataforma educativa
             </p>
+            <img src={Icono11} className="w-100 h-auto mx-auto mt-4" alt="linea" />
           </div>
 
           <div className="max-w-4xl mx-auto grid gap-6">
             {faqs.map((faq, index) => (
               <div key={index} className="bg-white rounded-lg shadow-sm p-6">
                 <div className="flex items-start">
-                  <HelpCircle className="w-6 h-6 text-primary-600 mt-1 flex-shrink-0" />
+                  <img src={Icono10} className="w-6 h-6 text-primary-600 mt-1 flex-shrink-0" />
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       {faq.question}
@@ -248,7 +301,7 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-primary-900 text-white py-20">
+      <div className=" text-white py-20" style={{ backgroundImage: `url(${Fondo})` }}>
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-heading">
             Comienza tu viaje de aprendizaje hoy
