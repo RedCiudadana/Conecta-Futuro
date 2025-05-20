@@ -1,5 +1,5 @@
 ---
-title: Iniciamos el Laboratorio Municipal de Innovación y Desarrollo Económico Local
+title: Planificación estratégica para el desarrollo económico local
 image: /uploads/cover-red-ciudadana.png
 descripcion: La primera sesión abordamos el tema de la planificación estratégica
   como herramienta fundamental para el desarrollo económico local.
