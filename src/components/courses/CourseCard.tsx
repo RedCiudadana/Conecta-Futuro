@@ -1,8 +1,8 @@
 import React from 'react';
 import { Clock, BookOpen } from 'lucide-react';
 
-import type { CourseFM, WithSlug } from '@/types/course';
-import type { InstructorFM } from '@/types/instructor'; // si lo necesitas
+import type { CourseFM, WithSlug } from '../../types/course';
+import type { InstructorFM } from '../../types/course'; // si lo necesitas
 
 /* -------------------------------------------------------- */
 /*  Tipo flexible: admite propiedades adicionales opcionales */
@@ -29,8 +29,8 @@ const CourseCard: React.FC<Props> = ({ course }) => {
     title = 'Curso sin título',
     nivel: level = 'Sin nivel',
     duracion: duration = '',
-    thumbnail = '/placeholder.png', // ruta a una imagen por defecto
-    category = (course as any).category ?? '',
+    thumbnail = (course as any).image ?? 'https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg', 
+    categoria = (course as any).categoria ?? '',
   } = course;
 
   const rawDesc =
@@ -53,7 +53,7 @@ const CourseCard: React.FC<Props> = ({ course }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full">
       <img
-        src="https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg" //{thumbnail}
+        src= {thumbnail}
         alt={title}
         className="w-full h-48 object-cover rounded-t-lg"
       />
@@ -66,9 +66,9 @@ const CourseCard: React.FC<Props> = ({ course }) => {
               {level}
             </span>
           )}
-          {category && (
+          {categoria && (
             <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
-              {category}
+              {categoria}
             </span>
           )}
         </div>

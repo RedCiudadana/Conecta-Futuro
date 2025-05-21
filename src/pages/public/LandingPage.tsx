@@ -139,10 +139,10 @@ const LandingPage: React.FC = () => {
                   Ver Cursos
                 </Link>
                 <Link
-                  to="/register"
+                  to="/learning-paths"
                   className="px-8 py-4 rounded-lg bg-black text-white font-semibold transition-colors text-lg border border-primary-600"
                 >
-                  Registrarse
+                  Rutas de Aprendizaje
                 </Link>
               </div>
             </div>

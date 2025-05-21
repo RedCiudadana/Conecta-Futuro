@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     mdPlugin({
-      mode: [Mode.REACT, Mode.TOC],
+      mode: [Mode.REACT, Mode.TOC, Mode.MARKDOWN],
     })
   ],
   optimizeDeps: {

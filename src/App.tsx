@@ -13,6 +13,9 @@ import Contact from './pages/public/Contact';
 import Documentation from './pages/public/Documentation';
 import NotFound from './pages/public/NotFound';
 import Community from './pages/public/Community';
+import CommunityDetails from './pages/public/CommunityDetails';
+import ScrollToTop from './components/scrolltotop';
+import ScrollTopButton from './components/scrolltotopButton';
 
 // Layout components
 import PublicLayout from './components/layouts/PublicLayout';
@@ -20,6 +23,8 @@ import PublicLayout from './components/layouts/PublicLayout';
 function App() {
   return (
     <>
+      <ScrollToTop />
+      <ScrollTopButton />
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<PublicLayout />}>
@@ -35,10 +40,11 @@ function App() {
           <Route path="contact" element={<Contact />} />
           <Route path="documentation" element={<Documentation />} />
           <Route path="community" element={<Community />} />
+          <Route path="community/:slug" element={<CommunityDetails />} />
         </Route>
         
         {/* 404 route */}
-        <Route path="/*" element={<PublicLayout><NotFound /></PublicLayout>} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </>
   );

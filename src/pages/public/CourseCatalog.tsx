@@ -23,7 +23,7 @@ export default function CourseCatalog() {
   /* ---------- Categorías dinámicas ---------- */
   const categories = useMemo(() => {
     const raw = courses
-      .map(c => (c as any).category as string | undefined)
+      .map(c => (c as any).categoria as string | undefined)
       .filter(Boolean);
     return Array.from(new Set(raw));
   }, [courses]);
@@ -43,7 +43,7 @@ export default function CourseCatalog() {
       const matchesSearch = title.includes(term) || desc.includes(term);
       const matchesLevel = !selectedLevel || course.nivel === selectedLevel;
 
-      const courseCategory = (course as any).category ?? '';
+      const courseCategory = (course as any).categoria ?? '';
       const matchesCategory =
         !selectedCategory || courseCategory === selectedCategory;
 
@@ -106,9 +106,9 @@ export default function CourseCatalog() {
             onChange={e => setSelectedCategory(e.target.value)}
           >
             <option value="">Todas las categorías</option>
-            {categories.map(category => (
-              <option key={category} value={category}>
-                {category}
+            {categories.map(categoria => (
+              <option key={categoria} value={categoria}>
+                {categoria}
               </option>
             ))}
           </select>

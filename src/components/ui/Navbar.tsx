@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Facebook, Linkedin, Youtube, Video } from 'lucide-react';
+import { Menu, X, Facebook, Linkedin, Youtube, Video, Instagram } from 'lucide-react';
 import Logo from './Logo';
 
 const Navbar: React.FC = () => {
@@ -29,10 +29,13 @@ const Navbar: React.FC = () => {
     <>
       {/* Top Header */}
       <div className="bg-primary-900 text-white py-2">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <p className="text-sm">
-            Sitio oficial de la Asociación Civil Red Ciudadana
-          </p>
+        <div className="container mx-auto px-8 flex justify-between items-center">
+          <div className='md:flex items-center'>
+            <img src="./logo/redciudadana.png" width={"25px"} className='mr-4'/>
+            <p className="text-sm">
+              Sitio oficial de la Asociación Civil Red Ciudadana
+            </p>
+          </div>
           <div className="hidden sm:flex items-center space-x-4">
             <a 
               href="https://facebook.com/RedCiudadanaGT" 
@@ -43,6 +46,14 @@ const Navbar: React.FC = () => {
               <Facebook size={20} />
             </a>
             <a 
+              href="https://www.instagram.com/redxguate/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white hover:text-primary-200 transition-colors"
+            >
+              <Instagram size={20} />
+            </a>
+            <a 
               href="https://linkedin.com/company/red-ciudadana" 
               target="_blank" 
               rel="noopener noreferrer"
@@ -51,20 +62,12 @@ const Navbar: React.FC = () => {
               <Linkedin size={20} />
             </a>
             <a 
-              href="https://youtube.com/@RedCiudadanaGT" 
+              href="https://www.youtube.com/channel/UCQwc62j7beStZYFzwPxBEQg" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-primary-200 transition-colors"
             >
               <Youtube size={20} />
-            </a>
-            <a 
-              href="https://tiktok.com/@redciudadanagt" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-white hover:text-primary-200 transition-colors"
-            >
-              <Video size={20} />
             </a>
           </div>
         </div>
@@ -147,6 +150,14 @@ const Navbar: React.FC = () => {
                   <Facebook size={20} />
                 </a>
                 <a 
+                  href="https://www.instagram.com/redxguate/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-primary-600 transition-colors"
+                >
+                  <Instagram size={20} />
+                </a>
+                <a 
                   href="https://linkedin.com/company/red-ciudadana" 
                   target="_blank" 
                   rel="noopener noreferrer"
@@ -155,20 +166,12 @@ const Navbar: React.FC = () => {
                   <Linkedin size={20} />
                 </a>
                 <a 
-                  href="https://youtube.com/@RedCiudadanaGT" 
+                  href="https://www.youtube.com/channel/UCQwc62j7beStZYFzwPxBEQg" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-primary-600 transition-colors"
                 >
                   <Youtube size={20} />
-                </a>
-                <a 
-                  href="https://tiktok.com/@redciudadanagt" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-primary-600 transition-colors"
-                >
-                  <Video size={20} />
                 </a>
               </div>
             </div>

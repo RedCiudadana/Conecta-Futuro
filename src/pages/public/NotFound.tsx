@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Home, AlertCircle } from 'lucide-react';
+import Fourofour from '../../assets/404.png';
 
 const NotFound = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
       <div className="text-center">
         <div className="flex justify-center mb-6">
-          <AlertCircle className="h-24 w-24 text-primary-600" />
+          <img src={Fourofour} />
         </div>
         <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
         <h2 className="text-3xl font-semibold text-gray-700 mb-6">
