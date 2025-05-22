@@ -1,5 +1,5 @@
 ---
-title: Intercambio de Datos para la Transformación Digital en el Sector Público
+title: Introducción a la Interoperabilidad Pública
 image: /uploads/cover-red-ciudadana.png
 descripcion: >-
   El curso busca proporcionar una introducción de los conceptos clave,
