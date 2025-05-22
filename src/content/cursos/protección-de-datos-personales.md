@@ -1,10 +1,10 @@
 ---
 title: Protección de Datos Personales
 image: /uploads/cover-red-ciudadana.png
-descripcion: >+
-  Curso completo sobre la protección de datos personales en el sector público,
-  normativas internacionales y mejores prácticas.
-
+descripcion: El curso tiene el objetivo de fortalecer las capacidades de los
+  funcionarios públicos en el adecuado manejo, resguardo y tratamiento de los
+  datos personales en posesión de las instituciones del Estado, alineándose con
+  estándares nacionales e internacionales de protección de datos.
 nivel: Básico
 estado: Finalizado
 categoria: Transformación Digital
