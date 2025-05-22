@@ -6,9 +6,11 @@ descripcion: >+
   normativas internacionales y mejores prácticas.
 
 nivel: Básico
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 12 horas
 enlace_contenido: https://redciudadana.org/
-enlace_registro: https://redciudadana.org/
+enlace_registro: "#"
 instructor: Christian Hidalgo
+password: gdpr2025
 ---
