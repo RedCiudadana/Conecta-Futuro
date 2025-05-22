@@ -310,7 +310,7 @@ const LandingPage: React.FC = () => {
             Únete a nuestra comunidad de servidores públicos comprometidos con la innovación
           </p>
           <Link
-            to="/register"
+            to="/courses"
             className="inline-flex items-center px-8 py-4 rounded-lg bg-white text-primary-800 font-semibold hover:bg-primary-50 transition-colors text-lg"
           >
             Comenzar ahora

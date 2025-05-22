@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Facebook, Linkedin, Youtube, Video, Instagram } from 'lucide-react';
 import Logo from './Logo';
+import LogoChiquito from '../../assets/redciudadana.png'; 
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,7 @@ const Navbar: React.FC = () => {
       <div className="bg-primary-900 text-white py-2">
         <div className="container mx-auto px-8 flex justify-between items-center">
           <div className='md:flex items-center'>
-            <img src="./logo/redciudadana.png" width={"25px"} className='mr-4'/>
+            <img src={LogoChiquito} width={"25px"} className='mr-4'/>
             <p className="text-sm">
               Sitio oficial de la Asociación Civil Red Ciudadana
             </p>
