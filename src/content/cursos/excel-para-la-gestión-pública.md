@@ -9,9 +9,11 @@ descripcion: >+
   toma de decisiones basadas en datos.
 
 nivel: Básico
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 12 horas
 enlace_contenido: https://escuela.redciudadana.org/cursos/excel-para-la-gestion-publica/
 enlace_registro: https://escuela.redciudadana.org/cursos/excel-para-la-gestion-publica/
 instructor: Édgar Cabrera
+password: ExcelBasico2025
 ---
