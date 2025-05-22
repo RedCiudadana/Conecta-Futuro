@@ -1,13 +1,13 @@
 ---
-title: "Introducción a la Inteligencia Artificial "
+title: IA aplicado para Gobierno
 image: /uploads/cover-red-ciudadana.png
-descripcion: "Introducción a la Inteligencia Artificial "
-nivel: Básico
-estado: Finalizado
+descripcion: IA aplicado para Gobierno
+nivel: Intermedio
+estado: Por iniciar
 categoria: Transformación Digital
-duracion: 8 horas
+duracion: 12 horas
 enlace_contenido: "#"
 enlace_registro: "#"
 instructor: Red Ciudadana
-password: IASEGEPLAN2024
+password: IAAplicado2025
 ---
