@@ -44,7 +44,7 @@ collections:
       - { label: "Thumbnail del Curso", name: "image", widget: "image" }
       - { label: "Descripción", name: "descripcion", widget: "text" }
       - { label: "Nivel", name: "nivel", widget: "select", options: ["Básico", "Intermedio", "Avanzado"] }
-      - { label: "Estado del Curso", name: "estado", widget: "select", options: ["Finalizado", "en Proceso", "Por iniciar"] }
+      - { label: "Estado del Curso", name: "estado", widget: "select", options: ["Finalizado", "En proceso", "Por iniciar"] }
       - label: "Categorías"
         name: "categoria"
         widget: "relation"

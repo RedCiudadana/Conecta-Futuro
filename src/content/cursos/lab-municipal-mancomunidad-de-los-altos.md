@@ -3,7 +3,7 @@ title: Lab Municipal - Mancomunidad de Los Altos
 image: /uploads/cover-red-ciudadana.png
 descripcion: Lab Municipal - Mancomunidad de Los Altos
 nivel: Básico
-estado: en Proceso
+estado: En proceso
 categoria: Emprendimiento Digital
 duracion: 40 horas
 enlace_contenido: "#"

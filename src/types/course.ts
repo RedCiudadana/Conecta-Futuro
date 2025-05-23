@@ -89,6 +89,8 @@ export interface CourseFM {
   enlace_registro: string;
   instructor: string;
   categoria: string;
+  estado: string;
+  password?: string;
 }
 
 export interface SessionFM {

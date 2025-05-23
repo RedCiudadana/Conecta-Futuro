@@ -10,6 +10,7 @@ import {
   FileText,
   Users,
   Video,
+  Calendar
 } from 'lucide-react';
 
 import { decapContentService } from '../../services/courseService';
@@ -60,6 +61,7 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<CourseFull | null>(null);
   const [related, setRelated] = useState<WithSlug<CourseFM>[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showNoSessionsModal, setShowNoSessionsModal] = useState(false);
 
   /* -------------------- Carga del curso --------------------------- */
   useEffect(() => {
@@ -136,18 +138,26 @@ const CourseDetails: React.FC = () => {
               <span className="flex items-center">
                 <Award className="w-5 h-5 mr-2" /> {course.nivel}
               </span>
+              <span className="flex items-center">
+                <Calendar className="w-5 h-5 mr-2" /> {course.estado}
+              </span>
             </div>
 
             <div className="flex flex-wrap gap-4">
               {course.enlace_contenido && (
-                <a
-                  href={`/course/${slug}/session`} //{course.enlace_contenido}
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => {
+                    if (course.sesiones.length === 0) {
+                      setShowNoSessionsModal(true);
+                    } else {
+                      window.location.href = `/course/${slug}/session`;
+                    }
+                  }}
                   className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
                 >
                   Ir al contenido
                   <ChevronRight className="ml-2 h-5 w-5" />
-                </a>
+                </button>
               )}
 
               {course.enlace_registro && (
@@ -260,6 +270,26 @@ const CourseDetails: React.FC = () => {
           </div>
         </div>
       )}
+
+      {showNoSessionsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              No hay sesiones disponibles
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Este curso aún no tiene sesiones publicadas. Por favor, vuelve más tarde o contacta al instructor.
+            </p>
+            <button
+              onClick={() => setShowNoSessionsModal(false)}
+              className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+            >
+              Entendido
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

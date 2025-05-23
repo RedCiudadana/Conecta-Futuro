@@ -31,6 +31,7 @@ const CourseCard: React.FC<Props> = ({ course }) => {
     duracion: duration = '',
     thumbnail = (course as any).image ?? 'https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg', 
     categoria = (course as any).categoria ?? '',
+    estado = (course as any).estado ?? '',
   } = course;
 
   const rawDesc =
@@ -48,6 +49,19 @@ const CourseCard: React.FC<Props> = ({ course }) => {
   const instructor =
     course.instructorObj ??
     { title: course.instructor ?? '', foto: '', especializacion: '' };
+
+  const getEstadoClasses = (estado: string) => {
+    switch (estado.toLowerCase()) {
+      case 'finalizado':
+        return 'bg-green-100 text-green-800';
+      case 'por iniciar':
+        return 'bg-red-100 text-red-800';
+      case 'en proceso':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-700';
+    }
+  };
 
   /* ------------------------ UI ------------------------ */
   return (
@@ -69,6 +83,11 @@ const CourseCard: React.FC<Props> = ({ course }) => {
           {categoria && (
             <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
               {categoria}
+            </span>
+          )}
+          {estado && (
+            <span className={`px-2 py-1 text-xs font-medium rounded ${getEstadoClasses(estado)}`}>
+              {estado}
             </span>
           )}
         </div>
