@@ -1,6 +1,6 @@
 ---
 title: Lab Municipal - Mancomunidad de Los Altos
-image: /uploads/cover-red-ciudadana.png
+image: /uploads/mancomunidad-de-los-altos.png
 descripcion: Lab Municipal - Mancomunidad de Los Altos
 nivel: Básico
 estado: En proceso
