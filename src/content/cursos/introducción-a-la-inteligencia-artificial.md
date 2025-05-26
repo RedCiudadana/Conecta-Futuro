@@ -1,6 +1,6 @@
 ---
 title: IA aplicado para Gobierno
-image: /uploads/cover-red-ciudadana.png
+image: /uploads/ia.png
 descripcion: IA aplicado para Gobierno
 nivel: Intermedio
 estado: Por iniciar
