@@ -1,6 +1,6 @@
 ---
 title: Excel para la Gestión Pública
-image: /uploads/cover-red-ciudadana.png
+image: /uploads/excel-gestion.png
 descripcion: >+
   Este curso está diseñado para funcionarios y servidores públicos que desean
   mejorar sus habilidades en Excel 📈, optimizando la gestión de datos, reportes
