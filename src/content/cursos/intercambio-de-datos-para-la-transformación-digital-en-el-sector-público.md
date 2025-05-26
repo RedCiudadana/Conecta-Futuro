@@ -1,6 +1,6 @@
 ---
 title: Introducción a la Interoperabilidad Pública
-image: /uploads/cover-red-ciudadana.png
+image: /uploads/interoperabilidad.png
 descripcion: El curso busca proporcionar una introducción de los conceptos
   clave, principios, estándares internacionales y casos de éxito en
   interoperabilidad, permitiendo a los participantes aplicar estos conocimientos
