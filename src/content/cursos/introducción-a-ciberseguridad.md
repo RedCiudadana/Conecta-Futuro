@@ -1,6 +1,6 @@
 ---
 title: Introducción a Ciberseguridad
-image: /uploads/cover-red-ciudadana.png
+image: /uploads/ciberseguridad.png
 descripcion: Introducción a Ciberseguridad
 nivel: Básico
 estado: Finalizado
