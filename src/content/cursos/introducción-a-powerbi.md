@@ -1,6 +1,6 @@
 ---
 title: Introducción a PowerBI
-image: /uploads/cover-red-ciudadana.png
+image: /uploads/introduccion-al-power-bi.png
 descripcion: Este curso tiene como objetivo enseñar a funcionarios públicos los
   principios fundamentales del uso de Power BI para transformar datos en
   visualizaciones estratégicas que faciliten la toma de decisiones informadas. A
