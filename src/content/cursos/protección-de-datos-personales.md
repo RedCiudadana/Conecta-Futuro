@@ -1,6 +1,6 @@
 ---
 title: Protección de Datos Personales
-image: /uploads/cover-red-ciudadana.png
+image: /uploads/proteccion-de-datos-personales.png
 descripcion: El curso tiene el objetivo de fortalecer las capacidades de los
   funcionarios públicos en el adecuado manejo, resguardo y tratamiento de los
   datos personales en posesión de las instituciones del Estado, alineándose con
