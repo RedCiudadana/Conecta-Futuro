@@ -1,6 +1,6 @@
 ---
 title: Introducción a Datos Abiertos
-image: /uploads/cover-red-ciudadana.png
+image: /uploads/introduccion-a-datos-abiertos.png
 descripcion: Introducción a Datos Abiertos
 nivel: Básico
 estado: Por iniciar
