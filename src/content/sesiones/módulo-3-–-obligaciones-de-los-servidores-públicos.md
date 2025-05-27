@@ -1,5 +1,5 @@
 ---
-title: Módulo 3 – Obligaciones de los Servidores Públicos
+title: Protección - Módulo 3 – Obligaciones de los Servidores Públicos
 curso: Protección de Datos Personales
 bienvenida: https://www.youtube.com/embed/UMv-9nqhFqY?si=8AhXryusmaaEDPd-
 teoria: |-
