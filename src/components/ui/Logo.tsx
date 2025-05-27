@@ -1,16 +1,16 @@
 import React from 'react';
 import { BookOpen } from 'lucide-react';
-import LogoRedNegro from '../../assets/logorednegro.png';
 
 interface LogoProps {
   className?: string;
+  src_logo?: string;
 }
 
-const Logo: React.FC<LogoProps> = ({ className }) => {
+const Logo: React.FC<LogoProps> = ({ className, src_logo }) => {
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <div className="my-4">
-        <img src={LogoRedNegro} />
+        <img src={src_logo} width={'200px'} />
       </div>
     </div>
   );

@@ -173,15 +173,18 @@ const CourseDetails: React.FC = () => {
             </div>
           </div>
 
-          {course.thumbnail && (
-            <div>
-              <img
-                src={course.thumbnail}
-                alt={course.title}
-                className="w-full h-64 object-cover rounded-lg"
-              />
-            </div>
-          )}
+          <div>
+            <img
+              src={
+                course.thumbnail ??
+                (course as any).image ?? // en caso Decap lo devuelva así
+                'https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg'
+              }
+              alt={course.title}
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </div>
+
         </div>
       </div>
 
@@ -190,13 +193,15 @@ const CourseDetails: React.FC = () => {
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
           <h2 className="text-2xl font-semibold mb-6">Instructor</h2>
           <div className="flex items-start space-x-4">
-            {course.instructor.foto && (
-              <img
-                src={course.instructor.foto}
-                alt={course.instructor.title}
-                className="w-24 h-24 rounded-full object-cover"
-              />
-            )}
+            <img
+              src={
+                course.instructor.foto ??
+                (course.instructor as any).image ??
+                'https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg'
+              }
+              alt={course.instructor.title}
+              className="w-24 h-24 rounded-full object-cover"
+            />
             <div>
               <h3 className="text-xl font-semibold">
                 {course.instructor.title}
@@ -212,8 +217,8 @@ const CourseDetails: React.FC = () => {
       {/* Certificado */}
       <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
         <div className="flex items-start space-x-6">
-          <div className="p-3 bg-primary-100 rounded-lg flex-shrink-0">
-            <Medal className="w-12 h-12 text-primary-600" />
+          <div className="p-3 bg-primary-600 rounded-lg flex-shrink-0">
+            <Medal className="w-12 h-12 text-white" />
           </div>
           <div>
             <h2 className="text-2xl font-semibold mb-3">
@@ -231,13 +236,13 @@ const CourseDetails: React.FC = () => {
               </span>
             </div>
           </div>
-          <div className="flex-shrink-0 hidden md:block">
+          {/* <div className="flex-shrink-0 hidden md:block">
             <img
               src="https://images.pexels.com/photos/5905555/pexels-photo-5905555.jpeg"
               alt="Certificado Digital"
               className="w-48 h-32 object-cover rounded-lg shadow-md"
             />
-          </div>
+          </div> */}
         </div>
       </div>
 

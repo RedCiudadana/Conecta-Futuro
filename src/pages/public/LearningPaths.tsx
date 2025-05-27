@@ -6,6 +6,7 @@ import {
   Building, Lightbulb, Smartphone, ShoppingBag, Coins,
   Heart, FileText, MessageSquare, Camera
 } from 'lucide-react';
+import Slider from '../../assets/slider/learningpaths.png';
 
 const LearningPaths = () => {
   const paths = [
@@ -14,7 +15,7 @@ const LearningPaths = () => {
       title: 'Gobierno Digital',
       description: 'Fortalecer capacidades en funcionarios públicos y sociedad civil para diseñar, implementar y evaluar servicios públicos digitales centrados en el ciudadano, con enfoque de datos abiertos, interoperabilidad, ética e innovación.',
       icon: Building,
-      bgColor: 'bg-primary-600',
+      bgColor: 'bg-black',
       textColor: 'text-primary-600',
       hoverBg: 'hover:bg-primary-50',
       tagBg: 'bg-primary-700',
@@ -62,7 +63,7 @@ const LearningPaths = () => {
       title: 'Emprendimiento Digital',
       description: 'Dotar a jóvenes y mujeres emprendedoras de herramientas digitales para lanzar, fortalecer o escalar sus negocios usando tecnología, automatización y plataformas digitales.',
       icon: Rocket,
-      bgColor: 'bg-[#2563eb]',
+      bgColor: 'bg-black',
       textColor: 'text-[#2563eb]',
       hoverBg: 'hover:bg-blue-50',
       tagBg: 'bg-[#1d4ed8]',
@@ -110,7 +111,7 @@ const LearningPaths = () => {
       title: 'Mis primeros pasos digitales',
       description: 'Garantizar el acceso y uso significativo de la tecnología a personas en situación de exclusión digital (adultos mayores, pueblos indígenas, jóvenes sin conectividad), empoderándolos con competencias digitales básicas y derechos digitales.',
       icon: Heart,
-      bgColor: 'bg-accent-600',
+      bgColor: 'bg-black',
       textColor: 'text-accent-600',
       hoverBg: 'hover:bg-accent-50',
       tagBg: 'bg-accent-700',
@@ -156,82 +157,90 @@ const LearningPaths = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Rutas de Aprendizaje
-        </h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Desarrolla tu expertise en áreas específicas siguiendo nuestras rutas de aprendizaje diseñadas por expertos
-        </p>
+    <div >
+
+      {/* Hero */}
+      <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Slider})` }}>
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-3xl mx-auto text-center py-16">
+            <h1 className="text-4xl font-bold mb-4">Rutas de Aprendizaje</h1>
+            <p className="text-xl text-primary-100 mb-8">
+              Desarrolla tu expertise en áreas específicas siguiendo nuestras rutas de aprendizaje diseñadas por expertos
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-12">
-        {paths.map((path) => (
-          <div key={path.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-            {/* Path Header */}
-            <div className={`${path.bgColor} text-white p-8`}>
-              <div className="flex items-start justify-between">
-                <div className="max-w-3xl">
-                  <div className="flex items-center mb-4">
-                    <path.icon className="w-8 h-8 mr-3" />
-                    <h2 className="text-2xl font-bold">{path.title}</h2>
-                  </div>
-                  <p className="text-lg text-white mb-4">{path.description}</p>
-                  <div className={`flex items-center text-sm ${path.tagBg} rounded-full px-4 py-1 w-fit`}>
-                    <Users className="w-4 h-4 mr-2" />
-                    <span>Público: {path.audience}</span>
-                  </div>
-                </div>
-                <Link
-                  to={`/courses?path=${path.id}`}
-                  className={`px-6 py-3 bg-white ${path.textColor} rounded-lg ${path.hoverBg} transition-colors font-semibold flex-shrink-0`}
-                >
-                  Comenzar ruta
-                </Link>
-              </div>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 py-12">
 
-            {/* Modules */}
-            <div className="p-8">
-              <h3 className="text-xl font-semibold mb-6">Módulos en esta ruta:</h3>
-              <div className="space-y-6">
-                {path.modules.map((module) => (
-                  <div key={module.id} className="flex items-start">
-                    <div className={`p-3 bg-opacity-10 rounded-lg mr-4 ${path.bgColor}`}>
-                      <module.icon className={`w-6 h-6 ${path.textColor}`} />
+        <div className="space-y-12">
+          {paths.map((path) => (
+            <div key={path.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+              {/* Path Header */}
+              <div className={`${path.bgColor} text-white p-8`}>
+                <div className="flex items-start justify-between">
+                  <div className="max-w-3xl">
+                    <div className="flex items-center mb-4">
+                      <path.icon className="w-8 h-8 mr-3" />
+                      <h2 className="text-2xl font-bold">{path.title}</h2>
                     </div>
-                    <div className="flex-grow">
-                      <div className="flex items-center mb-1">
-                        <h4 className="font-semibold text-gray-900">
-                          {module.id} - {module.name}
-                        </h4>
-                        <div className="flex items-center ml-3 text-sm text-gray-500">
-                          <Clock className="w-4 h-4 mr-1" />
-                          <span>{module.duration}</span>
-                        </div>
+                    <p className="text-lg text-white mb-4">{path.description}</p>
+                    <div className={`flex items-center text-sm ${path.tagBg} rounded-full px-4 py-1 w-fit`}>
+                      <Users className="w-4 h-4 mr-2" />
+                      <span>Público: {path.audience}</span>
+                    </div>
+                  </div>
+                  <Link
+                    to={`/courses?path=${path.id}`}
+                    className={`px-6 py-3 bg-white ${path.textColor} rounded-lg ${path.hoverBg} transition-colors font-semibold flex-shrink-0`}
+                  >
+                    Comenzar ruta
+                  </Link>
+                </div>
+              </div>
+
+              {/* Modules */}
+              <div className="p-8">
+                <h3 className="text-xl font-semibold mb-6">Módulos en esta ruta:</h3>
+                <div className="space-y-6">
+                  {path.modules.map((module) => (
+                    <div key={module.id} className="flex items-start">
+                      <div className={`p-3 bg-opacity-10 rounded-lg mr-4 ${path.bgColor}`}>
+                        <module.icon className={`w-6 h-6 text-white`} />
                       </div>
-                      <p className="text-gray-600">{module.description}</p>
+                      <div className="flex-grow">
+                        <div className="flex items-center mb-1">
+                          <h4 className="font-semibold text-gray-900">
+                            {module.id} - {module.name}
+                          </h4>
+                          <div className="flex items-center ml-3 text-sm text-gray-500">
+                            <Clock className="w-4 h-4 mr-1" />
+                            <span>{module.duration}</span>
+                          </div>
+                        </div>
+                        <p className="text-gray-600">{module.description}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              {/* Certificate Section */}
-              <div className="mt-8 pt-6 border-t">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm text-gray-500 mb-1">Al completar esta ruta:</div>
-                    <div className="font-semibold text-gray-900">Certificado de Especialización en {path.title}</div>
+                {/* Certificate Section */}
+                <div className="mt-8 pt-6 border-t">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-sm text-gray-500 mb-1">Al completar esta ruta:</div>
+                      <div className="font-semibold text-gray-900">Certificado de Especialización en {path.title}</div>
+                    </div>
+                    <Award className={`w-8 h-8 ${path.textColor}`} />
                   </div>
-                  <Award className={`w-8 h-8 ${path.textColor}`} />
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
+
   );
 };
 

@@ -126,10 +126,10 @@ const LandingPage: React.FC = () => {
             {/* Columna izquierda - Texto */}
             <div className="md:w-1/2 text-left space-y-6">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading">
-                Escuela de Innovación Pública
+                Escuela Conecta Futuro
               </h1>
               <p className="text-xl sm:text-2xl text-primary-100 max-w-md">
-                Fortaleciendo las capacidades del sector público en América Latina
+                Impulsa tu desarrollo profesional con cursos gratuitos sobre innovación, emprendimiento, gobierno digital y tecnología.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
@@ -168,7 +168,7 @@ const LandingPage: React.FC = () => {
               ¿Por qué elegirnos?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Nuestra plataforma está diseñada específicamente para fortalecer las capacidades del sector público
+              Nuestra plataforma está diseñada específicamente para fortalecer las capacidades del sector público y emprendedores locales.
             </p>
           </div>
           
@@ -201,7 +201,7 @@ const LandingPage: React.FC = () => {
               Áreas de Conocimiento
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Explora nuestras áreas temáticas diseñadas para el sector público
+              Explora nuestras áreas temáticas diseñadas para el sector público y emprendedores locales.
             </p>
             <img src={Icono11} className="w-100 h-auto mx-auto mt-4" alt="linea" />
           </div>
@@ -311,7 +311,7 @@ const LandingPage: React.FC = () => {
           </p>
           <Link
             to="/courses"
-            className="inline-flex items-center px-8 py-4 rounded-lg bg-white text-primary-800 font-semibold hover:bg-primary-50 transition-colors text-lg"
+            className="inline-flex items-center px-8 py-4 rounded-lg bg-black text-white font-semibold transition-colors text-lg"
           >
             Comenzar ahora
             <ArrowRight className="ml-2 h-5 w-5" />

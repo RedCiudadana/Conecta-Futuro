@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Facebook, Linkedin, Youtube, Video, Instagram } from 'lucide-react';
 import Logo from './Logo';
+import LogoRedNegro from '../../assets/logorednegro.png';
+import LogoPpli from '../../assets/logoppli.png';
 import LogoChiquito from '../../assets/redciudadana.png'; 
 
 const Navbar: React.FC = () => {
@@ -29,10 +31,10 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* Top Header */}
-      <div className="bg-primary-900 text-white py-2">
+      <div className="bg-black2 text-white py-2">
         <div className="container mx-auto px-8 flex justify-between items-center">
-          <div className='md:flex items-center'>
-            <img src={LogoChiquito} width={"25px"} className='mr-4'/>
+          <div className='md:flex items-center gap-2 sm:gap-4'>
+            <img src={LogoChiquito} width={"25px"}  style={{ filter: 'invert(1) hue-rotate(180deg) contrast(1.2) brightness(1.1)' }}/>
             <p className="text-sm">
               Sitio oficial de la Asociación Civil Red Ciudadana
             </p>
@@ -81,8 +83,9 @@ const Navbar: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Logo */}
-            <Link to="/" className="flex items-center">
-              <Logo className="h-10 w-auto" />
+            <Link to="/" className="flex items-center gap-2 sm:gap-4">
+              <Logo className="h-10 w-auto" src_logo={LogoRedNegro} />
+              <Logo className="h-10 w-auto" src_logo={LogoPpli} />
             </Link>
             
             {/* Desktop Navigation */}

@@ -45,8 +45,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Montserrat', 'sans-serif'],
+        sans: ['TextFont', 'system-ui', 'sans-serif'],
+        heading: ['TitularFont', 'sans-serif'],
       }
     },
   },

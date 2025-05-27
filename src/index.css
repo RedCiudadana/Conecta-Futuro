@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'TitularFont';
+  src: url('./assets/fonts/Sora-Bold.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TextFont';
+  src: url('./assets/fonts/EuclidCircularA-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 .bg-black{
   background-color: #232931;
   transition: 0.5s all ease;
@@ -9,4 +24,21 @@
 
 .bg-black:hover{
   background-color: #000;
+}
+
+.bg-black2{
+  background-color: #000;
+}
+
+.bg-gray-50{
+  background-color: #f0f4fa;
+}
+
+.bg-primary-600{
+  background-color: #7fb0ea;
+}
+
+.bg-primary-600:hover{
+  background-color: #000;
+  color: #fff;
 }

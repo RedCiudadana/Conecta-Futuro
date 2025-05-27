@@ -7,6 +7,7 @@ import { decapContentService } from '../../services/courseService';
 import type { CourseFM, Nivel, WithSlug } from '../../types/course';
 
 const levels: Nivel[] = ['Básico', 'Intermedio', 'Avanzado'];
+import Fondo from '../../assets/slider/fondo.png';
 
 export default function CourseCatalog() {
   /* ---------- Estado ---------- */
@@ -43,9 +44,9 @@ export default function CourseCatalog() {
   }, [searchTerm, selectedLevel, selectedCategory, selectedEstado]);
 
   const estadoOrden = {
-    finalizado: 1,
-    'en proceso': 2,
-    'por iniciar': 3,
+    finalizado: 3,
+    'en proceso': 1,
+    'por iniciar': 2,
   };
 
   const ordenarCursos = (a: WithSlug<CourseFM>, b: WithSlug<CourseFM>) => {
@@ -86,14 +87,12 @@ export default function CourseCatalog() {
   return (
     <div>
       {/* Hero */}
-      <div className="bg-gradient-to-r from-primary-900 to-primary-800 text-white">
+      <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Fondo})` }}>
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl font-bold mb-4">Explora Nuestros Cursos</h1>
             <p className="text-xl text-primary-100 mb-8">
-              Descubre una amplia gama de cursos diseñados para fortalecer tus
-              habilidades en gobierno digital, innovación pública y
-              transformación digital
+              Descubre una amplia gama de cursos diseñados para fortalecer tus habilidades en gobierno digital, innovación pública y transformación digital.
             </p>
 
             <div className="bg-white/10 p-1 rounded-lg backdrop-blur-sm">

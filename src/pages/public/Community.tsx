@@ -3,6 +3,7 @@ import { Newspaper, ArrowRight } from 'lucide-react';
 import { comunidadContentService } from '../../services/comunidadService';
 import { Link } from 'react-router-dom';
 import type { Comunidad } from '../../types/community';
+import Slider from '../../assets/slider/community.png';
 
 const Community = () => {
   const [news, setNews] = useState<Comunidad[]>([]);
@@ -21,12 +22,17 @@ const Community = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white py-16">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Últimas Noticias</h2>
-          <Newspaper className="w-8 h-8 text-primary-600" />
+    <div className="min-h-screen bg-white">
+      {/* Hero */}
+      <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Slider})` }}>
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-3xl mx-auto text-center py-16">
+            <h1 className="text-4xl font-bold mb-4">Últimas Noticias</h1>
+          </div>
         </div>
+      </div>
+      
+      <div className="container mx-auto px-4 mt-16">
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {news.map((item) => (

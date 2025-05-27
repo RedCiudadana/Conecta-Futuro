@@ -65,83 +65,75 @@ const CourseCard: React.FC<Props> = ({ course }) => {
 
   /* ------------------------ UI ------------------------ */
   return (
-    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full">
+    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col">
       <img
-        src= {thumbnail}
+        src={thumbnail}
         alt={title}
         className="w-full h-48 object-cover rounded-t-lg"
       />
 
-      <div className="p-6">
-        {/* Etiquetas de nivel y categoría */}
-        <div className="flex items-center space-x-2 mb-2">
-          {level && (
-            <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded">
-              {level}
-            </span>
-          )}
-          {categoria && (
-            <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
-              {categoria}
-            </span>
-          )}
-          {estado && (
-            <span className={`px-2 py-1 text-xs font-medium rounded ${getEstadoClasses(estado)}`}>
-              {estado}
-            </span>
-          )}
-        </div>
-
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-          {title}
-        </h3>
-
-        {description && (
-          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-            {description}
-          </p>
-        )}
-
-        {/* Duración y total de módulos (solo si hay datos) */}
-        <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-          {duration && (
-            <div className="flex items-center">
-              <Clock className="w-4 h-4 mr-1" />
-              {duration}
-            </div>
-          )}
-          {moduleCount > 0 && (
-            <div className="flex items-center">
-              <BookOpen className="w-4 h-4 mr-1" />
-              {moduleCount} módulos
-            </div>
-          )}
-        </div>
-
-        {/* Instructor (solo si tenemos algo más que el string) */}
-        {instructor.title && (
-          <div className="flex items-center space-x-3 mb-4">
-            {instructor.foto && (
-              <img
-                src={instructor.foto}
-                alt={instructor.title}
-                className="w-8 h-8 rounded-full object-cover"
-              />
+      <div className="p-6 flex flex-col justify-between h-full">
+        <div className="flex-1">
+          {/* Etiquetas */}
+          <div className="flex items-center space-x-2 mb-2">
+            {level && (
+              <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded">
+                {level}
+              </span>
             )}
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                {instructor.title}
-              </p>
-              {instructor.especializacion && (
-                <p className="text-xs text-gray-500">
-                  {instructor.especializacion}
-                </p>
-              )}
-            </div>
+            {categoria && (
+              <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                {categoria}
+              </span>
+            )}
+            {estado && (
+              <span className={`px-2 py-1 text-xs font-medium rounded ${getEstadoClasses(estado)}`}>
+                {estado}
+              </span>
+            )}
           </div>
-        )}
 
-        <button className="w-full text-center bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition-colors duration-200">
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+
+          {description && (
+            <p className="text-gray-600 text-sm mb-4 line-clamp-2">{description}</p>
+          )}
+
+          <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
+            {duration && (
+              <div className="flex items-center">
+                <Clock className="w-4 h-4 mr-1" />
+                {duration}
+              </div>
+            )}
+            {moduleCount > 0 && (
+              <div className="flex items-center">
+                <BookOpen className="w-4 h-4 mr-1" />
+                {moduleCount} módulos
+              </div>
+            )}
+          </div>
+
+          {instructor.title && (
+            <div className="flex items-center space-x-3 mb-4">
+              {instructor.foto && (
+                <img
+                  src={instructor.foto}
+                  alt={instructor.title}
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+              )}
+              <div>
+                <p className="text-sm font-medium text-gray-900">{instructor.title}</p>
+                {instructor.especializacion && (
+                  <p className="text-xs text-gray-500">{instructor.especializacion}</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <button className="w-full text-center bg-primary-600 text-white py-2 px-4 rounded-md transition-colors duration-200 mt-4">
           Ver Curso
         </button>
       </div>

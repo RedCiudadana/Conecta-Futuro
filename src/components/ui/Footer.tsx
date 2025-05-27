@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Logo from './Logo';
+import LogoRedNegro from '../../assets/logorednegro.png';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, Youtube, Video } from 'lucide-react';
 
 const Footer: React.FC = () => {
@@ -13,8 +13,7 @@ const Footer: React.FC = () => {
           {/* Logo and About */}
           <div className="col-span-1 md:col-span-2 lg:col-span-1">
             <div className="flex items-center mb-4">
-              <Logo className="h-10 w-auto" />
-              <span className="ml-2 text-xl font-bold text-white">Conecta Futuro</span>
+              <img src={LogoRedNegro} style={{ filter: 'invert(1) hue-rotate(180deg) contrast(1.2) brightness(1.1)' }} />
             </div>
             <p className="text-gray-400 mb-4">
               La plataforma educativa de Red Ciudadana para la innovación pública y transformación digital en América Latina.
