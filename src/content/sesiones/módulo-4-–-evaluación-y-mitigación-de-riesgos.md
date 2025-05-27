@@ -1,5 +1,5 @@
 ---
-title: Módulo 4 – Evaluación y Mitigación de Riesgos
+title: Protección - Módulo 4 – Evaluación y Mitigación de Riesgos
 curso: Protección de Datos Personales
 bienvenida: https://www.youtube.com/embed/UMv-9nqhFqY?si=8AhXryusmaaEDPd-
 teoria: |-
