@@ -1,5 +1,5 @@
 ---
-title: Cierre del curso - Proteccion de Datos Personales
+title: Protección - Cierre del curso - Proteccion de Datos Personales
 curso: Protección de Datos Personales
 bienvenida: https://www.youtube.com/embed/3VOd1Si398k?si=kO4kjm-zK1OW2Aqu
 teoria: >+
