@@ -14,6 +14,6 @@ categoria: Transformación Digital
 duracion: 12 horas
 enlace_contenido: https://escuela.redciudadana.org/cursos/excel-para-la-gestion-publica/
 enlace_registro: https://escuela.redciudadana.org/cursos/excel-para-la-gestion-publica/
-instructor: Édgar Cabrera
+instructor: Edgar Estuardo Cabrera
 password: ExcelBasico2025
 ---
