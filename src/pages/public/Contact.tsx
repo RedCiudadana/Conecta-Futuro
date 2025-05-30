@@ -5,70 +5,89 @@ import Redes3 from '../../assets/contacto/REDES-45.png';
 import Redes4 from '../../assets/contacto/REDES-46.png';
 import Slider from '../../assets/slider/contact.png';
 
-const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    affair: '',
-    message: '',
-  });
+interface FormData {
+  name: string;
+  email: string;
+  affair: string;
+  message: string;
+}
 
+const initialState: FormData = { name: '', email: '', affair: '', message: '' };
+
+const Contact: React.FC = () => {
+  /* ----------------------------- Estados ----------------------------- */
+  const [formData, setFormData] = useState<FormData>(initialState);
+  const [loading,   setLoading]   = useState(false);
+  const [error,     setError]     = useState('');
   const [submitted, setSubmitted] = useState(false);
 
+  /* ------------------------- Manejadores UI -------------------------- */
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const formUrl =
-      'https://docs.google.com/forms/d/e/1FAIpQLSe2DNIWZVQugZ_G-rQCzO9EKpWr66ZXe8rbBBHtKYduKIeXyQ/formResponse';
-
-    const formBody = new URLSearchParams();
-    formBody.append('entry.1064235632', formData.name);
-    formBody.append('entry.1330832081', formData.email);
-    formBody.append('entry.1233483376', formData.affair);
-    formBody.append('entry.608682247', formData.message);
+    setError('');
+    setLoading(true);
 
     try {
-      await fetch(formUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formBody.toString(),
-      });
+      const params = new URLSearchParams();
+      params.append('name',     formData.name.trim());
+      params.append('email',    formData.email.trim());
+      params.append('affair',   formData.affair.trim());
+      params.append('message',  formData.message.trim());
+      params.append(
+        'timestamp',
+        new Date().toLocaleString('es-GT', { timeZone: 'America/Guatemala' })
+      );
+
+      await fetch(
+        'https://script.google.com/macros/s/AKfycbwNCboqdGD2Nux023KtHXvuSKr4_-y5ZfDtE-xwPAukcoXdbNgWxiW0KIxJQBtIP4d0/exec?' +
+          params.toString(),
+        { method: 'GET', mode: 'no-cors' }
+      );
+
       setSubmitted(true);
-    } catch (error) {
-      console.error('Error al enviar:', error);
+      setFormData(initialState);
+    } catch {
+      setError('Hubo un error al enviar tu mensaje. Inténtalo de nuevo.');
+    } finally {
+      setLoading(false);
     }
   };
 
+  /* --------------------- Vista post-envío exitosa -------------------- */
   if (submitted) {
     return (
       <div className="max-w-2xl mx-auto text-center py-20">
-        <h2 className="text-2xl font-semibold text-green-600">✅ Su mensaje ha sido enviado</h2>
+        <h2 className="text-2xl font-semibold text-green-600">
+          ✅ Tu mensaje ha sido enviado
+        </h2>
       </div>
     );
   }
 
+  /* ------------------------------ JSX ------------------------------- */
   return (
     <div>
       {/* Hero */}
-      <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Slider})` }}>
+      <div
+        className="from-primary-900 to-primary-800 text-white"
+        style={{ backgroundImage: `url(${Slider})` }}
+      >
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto text-center py-16">
             <h1 className="text-4xl font-bold mb-4">Contáctanos</h1>
           </div>
         </div>
       </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
+      {/* Contenido */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Columna izquierda */}
           <div>
@@ -76,19 +95,36 @@ const Contact: React.FC = () => {
               Para más información de eventos, dudas o de nuestro trabajo
             </h2>
             <p className="mb-6 text-gray-700">
-              Llena el siguiente formulario y nuestro equipo te estará contactando.
+              Llena el siguiente formulario y nuestro equipo te estará
+              contactando.
             </p>
             <div className="flex gap-4 items-center flex-wrap">
-              <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/Redciudadanagt">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.facebook.com/Redciudadanagt"
+              >
                 <img width="40" src={Redes1} alt="Facebook" />
               </a>
-              <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/redxguate">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://twitter.com/redxguate"
+              >
                 <img width="40" src={Redes2} alt="Twitter" />
               </a>
-              <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/redxguate/">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.instagram.com/redxguate/"
+              >
                 <img width="40" src={Redes3} alt="Instagram" />
               </a>
-              <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/c/RedciudadanaOrgGt">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.youtube.com/c/RedciudadanaOrgGt"
+              >
                 <img width="40" src={Redes4} alt="YouTube" />
               </a>
             </div>
@@ -96,70 +132,55 @@ const Contact: React.FC = () => {
 
           {/* Columna derecha - Formulario */}
           <div>
+            {error && (
+              <p className="mb-4 text-red-600 text-sm font-medium">{error}</p>
+            )}
+
             <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <input
-                  placeholder='Nombre completo'
-                  type="text"
-                  name="name"
-                  id="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm p-4"
-                  style={{ border: '1px solid #000' }}
-                />
-              </div>
+              <input
+                placeholder="Nombre completo"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="block w-full p-4 border border-black shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              />
 
-              <div>
-                <input
-                  placeholder='Correo electrónico'
-                  type="email"
-                  name="email"
-                  id="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm p-4"
-                  style={{ border: '1px solid #000' }}
-                />
-              </div>
+              <input
+                placeholder="Correo electrónico"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="block w-full p-4 border border-black shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              />
 
-              <div>
-                <input
-                  placeholder='Asunto / Motivo de Contacto'
-                  type="text"
-                  name="affair"
-                  id="affair"
-                  value={formData.affair}
-                  onChange={handleChange}
-                  className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm p-4"
-                  style={{ border: '1px solid #000' }}
-                />
-              </div>
+              <input
+                placeholder="Asunto / Motivo de contacto"
+                name="affair"
+                value={formData.affair}
+                onChange={handleChange}
+                className="block w-full p-4 border border-black shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              />
 
-              <div>
-                <textarea
-                  placeholder='Escribe tu mensaje aquí...'
-                  id="message"
-                  name="message"
-                  rows={4}
-                  required
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm p-4"
-                  style={{ border: '1px solid #000' }}
-                />
-              </div>
+              <textarea
+                placeholder="Escribe tu mensaje aquí..."
+                name="message"
+                rows={4}
+                value={formData.message}
+                onChange={handleChange}
+                required
+                className="block w-full p-4 border border-black shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              />
 
-              <div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                >
-                  Envíanos un mensaje
-                </button>
-              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2 px-4 rounded-md text-sm font-medium text-white bg-primary-600 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              >
+                {loading ? 'Enviando…' : 'Envíanos un mensaje'}
+              </button>
             </form>
           </div>
         </div>
