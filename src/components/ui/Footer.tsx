@@ -48,21 +48,21 @@ const Footer: React.FC = () => {
                   Rutas de Aprendizaje
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/about" className="text-gray-400 hover:text-white transition-colors duration-200">
                   Sobre Nosotros
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link to="/contact" className="text-gray-400 hover:text-white transition-colors duration-200">
                   Contacto
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/mobile-api" className="text-gray-400 hover:text-white transition-colors duration-200">
                   API para iOS
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
           
@@ -71,24 +71,24 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4 text-white">Categorías</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/courses?category=innovacion-publica" className="text-gray-400 hover:text-white transition-colors duration-200">
+                <p className="text-gray-400 hover:text-white transition-colors duration-200">
                   Innovación Pública
-                </Link>
+                </p>
               </li>
               <li>
-                <Link to="/courses?category=transformacion-digital" className="text-gray-400 hover:text-white transition-colors duration-200">
+                <p className="text-gray-400 hover:text-white transition-colors duration-200">
                   Transformación Digital
-                </Link>
+                </p>
               </li>
               <li>
-                <Link to="/courses?category=inteligencia-artificial" className="text-gray-400 hover:text-white transition-colors duration-200">
+                <p className="text-gray-400 hover:text-white transition-colors duration-200">
                   Inteligencia Artificial
-                </Link>
+                </p>
               </li>
               <li>
-                <Link to="/courses?category=datos-abiertos" className="text-gray-400 hover:text-white transition-colors duration-200">
+                <p className="text-gray-400 hover:text-white transition-colors duration-200">
                   Datos Abiertos
-                </Link>
+                </p>
               </li>
             </ul>
           </div>
@@ -106,7 +106,7 @@ const Footer: React.FC = () => {
               <li className="flex items-center text-gray-400">
                 <Phone size={18} className="mr-2" />
                 <a href="tel:+50222245252" className="hover:text-white transition-colors duration-200">
-                  +502 2224-5252
+                  +502 4011-2926
                 </a>
               </li>
             </ul>

@@ -178,7 +178,7 @@ const LearningPaths = () => {
             <div key={path.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
               {/* Path Header */}
               <div className={`${path.bgColor} text-white p-8`}>
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
                   <div className="max-w-3xl">
                     <div className="flex items-center mb-4">
                       <path.icon className="w-8 h-8 mr-3" />

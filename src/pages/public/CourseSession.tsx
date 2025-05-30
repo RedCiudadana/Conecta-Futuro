@@ -10,6 +10,7 @@ import {
 
 import { decapContentService } from '../../services/courseService';
 import type { SessionFM, CourseFM, WithSlug } from '../../types/course';
+import ReactMarkdown from 'react-markdown';
 
 /* ---------- tipos ---------- */
 type FullCourse = WithSlug<CourseFM> & { sesiones: WithSlug<SessionFM>[] };
@@ -250,10 +251,22 @@ export default function CourseSession() {
                 )}
 
                 {currentSection === 'teoria' && session.teoria && (
-                  <article
-                    className="prose max-w-none mb-6"
-                    dangerouslySetInnerHTML={{ __html: session.teoria }}
-                  />
+                  <ReactMarkdown components={{
+                    p: ({ node, ...props }) => (
+                      <p className="mb-4 text-gray-700 leading-relaxed" {...props} />
+                    ),
+                    h2: ({ node, ...props }) => (
+                      <h2 className="mt-8 mb-4 text-xl font-bold text-primary-600" {...props} />
+                    ),
+                    a: ({ node, ...props }) => (
+                      <a className="text-blue-500 underline" {...props} />
+                    ),
+                    ul: ({ node, ...props }) => (
+                      <ul className="list-disc list-inside mb-4" {...props} />
+                    ),
+                  }}>
+                    { session.teoria}
+                  </ReactMarkdown>
                 )}
 
                 {currentSection === 'zoom' && session.video_zoom && (
