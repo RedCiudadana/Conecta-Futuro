@@ -13,6 +13,6 @@ categoria: Transformación Digital
 duracion: 12 horas
 enlace_contenido: "#"
 enlace_registro: "#"
-instructor: Édgar Cabrera
+instructor: Edgar Estuardo Cabrera
 password: powerbiRC2025
 ---
