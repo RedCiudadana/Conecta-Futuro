@@ -12,6 +12,6 @@ categoria: Transformación Digital
 duracion: 8 horas
 enlace_contenido: "#"
 enlace_registro: "#"
-instructor: Cesar Perez
+instructor: César Pérez
 password: interoperabilidad2025
 ---
