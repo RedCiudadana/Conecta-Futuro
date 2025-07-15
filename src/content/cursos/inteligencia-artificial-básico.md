@@ -1,5 +1,5 @@
 ---
-title: Inteligencia Artificial Básico
+title: "Entendiendo la Inteligencia Artificial: Primeros pasos para el sector público"
 image: /uploads/ia.png
 descripcion: Este curso introductorio brinda una comprensión clara y práctica de
   qué es la Inteligencia Artificial, sus usos cotidianos y su potencial
