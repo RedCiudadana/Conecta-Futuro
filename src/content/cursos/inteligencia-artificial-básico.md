@@ -9,8 +9,8 @@ descripcion: Este curso introductorio brinda una comprensión clara y práctica 
 nivel: Básico
 estado: Por iniciar
 categoria: Transformación Digital
-duracion: 8 horas
-enlace_contenido: "#"
+duracion: 12 horas
+enlace_contenido: https://redciudadana.org/
 enlace_registro: "#"
 instructor: Red Ciudadana
 password: iabasico
