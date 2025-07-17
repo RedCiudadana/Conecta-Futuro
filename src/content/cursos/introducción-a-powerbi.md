@@ -8,7 +8,7 @@ descripcion: Este curso tiene como objetivo enseñar a funcionarios públicos lo
   hasta la creación de dashboards e informes interactivos, utilizando
   herramientas clave como Power Query, Power Pivot y DAX.
 nivel: Básico
-estado: En proceso
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 12 horas
 enlace_contenido: "#"
