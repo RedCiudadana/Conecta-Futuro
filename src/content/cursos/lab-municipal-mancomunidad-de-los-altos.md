@@ -4,7 +4,7 @@ image: /uploads/mancomunidad-de-los-altos.png
 descripcion: Lab Municipal - Mancomunidad de Los Altos
 nivel: Básico
 estado: En proceso
-categoria: Emprendimiento Digital
+categoria: Innovación Pública
 duracion: 40 horas
 enlace_contenido: "#"
 enlace_registro: "#"
