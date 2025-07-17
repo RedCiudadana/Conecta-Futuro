@@ -16,5 +16,6 @@ teoria: >-
 
 
   Presentación de datos para la toma de decisiones: Mejores prácticas en storytelling con datos.
+video_zoom: https://www.youtube.com/embed/M1sOR-Ctt0A?si=SwklNZ4-VrCAh6iR
 numero: 5
 ---
