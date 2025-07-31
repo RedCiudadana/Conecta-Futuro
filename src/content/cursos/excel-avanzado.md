@@ -1,6 +1,6 @@
 ---
-title: Excel Avanzado
-image: /uploads/excel-gestion.png
+title: PowerBi Avanzado
+image: /uploads/introduccion-al-power-bi.png
 descripcion: >
   📋 Por favor, completa este formulario para inscribirte en el curso. La
   información proporcionada nos ayudará a personalizar tu experiencia de
