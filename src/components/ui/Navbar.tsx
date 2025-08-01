@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
           </div>
           <div className="hidden sm:flex items-center space-x-4">
             <a 
-              href="https://facebook.com/RedCiudadanaGT" 
+              href="https://www.facebook.com/Redciudadanagt/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-primary-200 transition-colors"
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
               <Instagram size={20} />
             </a>
             <a 
-              href="https://linkedin.com/company/red-ciudadana" 
+              href="https://www.linkedin.com/company/2532725" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-primary-200 transition-colors"
@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
               <Linkedin size={20} />
             </a>
             <a 
-              href="https://www.youtube.com/channel/UCQwc62j7beStZYFzwPxBEQg" 
+              href="https://www.youtube.com/c/RedciudadanaOrgGt" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-primary-200 transition-colors"

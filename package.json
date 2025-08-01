@@ -24,6 +24,7 @@
     "react-markdown": "^10.1.0",
     "react-player": "^2.13.0",
     "react-router-dom": "^6.18.0",
+    "remark-breaks": "^4.0.0",
     "rm": "^0.1.8",
     "zod": "^3.22.4",
     "zustand": "^4.4.6"

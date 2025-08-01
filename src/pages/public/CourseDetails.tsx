@@ -20,6 +20,8 @@ import type {
   InstructorFM,
   WithSlug,
 } from '../../types/course';
+import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
 
 import CourseCard from '../../components/courses/CourseCard';
 
@@ -127,9 +129,11 @@ const CourseDetails: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
               {course.title}
             </h1>
-            <p className="text-lg text-gray-600 mb-6">
-              {course.descripcion}
-            </p>
+            <div className="prose text-lg text-gray-600 mb-6">
+              <ReactMarkdown remarkPlugins={[remarkBreaks]}>
+                {course.descripcion}
+              </ReactMarkdown>
+            </div>
 
             <div className="flex flex-wrap gap-4 mb-6 text-gray-600">
               <span className="flex items-center">

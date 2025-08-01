@@ -19,17 +19,17 @@ const Footer: React.FC = () => {
               La plataforma educativa de Red Ciudadana para la innovación pública y transformación digital en América Latina.
             </p>
             <div className="flex space-x-4">
-              <a href="https://facebook.com/RedCiudadanaGT" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <a href="https://www.facebook.com/Redciudadanagt/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
                 <Facebook size={20} />
               </a>
-              <a href="https://linkedin.com/company/red-ciudadana" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <a href="https://www.instagram.com/redxguate/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
+                <Instagram size={20} />
+              </a>
+              <a href="https://www.linkedin.com/company/2532725" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
                 <Linkedin size={20} />
               </a>
-              <a href="https://youtube.com/@RedCiudadanaGT" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <a href="https://www.youtube.com/c/RedciudadanaOrgGt" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
                 <Youtube size={20} />
-              </a>
-              <a href="https://tiktok.com/@redciudadanagt" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
-                <Video size={20} />
               </a>
             </div>
           </div>
@@ -100,15 +100,15 @@ const Footer: React.FC = () => {
               <li className="flex items-center text-gray-400">
                 <Mail size={18} className="mr-2" />
                 <a href="mailto:info@redciudadana.org" className="hover:text-white transition-colors duration-200">
-                  info@redciudadana.org
+                  info@redciudadana.org.gt
                 </a>
               </li>
-              <li className="flex items-center text-gray-400">
+              {/* <li className="flex items-center text-gray-400">
                 <Phone size={18} className="mr-2" />
                 <a href="tel:+50222245252" className="hover:text-white transition-colors duration-200">
                   +502 4011-2926
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
