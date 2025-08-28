@@ -37,6 +37,7 @@ teoria: >-
   3. Escribir la sintaxis correcta.
 
   4. Verificar resultados y ajustar rangos si es necesario.
+video_zoom: https://www.youtube.com/embed/PucKUo0uvn0?si=O2IL7szZV2QX8BL5
 handout: /uploads/datasets_ejercicios_gobierno.xlsx
 numero: 2
 ---
