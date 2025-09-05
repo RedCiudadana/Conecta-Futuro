@@ -1,6 +1,7 @@
 ---
 title: Excel Avanzado - 7. Automatización con Macros
 curso: Excel Avanzado
+bienvenida: https://www.youtube.com/embed/0PWNFeD76oo?si=tm97pcJHn5HY-IUC
 teoria: |-
   
 
