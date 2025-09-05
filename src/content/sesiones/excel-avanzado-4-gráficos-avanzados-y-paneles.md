@@ -37,5 +37,6 @@ teoria: >-
   * Insertar gráfico combinado o minigráfico.
 
   * Personalizar con títulos y filtros.
+video_zoom: https://www.youtube.com/embed/9wq70JYbces?si=RdICF5Ij4MdUYVhl
 numero: 5
 ---
