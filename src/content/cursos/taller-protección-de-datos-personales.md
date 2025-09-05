@@ -8,6 +8,6 @@ categoria: Transformación Digital
 duracion: 4 horas
 enlace_contenido: https://redciudadana.org/
 enlace_registro: "#"
-instructor: Red Ciudadana
+instructor: Germán López Ardila
 password: gdpr2025
 ---
