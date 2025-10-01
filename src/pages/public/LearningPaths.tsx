@@ -59,54 +59,6 @@ const LearningPaths = () => {
       ]
     },
     {
-      id: 'emprendimiento-digital',
-      title: 'Emprendimiento Digital',
-      description: 'Dotar a jóvenes y mujeres emprendedoras de herramientas digitales para lanzar, fortalecer o escalar sus negocios usando tecnología, automatización y plataformas digitales.',
-      icon: Rocket,
-      bgColor: 'bg-black',
-      textColor: 'text-[#2563eb]',
-      hoverBg: 'hover:bg-blue-50',
-      tagBg: 'bg-[#1d4ed8]',
-      audience: 'Mujeres rurales, jóvenes emprendedores, microempresas, retornados',
-      modules: [
-        {
-          id: '2.1',
-          name: 'Alfabetización Digital para Emprender',
-          description: 'Uso de herramientas básicas: correo, nube, buscadores, redes',
-          icon: Laptop,
-          duration: '6 horas'
-        },
-        {
-          id: '2.2',
-          name: 'Comercio Electrónico y Plataformas Digitales',
-          description: 'Creación de tienda online, métodos de pago, marketplaces (Gumroad, Shopify, WhatsApp Business)',
-          icon: ShoppingBag,
-          duration: '8 horas'
-        },
-        {
-          id: '2.3',
-          name: 'Marketing Digital y Redes Sociales',
-          description: 'Canva, Meta Ads, TikTok y Reels, analítica básica, narrativa de marca',
-          icon: MessageSquare,
-          duration: '8 horas'
-        },
-        {
-          id: '2.4',
-          name: 'Automatización para Emprendimientos',
-          description: 'Herramientas no-code: Make.com, Zapier, Bolt.new, formularios inteligentes',
-          icon: Brain,
-          duration: '8 horas'
-        },
-        {
-          id: '2.5',
-          name: 'Finanzas Básicas y Formalización',
-          description: 'Facturación digital, SAT online, formalización, acceso a microcréditos',
-          icon: Coins,
-          duration: '6 horas'
-        }
-      ]
-    },
-    {
       id: 'primeros-pasos-digitales',
       title: 'Mis primeros pasos digitales',
       description: 'Garantizar el acceso y uso significativo de la tecnología a personas en situación de exclusión digital (adultos mayores, pueblos indígenas, jóvenes sin conectividad), empoderándolos con competencias digitales básicas y derechos digitales.',
