@@ -14,6 +14,7 @@ import Documentation from './pages/public/Documentation';
 import NotFound from './pages/public/NotFound';
 import Community from './pages/public/Community';
 import CommunityDetails from './pages/public/CommunityDetails';
+import PrimerosPasosDigitales from './pages/public/PrimerosPasosDigitales';
 import ScrollToTop from './components/scrolltotop';
 import ScrollTopButton from './components/scrolltotopButton';
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="course-sessions" element={<CourseSessions />} />
           <Route path="learning-paths" element={<LearningPaths />} />
           <Route path="mobile-api" element={<MobileApi />} />
+          <Route path="primeros-pasos-digitales" element={<PrimerosPasosDigitales />} />
           <Route path="course/:slug" element={<CourseDetails />} />
           <Route path="course/:slug/session" element={<CourseSession />} />
           <Route path="about" element={<AboutUs />} />
