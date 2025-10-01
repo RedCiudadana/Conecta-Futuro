@@ -12,7 +12,8 @@ import {
   ChevronDown,
   ChevronUp,
   Award,
-  ArrowRight
+  ArrowRight,
+  ExternalLink
 } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
@@ -155,7 +156,7 @@ const PrimerosPasosDigitales: React.FC = () => {
             <p className="text-xl sm:text-2xl text-primary-100 max-w-2xl mx-auto mb-8">
               Aprende lo básico para emprender en línea con herramientas digitales
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <span className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold text-lg">
                 🎉 Curso Gratuito
               </span>
@@ -165,6 +166,17 @@ const PrimerosPasosDigitales: React.FC = () => {
               <span className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold text-lg">
                 ⏱️ 16 horas totales
               </span>
+            </div>
+            <div className="flex justify-center">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSeibvYzAAGt7-60uDTi2BY9uhSkY1Kq7iaSYEdcH3PomNIakQ/viewform?usp=sharing&ouid=102614004827171520067"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-8 py-4 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-lg border-2 border-white"
+              >
+                Más información
+                <ExternalLink className="ml-2 h-5 w-5" />
+              </a>
             </div>
           </div>
         </div>
