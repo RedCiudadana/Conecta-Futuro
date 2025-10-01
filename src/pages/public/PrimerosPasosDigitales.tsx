@@ -174,7 +174,7 @@ const PrimerosPasosDigitales: React.FC = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-8 py-4 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-lg border-2 border-white"
               >
-                Más información
+                Registro
                 <ExternalLink className="ml-2 h-5 w-5" />
               </a>
             </div>
