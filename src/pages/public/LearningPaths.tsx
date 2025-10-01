@@ -118,39 +118,60 @@ const LearningPaths = () => {
       audience: 'Adultos mayores, pueblos indígenas, jóvenes sin conectividad',
       modules: [
         {
-          id: '3.1',
-          name: 'Primeros Pasos Digitales',
-          description: 'Encendido de dispositivos, uso de teclas, navegación básica, WhatsApp, fotografías',
+          id: '1',
+          name: 'Introducción al mundo digital',
+          description: '¿Qué es el internet y cómo funciona en el teléfono? • Uso básico de smartphone: botones, configuración, WiFi, datos móviles • Conceptos básicos: cuenta de Google, correo electrónico • Ejercicio práctico: enviar un correo y un mensaje por WhatsApp',
           icon: Smartphone,
-          duration: '6 horas'
+          duration: '2 horas'
         },
         {
-          id: '3.2',
-          name: 'Ciudadanía Digital',
-          description: 'Derechos en línea, protección de datos personales, ciberseguridad básica',
-          icon: Shield,
-          duration: '6 horas'
-        },
-        {
-          id: '3.3',
-          name: 'Acceso a Trámites y Servicios Públicos Digitales',
-          description: 'Portales del gobierno, citas en línea, trámites comunes, plataformas de salud y educación',
-          icon: FileText,
-          duration: '6 horas'
-        },
-        {
-          id: '3.4',
-          name: 'Creación de Contenido Comunitario',
-          description: 'Videos con celular, grabación de audio, narrativas comunitarias en redes sociales',
-          icon: Camera,
-          duration: '8 horas'
-        },
-        {
-          id: '3.5',
-          name: 'Alfabetización Digital en Idiomas Mayas',
-          description: 'Terminología, uso de interfaces multilingües, derechos lingüísticos digitales',
+          id: '2',
+          name: 'Comunicación digital con clientes',
+          description: 'WhatsApp como herramienta de ventas • Crear un perfil de WhatsApp Business • Uso de estados, respuestas automáticas y etiquetas para clientes • Ejercicio práctico: crear catálogo en WhatsApp Business',
           icon: MessageSquare,
-          duration: '6 horas'
+          duration: '2 horas'
+        },
+        {
+          id: '3',
+          name: 'Redes sociales para mi negocio',
+          description: '¿Por qué estar en redes sociales? • Crear una página de Facebook para negocios • Diferencia entre perfil personal y página • Ejercicio práctico: publicar una foto de producto con precio y descripción',
+          icon: Globe,
+          duration: '2 horas'
+        },
+        {
+          id: '4',
+          name: 'Contenido que vende',
+          description: 'Cómo tomar fotos atractivas con el celular • Uso de aplicaciones sencillas (Canva, CapCut) para editar imágenes y videos • Tips para escribir descripciones simples y llamativas • Ejercicio práctico: diseñar un flyer digital para un producto',
+          icon: Camera,
+          duration: '2 horas'
+        },
+        {
+          id: '5',
+          name: 'Estrategias de ventas en línea',
+          description: 'Cómo responder a clientes de forma clara y rápida • Métodos de confianza: mostrar producto, precio, forma de entrega • Promociones simples: descuentos, combos, rifas • Ejercicio práctico: simular una venta en WhatsApp',
+          icon: ShoppingBag,
+          duration: '2 horas'
+        },
+        {
+          id: '6',
+          name: 'Manejo básico de dinero digital',
+          description: 'Introducción a pagos digitales: transferencias, billeteras electrónicas • Cómo enviar y recibir pagos desde el celular • Seguridad digital: cómo evitar estafas • Ejercicio práctico: simular una venta con pago digital',
+          icon: Coins,
+          duration: '2 horas'
+        },
+        {
+          id: '7',
+          name: 'Construyendo mi identidad digital',
+          description: 'Cómo dar confianza: nombre, logo, colores, mensajes coherentes • Usar testimonios y fotos de clientes satisfechos • Diferencia entre vender un producto y vender una marca • Ejercicio práctico: crear una mini identidad de marca con Canva',
+          icon: Lightbulb,
+          duration: '2 horas'
+        },
+        {
+          id: '8',
+          name: 'Mi plan de negocio digital',
+          description: 'Paso a paso: definir producto, precio, promoción y entrega • Cómo organizar contactos de clientes en Excel/hoja de papel • Revisión de casos exitosos locales • Ejercicio práctico: cada emprendedora diseña su plan básico de ventas digitales',
+          icon: FileText,
+          duration: '2 horas'
         }
       ]
     }
