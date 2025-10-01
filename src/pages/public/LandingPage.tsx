@@ -285,6 +285,63 @@ const LandingPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Curso Destacado - Primeros Pasos Digitales - Segunda aparición */}
+      <div className="py-16 bg-green-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="grid md:grid-cols-2 gap-0">
+                <div className="p-8 md:p-12 flex flex-col justify-center">
+                  <div className="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold mb-4 w-fit">
+                    🎉 Curso Especial Gratuito
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-heading">
+                    Mis Primeros Pasos Digitales
+                  </h2>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Un curso diseñado especialmente para emprendedoras con pocos conocimientos digitales.
+                    Aprende a usar herramientas básicas para vender tus productos en línea, desde cero y a tu ritmo.
+                  </p>
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
+                      <span>8 módulos prácticos (16 horas totales)</span>
+                    </div>
+                    <div className="flex items-center text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
+                      <span>Sin experiencia previa necesaria</span>
+                    </div>
+                    <div className="flex items-center text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
+                      <span>Certificado digital al completar</span>
+                    </div>
+                    <div className="flex items-center text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
+                      <span>Aprende WhatsApp Business, redes sociales y más</span>
+                    </div>
+                  </div>
+                  <Link
+                    to="/primeros-pasos-digitales"
+                    className="inline-flex items-center px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg w-fit"
+                  >
+                    Conocer el curso
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </div>
+                <div className="relative h-64 md:h-auto bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center p-8">
+                  <div className="text-center">
+                    <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                      <BookOpen className="w-16 h-16 text-green-600" />
+                    </div>
+                    <p className="text-green-800 font-semibold text-xl">¡Empieza hoy tu transformación digital!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Testimonials Section */}
       {/* <div className="py-20 bg-white">
         <div className="container mx-auto px-4">
