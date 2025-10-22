@@ -134,21 +134,9 @@ const LandingPage: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   to="/courses"
-                  className="px-8 py-4 rounded-lg bg-black  text-white text-primary-800 font-semibold transition-colors text-lg"
+                  className="px-8 py-4 rounded-lg bg-black text-white font-semibold transition-colors text-lg"
                 >
                   Ver Cursos
-                </Link>
-                <Link
-                  to="/learning-paths"
-                  className="px-8 py-4 rounded-lg bg-black text-white font-semibold transition-colors text-lg border border-primary-600"
-                >
-                  Rutas de Aprendizaje
-                </Link>
-                <Link
-                  to="/primeros-pasos-digitales"
-                  className="px-8 py-4 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors text-lg"
-                >
-                  Mis Primeros Pasos Digitales
                 </Link>
               </div>
             </div>
