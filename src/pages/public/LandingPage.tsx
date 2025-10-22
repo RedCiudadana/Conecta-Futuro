@@ -14,6 +14,7 @@ import Icono8 from '../../assets/iconos/EC-30.png';
 import Icono9 from '../../assets/iconos/EC-31.png';
 import Icono10 from '../../assets/iconos/EC-32.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
+import ConectaFuturoPopup from '../../components/ui/ConectaFuturoPopup';
 
 const LandingPage: React.FC = () => {
   const features = [
@@ -114,6 +115,8 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
+      <ConectaFuturoPopup />
+
       {/* Hero Section */}
       <div
         className="relative bg-cover bg-center text-white"
