@@ -22,7 +22,6 @@ interface Module {
   number: number;
   icon: React.ReactNode;
   title: string;
-  duration: string;
   topics: string[];
   exercise: string;
   videoUrl?: string;
@@ -36,7 +35,6 @@ const PrimerosPasosDigitales: React.FC = () => {
       number: 1,
       icon: <Smartphone className="w-8 h-8" />,
       title: 'Introducción al mundo digital',
-      duration: '2 horas',
       topics: [
         '¿Qué es el internet y cómo funciona en el teléfono?',
         'Uso básico de smartphone: botones, configuración, WiFi, datos móviles',
@@ -48,7 +46,6 @@ const PrimerosPasosDigitales: React.FC = () => {
       number: 2,
       icon: <MessageCircle className="w-8 h-8" />,
       title: 'Comunicación digital con clientes',
-      duration: '2 horas',
       topics: [
         'WhatsApp como herramienta de ventas',
         'Crear un perfil de WhatsApp Business',
@@ -60,7 +57,6 @@ const PrimerosPasosDigitales: React.FC = () => {
       number: 3,
       icon: <Share2 className="w-8 h-8" />,
       title: 'Redes sociales para mi negocio',
-      duration: '2 horas',
       topics: [
         '¿Por qué estar en redes sociales?',
         'Crear una página de Facebook para negocios',
@@ -72,7 +68,6 @@ const PrimerosPasosDigitales: React.FC = () => {
       number: 4,
       icon: <Camera className="w-8 h-8" />,
       title: 'Contenido que vende',
-      duration: '2 horas',
       topics: [
         'Cómo tomar fotos atractivas con el celular',
         'Uso de aplicaciones sencillas (Canva, CapCut) para editar imágenes y videos',
@@ -84,7 +79,6 @@ const PrimerosPasosDigitales: React.FC = () => {
       number: 5,
       icon: <ShoppingBag className="w-8 h-8" />,
       title: 'Estrategias de ventas en línea',
-      duration: '2 horas',
       topics: [
         'Cómo responder a clientes de forma clara y rápida',
         'Métodos de confianza: mostrar producto, precio, forma de entrega',
@@ -96,7 +90,6 @@ const PrimerosPasosDigitales: React.FC = () => {
       number: 6,
       icon: <CreditCard className="w-8 h-8" />,
       title: 'Manejo básico de dinero digital',
-      duration: '2 horas',
       topics: [
         'Introducción a pagos digitales: transferencias, billeteras electrónicas',
         'Cómo enviar y recibir pagos desde el celular',
@@ -108,7 +101,6 @@ const PrimerosPasosDigitales: React.FC = () => {
       number: 7,
       icon: <Sparkles className="w-8 h-8" />,
       title: 'Construyendo mi identidad digital',
-      duration: '2 horas',
       topics: [
         'Cómo dar confianza: nombre, logo, colores, mensajes coherentes',
         'Usar testimonios y fotos de clientes satisfechos',
@@ -120,7 +112,6 @@ const PrimerosPasosDigitales: React.FC = () => {
       number: 8,
       icon: <FileText className="w-8 h-8" />,
       title: 'Mi plan de negocio digital',
-      duration: '2 horas',
       topics: [
         'Paso a paso: definir producto, precio, promoción y entrega',
         'Cómo organizar contactos de clientes en Excel/hoja de papel',
@@ -164,7 +155,7 @@ const PrimerosPasosDigitales: React.FC = () => {
                 📱 100% Práctico
               </span>
               <span className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold text-lg">
-                ⏱️ 16 horas totales
+                📚 8 Módulos
               </span>
             </div>
             <div className="flex justify-center">
@@ -253,12 +244,9 @@ const PrimerosPasosDigitales: React.FC = () => {
                       <div className="text-sm text-gray-500 mb-1">
                         Módulo {module.number}
                       </div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                      <h3 className="text-xl font-semibold text-gray-900">
                         {module.title}
                       </h3>
-                      <div className="text-sm text-gray-600">
-                        {module.duration}
-                      </div>
                     </div>
                   </div>
                   {expandedModule === module.number ? (
