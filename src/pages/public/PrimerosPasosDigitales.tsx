@@ -14,7 +14,8 @@ import {
   ChevronUp,
   Award,
   ArrowRight,
-  ExternalLink
+  ExternalLink,
+  Volume2
 } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
@@ -26,10 +27,12 @@ interface Module {
   topics: string[];
   exercise: string;
   videoUrl?: string;
+  audioUrl?: string;
 }
 
 const PrimerosPasosDigitales: React.FC = () => {
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
+  const [playingAudio, setPlayingAudio] = useState<number | null>(null);
 
   const modules: Module[] = [
     {
@@ -42,7 +45,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Conceptos básicos: cuenta de Google, correo electrónico'
       ],
       exercise: 'Enviar un correo y un mensaje por WhatsApp',
-      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
+      audioUrl: 'https://example.com/audio/modulo1.mp3'
     },
     {
       number: 2,
@@ -54,7 +58,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Uso de estados, respuestas automáticas y etiquetas para clientes'
       ],
       exercise: 'Crear catálogo en WhatsApp Business',
-      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
+      audioUrl: 'https://example.com/audio/modulo2.mp3'
     },
     {
       number: 3,
@@ -66,7 +71,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Diferencia entre perfil personal y página'
       ],
       exercise: 'Publicar una foto de producto con precio y descripción',
-      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
+      audioUrl: 'https://example.com/audio/modulo3.mp3'
     },
     {
       number: 4,
@@ -78,7 +84,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Tips para escribir descripciones simples y llamativas'
       ],
       exercise: 'Diseñar un flyer digital para un producto',
-      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
+      audioUrl: 'https://example.com/audio/modulo4.mp3'
     },
     {
       number: 5,
@@ -90,7 +97,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Promociones simples: descuentos, combos, rifas'
       ],
       exercise: 'Simular una venta en WhatsApp',
-      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
+      audioUrl: 'https://example.com/audio/modulo5.mp3'
     },
     {
       number: 6,
@@ -102,7 +110,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Seguridad digital: cómo evitar estafas'
       ],
       exercise: 'Simular una venta con pago digital',
-      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
+      audioUrl: 'https://example.com/audio/modulo6.mp3'
     },
     {
       number: 7,
@@ -114,7 +123,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Diferencia entre vender un producto y vender una marca'
       ],
       exercise: 'Crear una mini identidad de marca con Canva',
-      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
+      audioUrl: 'https://example.com/audio/modulo7.mp3'
     },
     {
       number: 8,
@@ -126,7 +136,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Revisión de casos exitosos locales'
       ],
       exercise: 'Cada emprendedora diseña su plan básico de ventas digitales',
-      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
+      audioUrl: 'https://example.com/audio/modulo8.mp3'
     }
   ];
 
@@ -280,6 +291,34 @@ const PrimerosPasosDigitales: React.FC = () => {
                           </li>
                         ))}
                       </ul>
+
+                      {module.audioUrl && (
+                        <div className="mb-6">
+                          <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                            <Volume2 className="w-5 h-5 text-primary-600" />
+                            🎧 Audio del módulo:
+                          </h4>
+                          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <ReactPlayer
+                              url={module.audioUrl}
+                              width="100%"
+                              height="50px"
+                              controls={true}
+                              playing={playingAudio === module.number}
+                              onPlay={() => setPlayingAudio(module.number)}
+                              onPause={() => setPlayingAudio(null)}
+                              onEnded={() => setPlayingAudio(null)}
+                              config={{
+                                file: {
+                                  attributes: {
+                                    controlsList: 'nodownload'
+                                  }
+                                }
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
 
                       {module.videoUrl && (
                         <div className="mb-6">
