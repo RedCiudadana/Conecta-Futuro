@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ReactPlayer from 'react-player';
 import {
   Smartphone,
   MessageCircle,
@@ -40,7 +41,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Uso básico de smartphone: botones, configuración, WiFi, datos móviles',
         'Conceptos básicos: cuenta de Google, correo electrónico'
       ],
-      exercise: 'Enviar un correo y un mensaje por WhatsApp'
+      exercise: 'Enviar un correo y un mensaje por WhatsApp',
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
     },
     {
       number: 2,
@@ -51,7 +53,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Crear un perfil de WhatsApp Business',
         'Uso de estados, respuestas automáticas y etiquetas para clientes'
       ],
-      exercise: 'Crear catálogo en WhatsApp Business'
+      exercise: 'Crear catálogo en WhatsApp Business',
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
     },
     {
       number: 3,
@@ -62,7 +65,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Crear una página de Facebook para negocios',
         'Diferencia entre perfil personal y página'
       ],
-      exercise: 'Publicar una foto de producto con precio y descripción'
+      exercise: 'Publicar una foto de producto con precio y descripción',
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
     },
     {
       number: 4,
@@ -73,7 +77,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Uso de aplicaciones sencillas (Canva, CapCut) para editar imágenes y videos',
         'Tips para escribir descripciones simples y llamativas'
       ],
-      exercise: 'Diseñar un flyer digital para un producto'
+      exercise: 'Diseñar un flyer digital para un producto',
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
     },
     {
       number: 5,
@@ -84,7 +89,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Métodos de confianza: mostrar producto, precio, forma de entrega',
         'Promociones simples: descuentos, combos, rifas'
       ],
-      exercise: 'Simular una venta en WhatsApp'
+      exercise: 'Simular una venta en WhatsApp',
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
     },
     {
       number: 6,
@@ -95,7 +101,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Cómo enviar y recibir pagos desde el celular',
         'Seguridad digital: cómo evitar estafas'
       ],
-      exercise: 'Simular una venta con pago digital'
+      exercise: 'Simular una venta con pago digital',
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
     },
     {
       number: 7,
@@ -106,7 +113,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Usar testimonios y fotos de clientes satisfechos',
         'Diferencia entre vender un producto y vender una marca'
       ],
-      exercise: 'Crear una mini identidad de marca con Canva'
+      exercise: 'Crear una mini identidad de marca con Canva',
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
     },
     {
       number: 8,
@@ -117,7 +125,8 @@ const PrimerosPasosDigitales: React.FC = () => {
         'Cómo organizar contactos de clientes en Excel/hoja de papel',
         'Revisión de casos exitosos locales'
       ],
-      exercise: 'Cada emprendedora diseña su plan básico de ventas digitales'
+      exercise: 'Cada emprendedora diseña su plan básico de ventas digitales',
+      videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv'
     }
   ];
 
@@ -277,8 +286,18 @@ const PrimerosPasosDigitales: React.FC = () => {
                           <h4 className="font-semibold text-gray-900 mb-3">
                             🎥 Video explicativo:
                           </h4>
-                          <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                            <span className="text-gray-500">Video del módulo {module.number}</span>
+                          <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                            <ReactPlayer
+                              url={module.videoUrl}
+                              width="100%"
+                              height="100%"
+                              controls={true}
+                              config={{
+                                youtube: {
+                                  playerVars: { showinfo: 1 }
+                                }
+                              }}
+                            />
                           </div>
                         </div>
                       )}
