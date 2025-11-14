@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Calendar, MapPin, Users, Target, Lightbulb, Globe, Search, Compass, Database, Shield, FileText, Network, CheckCircle, ExternalLink } from 'lucide-react';
 
 const ConectaFuturo: React.FC = () => {
-  const [activeDay, setActiveDay] = useState<1 | 2>(1);
 
   const objectives = [
     {
@@ -54,20 +53,11 @@ const ConectaFuturo: React.FC = () => {
     }
   ];
 
-  const agendaDay1 = [
+  const agenda = [
     { time: '08:00 – 08:05', activity: 'Bienvenida y apertura' },
-    { time: '08:05 – 09:00', activity: 'Keynote: "El Futuro Digital de los Estados"' },
-    { time: '09:00 – 09:50', activity: 'Bloque 1: Datos Abiertos' },
-    { time: '09:50 – 10:40', activity: 'Bloque 2: Trámites y Servicios Digitales' },
-    { time: '10:40 – 11:30', activity: 'Bloque 3: Tecnología para Combatir la Corrupción' },
-    { time: '11:30 – 11:35', activity: 'Cierre Día 1' }
-  ];
-
-  const agendaDay2 = [
-    { time: '08:00 – 08:05', activity: 'Bienvenida Día 2' },
     { time: '08:05 – 09:00', activity: 'La Agenda de Transformación Digital en Guatemala' },
-    { time: '09:00 – 09:55', activity: 'Bloque 4: Interoperabilidad' },
-    { time: '09:55 – 10:40', activity: 'Bloque 5: Ciberseguridad y Confianza Digital' },
+    { time: '09:00 – 09:55', activity: 'Bloque 1: Interoperabilidad' },
+    { time: '09:55 – 10:40', activity: 'Bloque 2: Ciberseguridad y Confianza Digital' },
     { time: '10:40 – 11:30', activity: 'Cierre y Llamado a la Acción' }
   ];
 
@@ -107,7 +97,7 @@ const ConectaFuturo: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-lg md:text-xl mb-10">
             <div className="flex items-center gap-2">
               <Calendar className="w-6 h-6" />
-              <span>18 y 19 de noviembre de 2025</span>
+              <span>19 de noviembre de 2025</span>
             </div>
             <span className="hidden sm:inline">|</span>
             <div className="flex items-center gap-2">
@@ -149,7 +139,7 @@ const ConectaFuturo: React.FC = () => {
                   Conecta Futuro 2025 es un encuentro virtual organizado por Red Ciudadana que busca inspirar la colaboración entre instituciones públicas, sociedad civil, academia y sector tecnológico.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Durante dos jornadas, exploraremos cómo los datos, la interoperabilidad y la ciberseguridad pueden fortalecer la confianza y la eficiencia del Estado guatemalteco.
+                  Durante esta jornada, exploraremos cómo los datos, la interoperabilidad y la ciberseguridad pueden fortalecer la confianza y la eficiencia del Estado guatemalteco.
                 </p>
               </div>
               <div className="relative">
@@ -205,44 +195,26 @@ const ConectaFuturo: React.FC = () => {
               Agenda del Evento
             </h2>
             <p className="text-xl text-gray-600">
-              Dos días de aprendizaje, intercambio y transformación digital
+              Un día de aprendizaje, intercambio y transformación digital
             </p>
           </div>
 
           <div className="max-w-4xl mx-auto">
-            {/* Tabs */}
-            <div className="flex gap-4 mb-8 border-b-2 border-gray-200">
-              <button
-                onClick={() => setActiveDay(1)}
-                className={`px-6 py-4 font-semibold text-lg transition-all ${
-                  activeDay === 1
-                    ? 'text-[#0072CE] border-b-4 border-[#0072CE] -mb-0.5'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Día 1 - Martes 18 de noviembre
-                <div className="text-sm font-normal mt-1">Gobierno Digital y Transparencia</div>
-              </button>
-              <button
-                onClick={() => setActiveDay(2)}
-                className={`px-6 py-4 font-semibold text-lg transition-all ${
-                  activeDay === 2
-                    ? 'text-[#0072CE] border-b-4 border-[#0072CE] -mb-0.5'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Día 2 - Miércoles 19 de noviembre
-                <div className="text-sm font-normal mt-1">Integridad, Interoperabilidad y Ciberseguridad</div>
-              </button>
+            {/* Agenda Header */}
+            <div className="mb-8 text-center">
+              <div className="inline-block px-6 py-4 bg-[#0072CE] text-white rounded-lg font-semibold text-lg">
+                Miércoles 19 de noviembre de 2025
+              </div>
+              <div className="text-gray-600 mt-2">Integridad, Interoperabilidad y Ciberseguridad</div>
             </div>
 
             {/* Agenda Content */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              {(activeDay === 1 ? agendaDay1 : agendaDay2).map((item, index) => (
+              {agenda.map((item, index) => (
                 <div
                   key={index}
                   className={`p-6 flex gap-6 ${
-                    index !== (activeDay === 1 ? agendaDay1 : agendaDay2).length - 1
+                    index !== agenda.length - 1
                       ? 'border-b border-gray-200'
                       : ''
                   } hover:bg-gray-50 transition-colors`}
@@ -304,7 +276,7 @@ const ConectaFuturo: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-lg">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-6 h-6" />
-                  <span>18 y 19 de noviembre de 2025</span>
+                  <span>19 de noviembre de 2025</span>
                 </div>
                 <span className="hidden sm:inline">•</span>
                 <div className="flex items-center gap-2">
