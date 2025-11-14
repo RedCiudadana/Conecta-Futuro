@@ -137,10 +137,10 @@ const ConectaFuturo: React.FC = () => {
         {/* Content */}
         <div className="relative z-10 container mx-auto px-4 py-20 text-center text-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 font-heading">
-            Conecta Futuro 2025
+            Conecta Futuro 2026
           </h1>
           <p className="text-2xl md:text-3xl mb-8 max-w-4xl mx-auto leading-relaxed">
-            Construyamos juntos un Estado digital, transparente y eficiente.
+            Construyamos juntos el Estado digital del próximo año
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-lg md:text-xl mb-10">
@@ -185,7 +185,7 @@ const ConectaFuturo: React.FC = () => {
                   Un espacio para construir confianza digital
                 </h2>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  Conecta Futuro 2025 es un encuentro virtual organizado por Red Ciudadana que busca inspirar la colaboración entre instituciones públicas, sociedad civil, academia y sector tecnológico.
+                  Conecta Futuro 2026 es un encuentro virtual organizado por Red Ciudadana que busca inspirar la colaboración entre instituciones públicas, sociedad civil, academia y sector tecnológico.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
                   Durante esta jornada, exploraremos cómo los datos, la interoperabilidad y la ciberseguridad pueden fortalecer la confianza y la eficiencia del Estado guatemalteco.
@@ -320,7 +320,7 @@ const ConectaFuturo: React.FC = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 font-heading">
-              🎟️ Participa en Conecta Futuro 2025
+              🎟️ Participa en Conecta Futuro 2026
             </h2>
             <p className="text-xl leading-relaxed mb-8">
               El evento es gratuito y abierto al público.

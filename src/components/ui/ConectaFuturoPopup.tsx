@@ -46,12 +46,12 @@ const ConectaFuturoPopup: React.FC = () => {
                   Evento Virtual 2025
                 </div>
                 <h3 className="text-xl font-bold font-heading">
-                  Conecta Futuro 2025
+                  Conecta Futuro 2026
                 </h3>
               </div>
             </div>
             <p className="text-sm text-blue-50 leading-snug">
-              Construyamos juntos un Estado digital, transparente y eficiente
+              Construyamos juntos el Estado digital del próximo año
             </p>
           </div>
 
