@@ -54,11 +54,60 @@ const ConectaFuturo: React.FC = () => {
   ];
 
   const agenda = [
-    { time: '08:00 – 08:05', activity: 'Bienvenida y apertura' },
-    { time: '08:05 – 09:00', activity: 'La Agenda de Transformación Digital en Guatemala' },
-    { time: '09:00 – 09:55', activity: 'Bloque 1: Interoperabilidad' },
-    { time: '09:55 – 10:40', activity: 'Bloque 2: Ciberseguridad y Confianza Digital' },
-    { time: '10:40 – 11:30', activity: 'Cierre y Llamado a la Acción' }
+    {
+      time: '09:00 – 09:30',
+      activity: 'Bienvenida y Apertura',
+      description: 'Apertura institucional y presentación de la visión estratégica del evento',
+      speaker: 'Julio Herrera Toledo – Director Ejecutivo, Red Ciudadana'
+    },
+    {
+      time: '09:30 – 10:00',
+      activity: 'Sesión 1 – Ciberseguridad y Confianza Digital',
+      description: 'Explorar prioridades, capacidades y próximos pasos en ciberseguridad para el sector público',
+      speaker: 'Germán López (Colombia)'
+    },
+    {
+      time: '10:00 – 10:05',
+      activity: 'Intervención – Embajada del Reino Unido',
+      description: 'Mensaje inaugural del bloque de Datos Abiertos desde la perspectiva de la cooperación internacional',
+      speaker: 'Paul Huggins – Deputy Head of Mission, UK Embassy'
+    },
+    {
+      time: '10:05 – 10:25',
+      activity: 'Sesión 2 – Datos Abiertos',
+      description: 'Introducción a los datos abiertos y su relevancia para la transparencia y el valor público',
+      speaker: 'Daniel Carranza – DATA Uruguay'
+    },
+    {
+      time: '10:25 – 10:45',
+      activity: 'Sesión 3 – Datos Abiertos',
+      description: 'Datos abiertos y medio ambiente: oportunidades, desafíos y ejemplos de impacto',
+      speaker: 'Mercedes De los Santos – Open Data Charter'
+    },
+    {
+      time: '10:45 – 11:05',
+      activity: 'Sesión 4 – Datos Abiertos',
+      description: 'Marcos regulatorios y tendencias en políticas de datos abiertos en América Latina',
+      speaker: 'Mike Mora – Organización de los Estados Americanos (OEA)'
+    },
+    {
+      time: '11:05 – 11:25',
+      activity: 'Sesión 5 – Datos Abiertos',
+      description: 'El liderazgo del Reino Unido en la agenda global de datos abiertos',
+      speaker: 'Marta Acosta – Embajada del Reino Unido'
+    },
+    {
+      time: '11:25 – 11:45',
+      activity: 'Sesión 6 – Interoperabilidad e Innovación Pública',
+      description: 'Presentación de avances internacionales y modelos exitosos en interoperabilidad',
+      speaker: 'Germán López (Colombia)'
+    },
+    {
+      time: '12:05 – 12:10',
+      activity: 'Cierre Institucional',
+      description: 'Agradecimientos, conclusiones y próximos pasos',
+      speaker: 'Julio Herrera Toledo – Director Ejecutivo, Red Ciudadana'
+    }
   ];
 
   const scrollToAgenda = () => {
@@ -213,17 +262,21 @@ const ConectaFuturo: React.FC = () => {
               {agenda.map((item, index) => (
                 <div
                   key={index}
-                  className={`p-6 flex gap-6 ${
+                  className={`p-6 ${
                     index !== agenda.length - 1
                       ? 'border-b border-gray-200'
                       : ''
                   } hover:bg-gray-50 transition-colors`}
                 >
-                  <div className="flex-shrink-0 w-32 text-[#0072CE] font-semibold">
-                    {item.time}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-gray-900 text-lg">{item.activity}</p>
+                  <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                    <div className="flex-shrink-0 md:w-32 text-[#0072CE] font-semibold">
+                      {item.time}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-gray-900 text-lg font-semibold mb-2">{item.activity}</h3>
+                      <p className="text-gray-700 text-sm mb-2 leading-relaxed">{item.description}</p>
+                      <p className="text-gray-600 text-sm italic">{item.speaker}</p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -280,7 +333,7 @@ const ConectaFuturo: React.FC = () => {
                 </div>
                 <span className="hidden sm:inline">•</span>
                 <div className="flex items-center gap-2">
-                  <span>🕗 08:00 a 11:30 am (hora de Guatemala)</span>
+                  <span>🕗 09:00 am a 12:10 pm (hora de Guatemala)</span>
                 </div>
                 <span className="hidden sm:inline">•</span>
                 <div className="flex items-center gap-2">

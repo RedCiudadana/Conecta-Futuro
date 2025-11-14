@@ -61,7 +61,7 @@ const ConectaFuturoPopup: React.FC = () => {
                 <Calendar className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-semibold text-gray-900">19 de noviembre</p>
-                  <p className="text-xs text-gray-600">8:00 - 11:30 am</p>
+                  <p className="text-xs text-gray-600">9:00 am - 12:10 pm</p>
                 </div>
               </div>
 
