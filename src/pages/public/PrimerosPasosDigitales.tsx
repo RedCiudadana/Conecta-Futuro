@@ -16,7 +16,6 @@ import {
   Volume2,
   CheckCircle,
   Circle,
-  Download,
   BookOpen
 } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
@@ -45,7 +44,6 @@ const PrimerosPasosDigitales: React.FC = () => {
   const [currentExam, setCurrentExam] = useState<number | null>(null);
   const [examAnswers, setExamAnswers] = useState<{[key: number]: number}>({});
   const [examResults, setExamResults] = useState<{[key: number]: boolean}>({});
-  const [showDiploma, setShowDiploma] = useState(false);
 
   const modules: Module[] = [
     {
@@ -651,59 +649,23 @@ const PrimerosPasosDigitales: React.FC = () => {
                   ¡Felicitaciones! Has completado todas las evaluaciones
                 </h3>
                 <p className="text-primary-100 mb-6">
-                  Ahora puedes generar tu diploma digital
+                  Ahora puedes solicitar tu diploma digital
                 </p>
-                <button
-                  onClick={() => setShowDiploma(true)}
+                <a
+                  href="https://forms.gle/knhEDnwWoUSe4rts9"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-100 transition-colors font-semibold text-lg"
                 >
-                  <Download className="w-5 h-5" />
-                  Generar Mi Diploma
-                </button>
+                  <Award className="w-5 h-5" />
+                  Solicitar mi Certificado
+                </a>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Diploma Modal */}
-      {showDiploma && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full p-8">
-            <div className="text-center">
-              <Award className="w-20 h-20 text-yellow-500 mx-auto mb-4" />
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Diploma de Finalización
-              </h2>
-              <div className="border-4 border-primary-600 rounded-lg p-8 mb-6">
-                <p className="text-lg text-gray-600 mb-4">Se certifica que</p>
-                <p className="text-2xl font-bold text-gray-900 mb-4">[Tu Nombre]</p>
-                <p className="text-gray-600 mb-2">ha completado exitosamente el curso</p>
-                <p className="text-xl font-semibold text-primary-600 mb-4">
-                  Mis Primeros Pasos Digitales
-                </p>
-                <p className="text-gray-500 text-sm">
-                  Fecha: {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </p>
-              </div>
-              <div className="flex gap-4 justify-center">
-                <button
-                  onClick={() => window.print()}
-                  className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-                >
-                  Descargar PDF
-                </button>
-                <button
-                  onClick={() => setShowDiploma(false)}
-                  className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-                >
-                  Cerrar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* CTA Final */}
       <div
