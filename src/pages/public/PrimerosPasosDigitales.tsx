@@ -10,8 +10,6 @@ import {
   CreditCard,
   Sparkles,
   FileText,
-  ChevronDown,
-  ChevronUp,
   Award,
   ArrowRight,
   ExternalLink,
@@ -31,7 +29,6 @@ interface Module {
 }
 
 const PrimerosPasosDigitales: React.FC = () => {
-  const [expandedModule, setExpandedModule] = useState<number | null>(null);
   const [playingAudio, setPlayingAudio] = useState<number | null>(null);
 
   const modules: Module[] = [
@@ -141,9 +138,6 @@ const PrimerosPasosDigitales: React.FC = () => {
     }
   ];
 
-  const toggleModule = (moduleNumber: number) => {
-    setExpandedModule(expandedModule === moduleNumber ? null : moduleNumber);
-  };
 
   return (
     <div className="min-h-screen">
@@ -252,33 +246,22 @@ const PrimerosPasosDigitales: React.FC = () => {
                 className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
               >
                 {/* Module Header */}
-                <button
-                  onClick={() => toggleModule(module.number)}
-                  className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-primary-600 rounded-lg flex items-center justify-center text-white flex-shrink-0">
-                      {module.icon}
-                    </div>
-                    <div className="text-left">
-                      <div className="text-sm text-gray-500 mb-1">
-                        Módulo {module.number}
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900">
-                        {module.title}
-                      </h3>
-                    </div>
+                <div className="p-6 flex items-center space-x-4 bg-gray-50">
+                  <div className="w-16 h-16 bg-primary-600 rounded-lg flex items-center justify-center text-white flex-shrink-0">
+                    {module.icon}
                   </div>
-                  {expandedModule === module.number ? (
-                    <ChevronUp className="w-6 h-6 text-gray-400 flex-shrink-0" />
-                  ) : (
-                    <ChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0" />
-                  )}
-                </button>
+                  <div className="text-left">
+                    <div className="text-sm text-gray-500 mb-1">
+                      Módulo {module.number}
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {module.title}
+                    </h3>
+                  </div>
+                </div>
 
                 {/* Module Content */}
-                {expandedModule === module.number && (
-                  <div className="px-6 pb-6 border-t border-gray-100">
+                <div className="px-6 pb-6 border-t border-gray-100">
                     <div className="pt-6">
                       <h4 className="font-semibold text-gray-900 mb-3">
                         📚 Contenidos:
@@ -350,7 +333,6 @@ const PrimerosPasosDigitales: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                )}
               </div>
             ))}
           </div>
