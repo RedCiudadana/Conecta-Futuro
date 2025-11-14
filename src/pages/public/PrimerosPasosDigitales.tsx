@@ -20,6 +20,11 @@ import {
 import Fondo from '../../assets/slider/fondo.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
 
+interface AudioResource {
+  title: string;
+  url: string;
+}
+
 interface Module {
   number: number;
   icon: React.ReactNode;
@@ -28,6 +33,7 @@ interface Module {
   exercise: string;
   videoUrl?: string;
   audioUrl?: string;
+  audios?: AudioResource[];
   questions?: Question[];
 }
 
@@ -38,7 +44,7 @@ interface Question {
 }
 
 const PrimerosPasosDigitales: React.FC = () => {
-  const [playingAudio, setPlayingAudio] = useState<number | null>(null);
+  const [playingAudio, setPlayingAudio] = useState<number | string | null>(null);
   const [completedModules, setCompletedModules] = useState<Set<number>>(new Set());
   const [currentExam, setCurrentExam] = useState<number | null>(null);
   const [examAnswers, setExamAnswers] = useState<{[key: number]: number}>({});
@@ -56,7 +62,16 @@ const PrimerosPasosDigitales: React.FC = () => {
       ],
       exercise: 'Enviar un correo y un mensaje por WhatsApp',
       videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
-      audioUrl: 'https://example.com/audio/modulo1.mp3',
+      audios: [
+        {
+          title: '¿Qué es lo digital?',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo1/Mis-Primeros-Pasos%20Digitales-Modulo1-Audio1.mp3'
+        },
+        {
+          title: '¿Qué es internet?',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo1/Mis-Primeros-Pasos%20Digitales-Modulo1-Audio2.mp3'
+        }
+      ],
       questions: [
         {
           question: '¿Qué es el internet?',
@@ -387,6 +402,41 @@ const PrimerosPasosDigitales: React.FC = () => {
                           </li>
                         ))}
                       </ul>
+
+                      {module.audios && module.audios.length > 0 && (
+                        <div className="mb-6">
+                          <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                            <Volume2 className="w-5 h-5 text-primary-600" />
+                            🎧 Audios del módulo:
+                          </h4>
+                          <div className="space-y-4">
+                            {module.audios.map((audio, audioIndex) => (
+                              <div key={audioIndex} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                <p className="text-sm font-medium text-gray-700 mb-2">
+                                  {audio.title}
+                                </p>
+                                <ReactPlayer
+                                  url={audio.url}
+                                  width="100%"
+                                  height="50px"
+                                  controls={true}
+                                  playing={playingAudio === `${module.number}-${audioIndex}`}
+                                  onPlay={() => setPlayingAudio(`${module.number}-${audioIndex}`)}
+                                  onPause={() => setPlayingAudio(null)}
+                                  onEnded={() => setPlayingAudio(null)}
+                                  config={{
+                                    file: {
+                                      attributes: {
+                                        controlsList: 'nodownload'
+                                      }
+                                    }
+                                  }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
                       {module.audioUrl && (
                         <div className="mb-6">
