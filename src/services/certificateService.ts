@@ -21,6 +21,7 @@ const parseCSV = (csvText: string): CertificateRecord[] => {
         issueDate: values[5].trim(),
         instructorName: values[6].trim(),
         expirationDate: values[7] ? values[7].trim() : undefined,
+        certificateUrl: values[8] ? values[8].trim() : undefined,
       });
     }
   }

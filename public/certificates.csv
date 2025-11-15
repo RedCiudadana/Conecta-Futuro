@@ -1,11 +1,11 @@
-certificateCode,studentName,studentEmail,courseName,completionDate,issueDate,instructorName,expirationDate
-CERT-2024-001,Juan Carlos Pérez,juan.perez@example.com,Excel Avanzado,2024-10-15,2024-10-16,César Pérez,2026-10-16
-CERT-2024-002,María García López,maria.garcia@example.com,Introducción a PowerBI,2024-10-20,2024-10-21,Red Ciudadana,2026-10-21
-CERT-2024-003,Carlos Rodríguez,carlos.rodriguez@example.com,Protección de Datos Personales,2024-10-25,2024-10-26,Julio Herrera,2026-10-26
-CERT-2024-004,Ana Martínez,ana.martinez@example.com,Inteligencia Artificial Básico,2024-11-01,2024-11-02,Édgar Cabrera,2026-11-02
-CERT-2024-005,Luis Fernando Torres,luis.torres@example.com,Introducción a Ciberseguridad,2024-11-05,2024-11-06,Christian Hidalgo,2026-11-06
-CERT-2024-006,Patricia Hernández,patricia.hernandez@example.com,Excel para la Gestión Pública,2024-11-08,2024-11-09,César Pérez,2026-11-09
-CERT-2024-007,Roberto Morales,roberto.morales@example.com,Introducción a Datos Abiertos,2024-11-10,2024-11-11,Germán López Ardila,2026-11-11
-CERT-2024-008,Carmen Flores,carmen.flores@example.com,PowerBI Avanzado,2024-11-12,2024-11-13,Red Ciudadana,2026-11-13
-CERT-2024-009,Diego Ramírez,diego.ramirez@example.com,Aplicando la IA Herramientas y Soluciones para la Gestión Pública,2024-11-14,2024-11-15,Édgar Cabrera,2026-11-15
-CERT-2024-010,Sofia Castillo,sofia.castillo@example.com,Intercambio de Datos para la Transformación Digital en el Sector Público,2024-11-13,2024-11-14,Germán López Ardila,2026-11-14
+certificateCode,studentName,studentEmail,courseName,completionDate,issueDate,instructorName,expirationDate,certificateUrl
+CERT-2024-001,Juan Carlos Pérez,juan.perez@example.com,Excel Avanzado,2024-10-15,2024-10-16,César Pérez,2026-10-16,https://example.com/certificates/CERT-2024-001.pdf
+CERT-2024-002,María García López,maria.garcia@example.com,Introducción a PowerBI,2024-10-20,2024-10-21,Red Ciudadana,2026-10-21,https://example.com/certificates/CERT-2024-002.pdf
+CERT-2024-003,Carlos Rodríguez,carlos.rodriguez@example.com,Protección de Datos Personales,2024-10-25,2024-10-26,Julio Herrera,2026-10-26,https://example.com/certificates/CERT-2024-003.pdf
+CERT-2024-004,Ana Martínez,ana.martinez@example.com,Inteligencia Artificial Básico,2024-11-01,2024-11-02,Édgar Cabrera,2026-11-02,https://example.com/certificates/CERT-2024-004.pdf
+CERT-2024-005,Luis Fernando Torres,luis.torres@example.com,Introducción a Ciberseguridad,2024-11-05,2024-11-06,Christian Hidalgo,2026-11-06,https://example.com/certificates/CERT-2024-005.pdf
+CERT-2024-006,Patricia Hernández,patricia.hernandez@example.com,Excel para la Gestión Pública,2024-11-08,2024-11-09,César Pérez,2026-11-09,https://example.com/certificates/CERT-2024-006.pdf
+CERT-2024-007,Roberto Morales,roberto.morales@example.com,Introducción a Datos Abiertos,2024-11-10,2024-11-11,Germán López Ardila,2026-11-11,https://example.com/certificates/CERT-2024-007.pdf
+CERT-2024-008,Carmen Flores,carmen.flores@example.com,PowerBI Avanzado,2024-11-12,2024-11-13,Red Ciudadana,2026-11-13,https://example.com/certificates/CERT-2024-008.pdf
+CERT-2024-009,Diego Ramírez,diego.ramirez@example.com,Aplicando la IA Herramientas y Soluciones para la Gestión Pública,2024-11-14,2024-11-15,Édgar Cabrera,2026-11-15,https://example.com/certificates/CERT-2024-009.pdf
+CERT-2024-010,Sofia Castillo,sofia.castillo@example.com,Intercambio de Datos para la Transformación Digital en el Sector Público,2024-11-13,2024-11-14,Germán López Ardila,2026-11-14,https://example.com/certificates/CERT-2024-010.pdf

@@ -143,6 +143,7 @@ export interface CertificateRecord {
   issueDate: string;
   instructorName: string;
   expirationDate?: string;
+  certificateUrl?: string;
 }
 
 // Badge types

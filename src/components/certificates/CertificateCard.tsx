@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, Calendar, User, GraduationCap, Share2, CheckCircle } from 'lucide-react';
+import { Award, Calendar, User, GraduationCap, Share2, CheckCircle, ExternalLink } from 'lucide-react';
 import { CertificateRecord } from '../../types';
 
 interface CertificateCardProps {
@@ -121,7 +121,19 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        <div className="mt-8 pt-6 border-t border-gray-200 space-y-3">
+          {certificate.certificateUrl && (
+            <a
+              href={certificate.certificateUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl"
+            >
+              <ExternalLink className="w-5 h-5" />
+              <span>Ver Certificado</span>
+            </a>
+          )}
+
           <button
             onClick={onShare}
             className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl"
@@ -129,8 +141,9 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
             <Share2 className="w-5 h-5" />
             <span>Agregar Certificado a LinkedIn</span>
           </button>
+
           <p className="text-xs text-center text-gray-500 mt-3">
-            Se abrirá LinkedIn para agregar esta certificación a tu perfil con Red Ciudadana como organización emisora
+            {certificate.certificateUrl ? 'Ver tu certificado o agregarlo' : 'Agregar esta certificación'} a tu perfil de LinkedIn con Red Ciudadana como organización emisora
           </p>
         </div>
 
