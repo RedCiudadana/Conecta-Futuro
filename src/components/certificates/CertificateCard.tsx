@@ -113,8 +113,11 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl"
           >
             <Share2 className="w-5 h-5" />
-            <span>Compartir en LinkedIn</span>
+            <span>Agregar Certificado a LinkedIn</span>
           </button>
+          <p className="text-xs text-center text-gray-500 mt-3">
+            Se abrirá LinkedIn para agregar esta certificación a tu perfil con Red Ciudadana como organización emisora
+          </p>
         </div>
 
         <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
