@@ -84,17 +84,17 @@ const VerifyCertificate: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full p-4 mb-6">
               <Award className="w-16 h-16" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-heading">
               Verificación de Certificados
             </h1>
-            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+            <p className="text-xl text-primary-100 max-w-2xl mx-auto">
               Busca y verifica certificados emitidos por Conecta Futuro. Comparte tus logros en LinkedIn.
             </p>
           </div>
@@ -115,7 +115,7 @@ const VerifyCertificate: React.FC = () => {
                     onClick={() => setSearchType('code')}
                     className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
                       searchType === 'code'
-                        ? 'bg-blue-600 text-white shadow-lg'
+                        ? 'bg-black text-white shadow-lg'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -126,7 +126,7 @@ const VerifyCertificate: React.FC = () => {
                     onClick={() => setSearchType('name')}
                     className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
                       searchType === 'name'
-                        ? 'bg-blue-600 text-white shadow-lg'
+                        ? 'bg-black text-white shadow-lg'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -137,7 +137,7 @@ const VerifyCertificate: React.FC = () => {
                     onClick={() => setSearchType('email')}
                     className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
                       searchType === 'email'
-                        ? 'bg-blue-600 text-white shadow-lg'
+                        ? 'bg-black text-white shadow-lg'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -165,7 +165,7 @@ const VerifyCertificate: React.FC = () => {
                         ? 'Juan Pérez'
                         : 'correo@ejemplo.com'
                     }
-                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-lg"
+                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-primary-600 focus:ring-2 focus:ring-primary-200 transition-all duration-200 text-lg"
                   />
                   <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 </div>
@@ -174,7 +174,7 @@ const VerifyCertificate: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -219,7 +219,7 @@ const VerifyCertificate: React.FC = () => {
 
           {certificates.length > 0 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900 font-heading">
                 Se encontraron {certificates.length} certificado(s)
               </h2>
               {certificates.map((cert, index) => (
@@ -234,10 +234,10 @@ const VerifyCertificate: React.FC = () => {
 
           {!loading && !error && !certificate && certificates.length === 0 && (
             <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-              <div className="inline-block bg-blue-100 rounded-full p-6 mb-6">
-                <Award className="w-16 h-16 text-blue-600" />
+              <div className="inline-block bg-primary-100 rounded-full p-6 mb-6">
+                <Award className="w-16 h-16 text-primary-600" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              <h3 className="text-2xl font-bold text-gray-900 mb-3 font-heading">
                 ¿Buscas tu certificado?
               </h3>
               <p className="text-gray-600 max-w-md mx-auto">
@@ -251,15 +251,15 @@ const VerifyCertificate: React.FC = () => {
 
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
-            <h3 className="text-2xl font-bold mb-4">¿Cómo funciona?</h3>
+          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-8 text-white">
+            <h3 className="text-2xl font-bold mb-4 font-heading">¿Cómo funciona?</h3>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="flex flex-col items-center text-center">
                 <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 mb-4">
                   <Search className="w-8 h-8" />
                 </div>
                 <h4 className="font-semibold mb-2">1. Busca</h4>
-                <p className="text-sm text-blue-100">
+                <p className="text-sm text-primary-100">
                   Ingresa tu código, nombre o correo electrónico
                 </p>
               </div>
@@ -268,7 +268,7 @@ const VerifyCertificate: React.FC = () => {
                   <Award className="w-8 h-8" />
                 </div>
                 <h4 className="font-semibold mb-2">2. Verifica</h4>
-                <p className="text-sm text-blue-100">
+                <p className="text-sm text-primary-100">
                   Visualiza los detalles completos de tu certificado
                 </p>
               </div>
@@ -277,7 +277,7 @@ const VerifyCertificate: React.FC = () => {
                   <Search className="w-8 h-8" />
                 </div>
                 <h4 className="font-semibold mb-2">3. Comparte</h4>
-                <p className="text-sm text-blue-100">
+                <p className="text-sm text-primary-100">
                   Comparte tu logro en LinkedIn con un solo clic
                 </p>
               </div>

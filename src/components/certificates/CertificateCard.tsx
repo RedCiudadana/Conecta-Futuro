@@ -23,7 +23,7 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
 
   return (
     <div className="bg-white rounded-2xl shadow-xl border-2 border-gray-100 overflow-hidden hover:shadow-2xl transition-shadow duration-300">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 p-6 text-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
@@ -42,16 +42,16 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
 
       <div className="p-8">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2 font-heading">
             Certificado de Finalización
           </h2>
-          <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+          <div className="w-24 h-1 bg-primary-600 mx-auto rounded-full"></div>
         </div>
 
         <div className="space-y-6">
           <div className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl">
-            <div className="bg-blue-100 rounded-lg p-3">
-              <User className="w-6 h-6 text-blue-600" />
+            <div className="bg-primary-100 rounded-lg p-3">
+              <User className="w-6 h-6 text-primary-600" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium text-gray-600 mb-1">Estudiante</p>
@@ -97,8 +97,8 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
           </div>
 
           <div className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl">
-            <div className="bg-blue-100 rounded-lg p-3">
-              <User className="w-6 h-6 text-blue-600" />
+            <div className="bg-primary-100 rounded-lg p-3">
+              <User className="w-6 h-6 text-primary-600" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium text-gray-600 mb-1">Instructor</p>
@@ -110,7 +110,7 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
         <div className="mt-8 pt-6 border-t border-gray-200">
           <button
             onClick={onShare}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl"
+            className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl"
           >
             <Share2 className="w-5 h-5" />
             <span>Agregar Certificado a LinkedIn</span>
@@ -120,10 +120,10 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
           </p>
         </div>
 
-        <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+        <div className="mt-4 p-4 bg-primary-50 rounded-xl border border-primary-100">
           <p className="text-sm text-center text-gray-700">
             <span className="font-semibold">Código de Verificación:</span>{' '}
-            <span className="font-mono text-blue-600 font-bold">{certificate.certificateCode}</span>
+            <span className="font-mono text-primary-600 font-bold">{certificate.certificateCode}</span>
           </p>
           <p className="text-xs text-center text-gray-500 mt-2">
             Comparte este código para que otros puedan verificar tu certificado
