@@ -96,6 +96,20 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, onShare 
             </div>
           </div>
 
+          {certificate.expirationDate && (
+            <div className="flex items-start space-x-4 p-4 bg-amber-50 rounded-xl border border-amber-200">
+              <div className="bg-amber-100 rounded-lg p-3">
+                <Calendar className="w-6 h-6 text-amber-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">Fecha de Expiración</p>
+                <p className="text-base font-semibold text-gray-900">
+                  {formatDate(certificate.expirationDate)}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl">
             <div className="bg-primary-100 rounded-lg p-3">
               <User className="w-6 h-6 text-primary-600" />

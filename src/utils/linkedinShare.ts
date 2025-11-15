@@ -15,8 +15,9 @@ export const shareToLinkedIn = (certificate: CertificateRecord): void => {
   };
 
   const issueDate = formatDate(certificate.issueDate);
+  const expirationDate = certificate.expirationDate ? formatDate(certificate.expirationDate) : '';
 
-  const params = new URLSearchParams({
+  const params: Record<string, string> = {
     name: certificate.courseName,
     organizationId: '2532725',
     organizationName: 'Red Ciudadana',
@@ -24,9 +25,15 @@ export const shareToLinkedIn = (certificate: CertificateRecord): void => {
     issueMonth: issueDate.split('-')[1] || '',
     certUrl: verificationUrl,
     certId: certificate.certificateCode
-  });
+  };
 
-  const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&${params.toString()}`;
+  if (expirationDate) {
+    params.expirationYear = expirationDate.split('-')[0];
+    params.expirationMonth = expirationDate.split('-')[1];
+  }
+
+  const searchParams = new URLSearchParams(params);
+  const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&${searchParams.toString()}`;
 
   window.open(linkedInUrl, '_blank', 'width=700,height=700');
 };

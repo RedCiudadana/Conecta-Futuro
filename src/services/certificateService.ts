@@ -11,7 +11,7 @@ const parseCSV = (csvText: string): CertificateRecord[] => {
   for (let i = 1; i < lines.length; i++) {
     const values = lines[i].split(',');
 
-    if (values.length === headers.length) {
+    if (values.length >= 7) {
       certificates.push({
         certificateCode: values[0].trim(),
         studentName: values[1].trim(),
@@ -20,6 +20,7 @@ const parseCSV = (csvText: string): CertificateRecord[] => {
         completionDate: values[4].trim(),
         issueDate: values[5].trim(),
         instructorName: values[6].trim(),
+        expirationDate: values[7] ? values[7].trim() : undefined,
       });
     }
   }
