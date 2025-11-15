@@ -16,6 +16,7 @@ import Community from './pages/public/Community';
 import CommunityDetails from './pages/public/CommunityDetails';
 import PrimerosPasosDigitales from './pages/public/PrimerosPasosDigitales';
 import ConectaFuturo from './pages/public/ConectaFuturo';
+import VerifyCertificate from './pages/public/VerifyCertificate';
 import ScrollToTop from './components/scrolltotop';
 import ScrollTopButton from './components/scrolltotopButton';
 
@@ -38,6 +39,7 @@ function App() {
           <Route path="mobile-api" element={<MobileApi />} />
           <Route path="primeros-pasos-digitales" element={<PrimerosPasosDigitales />} />
           <Route path="conecta-futuro" element={<ConectaFuturo />} />
+          <Route path="verify-certificate" element={<VerifyCertificate />} />
           <Route path="course/:slug" element={<CourseDetails />} />
           <Route path="course/:slug/session" element={<CourseSession />} />
           <Route path="about" element={<AboutUs />} />

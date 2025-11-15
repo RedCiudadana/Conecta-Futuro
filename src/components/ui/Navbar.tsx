@@ -105,6 +105,9 @@ const Navbar: React.FC = () => {
               <Link to="/community" className="text-gray-700 hover:text-primary-600 font-medium">
                 Comunidad
               </Link>
+              <Link to="/verify-certificate" className="text-gray-700 hover:text-primary-600 font-medium">
+                Verificar Certificado
+              </Link>
               <Link to="/contact" className="text-gray-700 hover:text-primary-600 font-medium">
                 Contacto
               </Link>
@@ -138,6 +141,9 @@ const Navbar: React.FC = () => {
               </Link> */}
               <Link to="/community" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Comunidad
+              </Link>
+              <Link to="/verify-certificate" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+                Verificar Certificado
               </Link>
               <Link to="/contact" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Contacto

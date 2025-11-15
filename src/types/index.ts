@@ -134,6 +134,16 @@ export interface Certificate {
   verificationCode: string;
 }
 
+export interface CertificateRecord {
+  certificateCode: string;
+  studentName: string;
+  studentEmail: string;
+  courseName: string;
+  completionDate: string;
+  issueDate: string;
+  instructorName: string;
+}
+
 // Badge types
 export interface Badge {
   id: string;
