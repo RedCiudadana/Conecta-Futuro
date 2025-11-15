@@ -122,22 +122,21 @@ const LandingPage: React.FC = () => {
         className="relative bg-cover bg-center text-white"
         style={{ backgroundImage: `url(${Fondo})` }}
       >
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:py-28">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
 
-        <div className="relative z-10 container mx-auto px-6 py-20 sm:py-28">
-          <div className="flex flex-col md:flex-row items-center">
-            
             {/* Columna izquierda - Texto */}
-            <div className="md:w-1/2 text-left space-y-6">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading">
+            <div className="md:w-1/2 text-center md:text-left space-y-4 sm:space-y-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight">
                 Escuela Conecta Futuro
               </h1>
-              <p className="text-xl sm:text-2xl text-primary-100 max-w-md">
+              <p className="text-lg sm:text-xl md:text-2xl text-primary-100 max-w-md mx-auto md:mx-0">
                 Impulsa tu desarrollo profesional con cursos gratuitos sobre innovación, emprendimiento, gobierno digital y tecnología.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
                 <Link
                   to="/courses"
-                  className="px-8 py-4 rounded-lg bg-black text-white font-semibold transition-colors text-lg"
+                  className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-black text-white font-semibold transition-colors text-base sm:text-lg hover:bg-gray-800 text-center"
                 >
                   Ver Cursos
                 </Link>
@@ -145,11 +144,11 @@ const LandingPage: React.FC = () => {
             </div>
 
             {/* Columna derecha - Imagen */}
-            <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center">
+            <div className="md:w-1/2 flex justify-center">
               <img
                 src={Slider}
                 alt="Innovación"
-                className="max-w-xs md:max-w-md rounded-lg"
+                className="w-full max-w-[280px] sm:max-w-xs md:max-w-md rounded-lg"
               />
             </div>
           </div>
@@ -157,30 +156,30 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* Features Section */}
-      <div className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 font-heading">
+      <div className="py-12 sm:py-16 md:py-20 bg-white">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 font-heading px-4">
               ¿Por qué elegirnos?
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Nuestra plataforma está diseñada específicamente para fortalecer las capacidades del sector público y emprendedores locales.
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="p-8 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
+                className="p-6 sm:p-8 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
               >
-                <div className="w-20 h-20 rounded-lg flex items-center justify-center mb-6">
-                  <img src={feature.icon} alt={feature.title} />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg flex items-center justify-center mb-4 sm:mb-6">
+                  <img src={feature.icon} alt={feature.title} className="w-full h-full" />
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-heading">
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4 font-heading">
                   {feature.title}
                 </h3>
-                <p className="text-lg text-gray-600">
+                <p className="text-base sm:text-lg text-gray-600">
                   {feature.description}
                 </p>
               </div>
@@ -190,83 +189,83 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* Topics Section */}
-      <div className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 font-heading">
+      <div className="py-12 sm:py-16 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 font-heading px-4">
               Áreas de Conocimiento
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Explora nuestras áreas temáticas diseñadas para el sector público y emprendedores locales.
             </p>
-            <img src={Icono11} className="w-100 h-auto mx-auto mt-4" alt="linea" />
+            <img src={Icono11} className="w-full max-w-[200px] h-auto mx-auto mt-4" alt="linea" />
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
             {highlights.map((topic, index) => (
               <div
                 key={index}
-                className="flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100"
+                className="flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
               >
-                <div className="w-14 h-14 mr-4 rounded-lg flex items-center justify-center">
-                  <img src={topic.icon} alt={topic.title}/>
+                <div className="w-12 h-12 sm:w-14 sm:h-14 mr-3 sm:mr-4 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <img src={topic.icon} alt={topic.title} className="w-full h-full"/>
                 </div>
-                <span className="text-lg text-gray-800">{topic.title}</span>
+                <span className="text-base sm:text-lg text-gray-800">{topic.title}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Curso Destacado - Primeros Pasos Digitales - Segunda aparición */}
-      <div className="py-16 bg-green-50">
-        <div className="container mx-auto px-4">
+      {/* Curso Destacado - Primeros Pasos Digitales */}
+      <div className="py-12 sm:py-16 bg-green-50">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="grid md:grid-cols-2 gap-0">
-                <div className="p-8 md:p-12 flex flex-col justify-center">
-                  <div className="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold mb-4 w-fit">
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center order-2 md:order-1">
+                  <div className="inline-block px-3 sm:px-4 py-2 bg-green-100 text-green-800 rounded-full text-xs sm:text-sm font-semibold mb-3 sm:mb-4 w-fit">
                     🎉 Curso Especial Gratuito
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-heading">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 font-heading">
                     Mis Primeros Pasos Digitales
                   </h2>
-                  <p className="text-lg text-gray-600 mb-6">
+                  <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
                     Un curso diseñado especialmente para emprendedoras con pocos conocimientos digitales.
                     Aprende a usar herramientas básicas para vender tus productos en línea, desde cero y a tu ritmo.
                   </p>
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-                      <span>8 módulos prácticos</span>
+                  <div className="space-y-2 sm:space-y-3 mb-6">
+                    <div className="flex items-start sm:items-center text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <span className="text-sm sm:text-base">8 módulos prácticos</span>
                     </div>
-                    <div className="flex items-center text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-                      <span>Sin experiencia previa necesaria</span>
+                    <div className="flex items-start sm:items-center text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <span className="text-sm sm:text-base">Sin experiencia previa necesaria</span>
                     </div>
-                    <div className="flex items-center text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-                      <span>Certificado digital al completar</span>
+                    <div className="flex items-start sm:items-center text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <span className="text-sm sm:text-base">Certificado digital al completar</span>
                     </div>
-                    <div className="flex items-center text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-                      <span>Aprende WhatsApp Business, redes sociales y más</span>
+                    <div className="flex items-start sm:items-center text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <span className="text-sm sm:text-base">Aprende WhatsApp Business, redes sociales y más</span>
                     </div>
                   </div>
                   <Link
                     to="/primeros-pasos-digitales"
-                    className="inline-flex items-center px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg w-fit"
+                    className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-base sm:text-lg w-full sm:w-fit"
                   >
                     Conocer el curso
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Link>
                 </div>
-                <div className="relative h-64 md:h-auto bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center p-8">
+                <div className="relative h-48 sm:h-64 md:h-auto bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center p-6 sm:p-8 order-1 md:order-2">
                   <div className="text-center">
-                    <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                      <BookOpen className="w-16 h-16 text-green-600" />
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
+                      <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-green-600" />
                     </div>
-                    <p className="text-green-800 font-semibold text-xl">¡Empieza hoy tu transformación digital!</p>
+                    <p className="text-green-800 font-semibold text-base sm:text-lg md:text-xl px-4">¡Empieza hoy tu transformación digital!</p>
                   </div>
                 </div>
               </div>
@@ -321,28 +320,28 @@ const LandingPage: React.FC = () => {
       </div> */}
 
       {/* FAQ Section */}
-      <div className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 font-heading">
+      <div className="py-12 sm:py-16 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 font-heading px-4">
               Preguntas Frecuentes
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Resolvemos tus dudas sobre nuestra plataforma educativa
             </p>
-            <img src={Icono11} className="w-100 h-auto mx-auto mt-4" alt="linea" />
+            <img src={Icono11} className="w-full max-w-[200px] h-auto mx-auto mt-4" alt="linea" />
           </div>
 
-          <div className="max-w-4xl mx-auto grid gap-6">
+          <div className="max-w-4xl mx-auto grid gap-4 sm:gap-6">
             {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm p-6">
-                <div className="flex items-start">
-                  <img src={Icono10} className="w-6 h-6 text-primary-600 mt-1 flex-shrink-0" />
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <div key={index} className="bg-white rounded-lg shadow-sm p-4 sm:p-6 hover:shadow-md transition-shadow">
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <img src={Icono10} className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600 mt-0.5 sm:mt-1 flex-shrink-0" alt="question" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
                       {faq.question}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-sm sm:text-base text-gray-600">
                       {faq.answer}
                     </p>
                   </div>
@@ -354,20 +353,20 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* CTA Section */}
-      <div className=" text-white py-20" style={{ backgroundImage: `url(${Fondo})` }}>
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-heading">
+      <div className="text-white py-12 sm:py-16 md:py-20" style={{ backgroundImage: `url(${Fondo})` }}>
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 font-heading px-4">
             Comienza tu viaje de aprendizaje hoy
           </h2>
-          <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-primary-100 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
             Únete a nuestra comunidad de servidores públicos comprometidos con la innovación
           </p>
           <Link
             to="/courses"
-            className="inline-flex items-center px-8 py-4 rounded-lg bg-black text-white font-semibold transition-colors text-lg"
+            className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-black text-white font-semibold transition-colors text-base sm:text-lg hover:bg-gray-800 w-full max-w-xs sm:w-auto mx-auto"
           >
             Comenzar ahora
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
           </Link>
         </div>
       </div>
