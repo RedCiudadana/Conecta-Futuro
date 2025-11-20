@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Award, AlertCircle, Loader2 } from 'lucide-react';
 import { CertificateRecord } from '../../types';
+import Fondo from '../../assets/slider/fondo.png';
 import {
   searchCertificateByCode,
   searchCertificatesByName,
@@ -85,7 +86,7 @@ const VerifyCertificate: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-16">
+      <div className="relative bg-cover bg-center text-white py-16" style={{ backgroundImage: `url(${Fondo})` }}>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full p-4 mb-6">
@@ -101,7 +102,7 @@ const VerifyCertificate: React.FC = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 -mt-8">
+      <div className="container mx-auto px-4 mt-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -234,8 +235,8 @@ const VerifyCertificate: React.FC = () => {
 
           {!loading && !error && !certificate && certificates.length === 0 && (
             <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-              <div className="inline-block bg-primary-100 rounded-full p-6 mb-6">
-                <Award className="w-16 h-16 text-primary-600" />
+              <div className="inline-block bg-primary-600 rounded-full p-6 mb-6">
+                <Award className="w-16 h-16 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3 font-heading">
                 ¿Buscas tu certificado?
@@ -251,7 +252,7 @@ const VerifyCertificate: React.FC = () => {
 
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-8 text-white">
+          <div className="bg-primary-600 hover:bg-primary-600 rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4 font-heading">¿Cómo funciona?</h3>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="flex flex-col items-center text-center">

@@ -218,14 +218,14 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* Curso Destacado - Primeros Pasos Digitales */}
-      <div className="py-12 sm:py-16 bg-green-50">
+      <div className="py-12 sm:py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center order-2 md:order-1">
-                  <div className="inline-block px-3 sm:px-4 py-2 bg-green-100 text-green-800 rounded-full text-xs sm:text-sm font-semibold mb-3 sm:mb-4 w-fit">
-                    🎉 Curso Especial Gratuito
+                  <div className="inline-block px-3 sm:px-4 py-2 bg-primary-100 text-primary-800 rounded-full text-xs sm:text-sm font-semibold mb-3 sm:mb-4 w-fit">
+                    Curso Especial Gratuito
                   </div>
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 font-heading">
                     Mis Primeros Pasos Digitales
@@ -236,36 +236,36 @@ const LandingPage: React.FC = () => {
                   </p>
                   <div className="space-y-2 sm:space-y-3 mb-6">
                     <div className="flex items-start sm:items-center text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <CheckCircle className="w-5 h-5 text-primary-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
                       <span className="text-sm sm:text-base">8 módulos prácticos</span>
                     </div>
                     <div className="flex items-start sm:items-center text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <CheckCircle className="w-5 h-5 text-primary-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
                       <span className="text-sm sm:text-base">Sin experiencia previa necesaria</span>
                     </div>
                     <div className="flex items-start sm:items-center text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <CheckCircle className="w-5 h-5 text-primary-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
                       <span className="text-sm sm:text-base">Certificado digital al completar</span>
                     </div>
                     <div className="flex items-start sm:items-center text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
+                      <CheckCircle className="w-5 h-5 text-primary-600 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" />
                       <span className="text-sm sm:text-base">Aprende WhatsApp Business, redes sociales y más</span>
                     </div>
                   </div>
                   <Link
                     to="/primeros-pasos-digitales"
-                    className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-base sm:text-lg w-full sm:w-fit"
+                    className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold text-base sm:text-lg w-full sm:w-fit"
                   >
                     Conocer el curso
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Link>
                 </div>
-                <div className="relative h-48 sm:h-64 md:h-auto bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center p-6 sm:p-8 order-1 md:order-2">
+                <div className="relative h-48 sm:h-64 md:h-auto bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center p-6 sm:p-8 order-1 md:order-2">
                   <div className="text-center">
                     <div className="w-24 h-24 sm:w-32 sm:h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
-                      <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-green-600" />
+                      <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-primary-600" />
                     </div>
-                    <p className="text-green-800 font-semibold text-base sm:text-lg md:text-xl px-4">¡Empieza hoy tu transformación digital!</p>
+                    <p className="text-primary-800 font-semibold text-base sm:text-lg md:text-xl px-4">¡Empieza hoy tu transformación digital!</p>
                   </div>
                 </div>
               </div>

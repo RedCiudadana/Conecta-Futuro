@@ -87,7 +87,7 @@ const ConectaFuturoPopup: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleClose}
-                className="w-full inline-flex items-center justify-center px-4 py-2.5 bg-green-600 text-white text-sm rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                className="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary-600 text-white text-sm rounded-lg font-semibold hover:bg-primary-700 transition-colors"
               >
                 Registrarme ahora
                 <ExternalLink className="ml-2 w-3.5 h-3.5" />
