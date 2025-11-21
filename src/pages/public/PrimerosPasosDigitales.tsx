@@ -70,7 +70,7 @@ const PrimerosPasosDigitales: React.FC = () => {
   }, [location]);
 
   const shareOnSocialMedia = (moduleId: string, moduleTitle: string, platform: string) => {
-    const url = `${window.location.origin}/primeros-pasos-digitales#${moduleId}`;
+    const url = `https://escuela.redciudadana.org/primeros-pasos-digitales#${moduleId}`;
     const text = `Te invito a ver el módulo "${moduleTitle}" del curso Mis Primeros Pasos Digitales`;
 
     let shareUrl = '';
@@ -96,7 +96,7 @@ const PrimerosPasosDigitales: React.FC = () => {
   };
 
   const copyModuleLink = (moduleId: string, moduleTitle: string) => {
-    const url = `${window.location.origin}/primeros-pasos-digitales#${moduleId}`;
+    const url = `https://escuela.redciudadana.org/primeros-pasos-digitales#${moduleId}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopiedModule(moduleId);
       setTimeout(() => setCopiedModule(null), 2000);
