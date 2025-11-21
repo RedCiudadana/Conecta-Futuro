@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import {
   Smartphone,
@@ -15,7 +15,11 @@ import {
   Volume2,
   CheckCircle,
   Circle,
-  BookOpen
+  BookOpen,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Link as LinkIcon
 } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
@@ -27,6 +31,7 @@ interface AudioResource {
 
 interface Module {
   number: number;
+  id: string;
   icon: React.ReactNode;
   title: string;
   topics: string[];
@@ -44,15 +49,64 @@ interface Question {
 }
 
 const PrimerosPasosDigitales: React.FC = () => {
+  const location = useLocation();
   const [playingAudio, setPlayingAudio] = useState<number | string | null>(null);
   const [completedModules, setCompletedModules] = useState<Set<number>>(new Set());
   const [currentExam, setCurrentExam] = useState<number | null>(null);
   const [examAnswers, setExamAnswers] = useState<{[key: number]: number}>({});
   const [examResults, setExamResults] = useState<{[key: number]: boolean}>({});
+  const [copiedModule, setCopiedModule] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [location]);
+
+  const shareOnSocialMedia = (moduleId: string, moduleTitle: string, platform: string) => {
+    const url = `${window.location.origin}/primeros-pasos-digitales#${moduleId}`;
+    const text = `Te invito a ver el módulo "${moduleTitle}" del curso Mis Primeros Pasos Digitales`;
+
+    let shareUrl = '';
+
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+        break;
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+        break;
+    }
+
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+  };
+
+  const copyModuleLink = (moduleId: string, moduleTitle: string) => {
+    const url = `${window.location.origin}/primeros-pasos-digitales#${moduleId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedModule(moduleId);
+      setTimeout(() => setCopiedModule(null), 2000);
+    });
+  };
 
   const modules: Module[] = [
     {
       number: 1,
+      id: 'modulo-1-introduccion',
       icon: <Smartphone className="w-8 h-8" />,
       title: 'Introducción al mundo digital',
       topics: [
@@ -92,6 +146,7 @@ const PrimerosPasosDigitales: React.FC = () => {
     },
     {
       number: 2,
+      id: 'modulo-2-comunicacion',
       icon: <MessageCircle className="w-8 h-8" />,
       title: 'Comunicación digital con clientes',
       topics: [
@@ -122,6 +177,7 @@ const PrimerosPasosDigitales: React.FC = () => {
     },
     {
       number: 3,
+      id: 'modulo-3-redes-sociales',
       icon: <Share2 className="w-8 h-8" />,
       title: 'Redes sociales para mi negocio',
       topics: [
@@ -147,6 +203,7 @@ const PrimerosPasosDigitales: React.FC = () => {
     },
     {
       number: 4,
+      id: 'modulo-4-contenido',
       icon: <Camera className="w-8 h-8" />,
       title: 'Contenido que vende',
       topics: [
@@ -172,6 +229,7 @@ const PrimerosPasosDigitales: React.FC = () => {
     },
     {
       number: 5,
+      id: 'modulo-5-estrategias',
       icon: <ShoppingBag className="w-8 h-8" />,
       title: 'Estrategias de ventas en línea',
       topics: [
@@ -197,6 +255,7 @@ const PrimerosPasosDigitales: React.FC = () => {
     },
     {
       number: 6,
+      id: 'modulo-6-dinero-digital',
       icon: <CreditCard className="w-8 h-8" />,
       title: 'Manejo básico de dinero digital',
       topics: [
@@ -222,6 +281,7 @@ const PrimerosPasosDigitales: React.FC = () => {
     },
     {
       number: 7,
+      id: 'modulo-7-identidad',
       icon: <Sparkles className="w-8 h-8" />,
       title: 'Construyendo mi identidad digital',
       topics: [
@@ -247,6 +307,7 @@ const PrimerosPasosDigitales: React.FC = () => {
     },
     {
       number: 8,
+      id: 'modulo-8-plan-negocio',
       icon: <FileText className="w-8 h-8" />,
       title: 'Mi plan de negocio digital',
       topics: [
@@ -371,20 +432,74 @@ const PrimerosPasosDigitales: React.FC = () => {
             {modules.map((module) => (
               <div
                 key={module.number}
-                className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
+                id={module.id}
+                className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden scroll-mt-24"
               >
                 {/* Module Header */}
-                <div className="p-6 flex items-center space-x-4 bg-gray-50">
-                  <div className="w-16 h-16 bg-primary-600 rounded-lg flex items-center justify-center text-white flex-shrink-0">
-                    {module.icon}
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm text-gray-500 mb-1">
-                      Módulo {module.number}
+                <div className="p-6 bg-gray-50">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 bg-primary-600 rounded-lg flex items-center justify-center text-white flex-shrink-0">
+                        {module.icon}
+                      </div>
+                      <div className="text-left">
+                        <div className="text-sm text-gray-500 mb-1">
+                          Módulo {module.number}
+                        </div>
+                        <h3 className="text-xl font-semibold text-gray-900">
+                          {module.title}
+                        </h3>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900">
-                      {module.title}
-                    </h3>
+                  </div>
+
+                  {/* Social Share Buttons */}
+                  <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-200">
+                    <span className="text-sm text-gray-600 mr-2">Compartir módulo:</span>
+                    <button
+                      onClick={() => shareOnSocialMedia(module.id, module.title, 'facebook')}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                      title="Compartir en Facebook"
+                    >
+                      <Facebook className="w-4 h-4" />
+                      <span className="hidden sm:inline">Facebook</span>
+                    </button>
+                    <button
+                      onClick={() => shareOnSocialMedia(module.id, module.title, 'twitter')}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors text-sm"
+                      title="Compartir en Twitter"
+                    >
+                      <Twitter className="w-4 h-4" />
+                      <span className="hidden sm:inline">Twitter</span>
+                    </button>
+                    <button
+                      onClick={() => shareOnSocialMedia(module.id, module.title, 'linkedin')}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors text-sm"
+                      title="Compartir en LinkedIn"
+                    >
+                      <Linkedin className="w-4 h-4" />
+                      <span className="hidden sm:inline">LinkedIn</span>
+                    </button>
+                    <button
+                      onClick={() => shareOnSocialMedia(module.id, module.title, 'whatsapp')}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                      title="Compartir en WhatsApp"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span className="hidden sm:inline">WhatsApp</span>
+                    </button>
+                    <button
+                      onClick={() => copyModuleLink(module.id, module.title)}
+                      className={`flex items-center gap-1 px-3 py-1.5 rounded-lg transition-colors text-sm ${
+                        copiedModule === module.id
+                          ? 'bg-green-600 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                      title="Copiar enlace"
+                    >
+                      <LinkIcon className="w-4 h-4" />
+                      <span className="hidden sm:inline">{copiedModule === module.id ? 'Copiado!' : 'Copiar enlace'}</span>
+                    </button>
                   </div>
                 </div>
 
