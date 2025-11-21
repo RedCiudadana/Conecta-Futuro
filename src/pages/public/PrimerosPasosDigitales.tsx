@@ -25,6 +25,14 @@ import {
 } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
+import { Module1Exercise } from '../../components/exercises/Module1Exercise';
+import { Module2Exercise } from '../../components/exercises/Module2Exercise';
+import { Module3Exercise } from '../../components/exercises/Module3Exercise';
+import { Module4Exercise } from '../../components/exercises/Module4Exercise';
+import { Module5Exercise } from '../../components/exercises/Module5Exercise';
+import { Module6Exercise } from '../../components/exercises/Module6Exercise';
+import { Module7Exercise } from '../../components/exercises/Module7Exercise';
+import { Module8Exercise } from '../../components/exercises/Module8Exercise';
 
 interface AudioResource {
   title: string;
@@ -59,6 +67,14 @@ const PrimerosPasosDigitales: React.FC = () => {
   const [examResults, setExamResults] = useState<{[key: number]: boolean}>({});
   const [copiedModule, setCopiedModule] = useState<string | null>(null);
   const [expandedModules, setExpandedModules] = useState<Set<number>>(new Set());
+  const [completedExercises, setCompletedExercises] = useState<Set<number>>(() => {
+    const saved = localStorage.getItem('completedExercises');
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
+  const [exerciseData, setExerciseData] = useState<Record<number, Record<string, string>>>(() => {
+    const saved = localStorage.getItem('exerciseData');
+    return saved ? JSON.parse(saved) : {};
+  });
 
   const toggleModule = (moduleNumber: number) => {
     const newExpanded = new Set(expandedModules);
@@ -68,6 +84,44 @@ const PrimerosPasosDigitales: React.FC = () => {
       newExpanded.add(moduleNumber);
     }
     setExpandedModules(newExpanded);
+  };
+
+  const handleExerciseComplete = (moduleNumber: number, data: Record<string, string>) => {
+    const newCompleted = new Set(completedExercises);
+    newCompleted.add(moduleNumber);
+    setCompletedExercises(newCompleted);
+    localStorage.setItem('completedExercises', JSON.stringify([...newCompleted]));
+
+    const newExerciseData = { ...exerciseData, [moduleNumber]: data };
+    setExerciseData(newExerciseData);
+    localStorage.setItem('exerciseData', JSON.stringify(newExerciseData));
+  };
+
+  const renderExercise = (moduleNumber: number) => {
+    const isCompleted = completedExercises.has(moduleNumber);
+    const savedData = exerciseData[moduleNumber];
+    const onComplete = (data: Record<string, string>) => handleExerciseComplete(moduleNumber, data);
+
+    switch (moduleNumber) {
+      case 1:
+        return <Module1Exercise onComplete={onComplete} isCompleted={isCompleted} savedData={savedData} />;
+      case 2:
+        return <Module2Exercise onComplete={onComplete} isCompleted={isCompleted} savedData={savedData} />;
+      case 3:
+        return <Module3Exercise onComplete={onComplete} isCompleted={isCompleted} savedData={savedData} />;
+      case 4:
+        return <Module4Exercise onComplete={onComplete} isCompleted={isCompleted} savedData={savedData} />;
+      case 5:
+        return <Module5Exercise onComplete={onComplete} isCompleted={isCompleted} savedData={savedData} />;
+      case 6:
+        return <Module6Exercise onComplete={onComplete} isCompleted={isCompleted} savedData={savedData} />;
+      case 7:
+        return <Module7Exercise onComplete={onComplete} isCompleted={isCompleted} savedData={savedData} />;
+      case 8:
+        return <Module8Exercise onComplete={onComplete} isCompleted={isCompleted} savedData={savedData} />;
+      default:
+        return null;
+    }
   };
 
   useEffect(() => {
@@ -633,13 +687,7 @@ const PrimerosPasosDigitales: React.FC = () => {
                         </div>
                       )}
 
-                      <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                        <h4 className="font-semibold text-green-900 mb-2 flex items-center">
-                          <Award className="w-5 h-5 mr-2" />
-                          ✏️ Ejercicio Práctico:
-                        </h4>
-                        <p className="text-green-800">{module.exercise}</p>
-                      </div>
+                      {renderExercise(module.number)}
                     </div>
                   </div>
                 )}
