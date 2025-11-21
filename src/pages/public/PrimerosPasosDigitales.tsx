@@ -19,7 +19,9 @@ import {
   Facebook,
   Twitter,
   Linkedin,
-  Link as LinkIcon
+  Link as LinkIcon,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
@@ -56,6 +58,17 @@ const PrimerosPasosDigitales: React.FC = () => {
   const [examAnswers, setExamAnswers] = useState<{[key: number]: number}>({});
   const [examResults, setExamResults] = useState<{[key: number]: boolean}>({});
   const [copiedModule, setCopiedModule] = useState<string | null>(null);
+  const [expandedModules, setExpandedModules] = useState<Set<number>>(new Set());
+
+  const toggleModule = (moduleNumber: number) => {
+    const newExpanded = new Set(expandedModules);
+    if (newExpanded.has(moduleNumber)) {
+      newExpanded.delete(moduleNumber);
+    } else {
+      newExpanded.add(moduleNumber);
+    }
+    setExpandedModules(newExpanded);
+  };
 
   useEffect(() => {
     if (location.hash) {
@@ -429,7 +442,9 @@ const PrimerosPasosDigitales: React.FC = () => {
           </div>
 
           <div className="max-w-5xl mx-auto space-y-4">
-            {modules.map((module) => (
+            {modules.map((module) => {
+              const isExpanded = expandedModules.has(module.number);
+              return (
               <div
                 key={module.number}
                 id={module.id}
@@ -437,7 +452,10 @@ const PrimerosPasosDigitales: React.FC = () => {
               >
                 {/* Module Header */}
                 <div className="p-6 bg-gray-50">
-                  <div className="flex items-center justify-between mb-4">
+                  <div
+                    className="flex items-center justify-between mb-4 cursor-pointer"
+                    onClick={() => toggleModule(module.number)}
+                  >
                     <div className="flex items-center space-x-4">
                       <div className="w-16 h-16 bg-primary-600 rounded-lg flex items-center justify-center text-white flex-shrink-0">
                         {module.icon}
@@ -451,9 +469,20 @@ const PrimerosPasosDigitales: React.FC = () => {
                         </h3>
                       </div>
                     </div>
+                    <button
+                      className="ml-4 p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                      aria-label={isExpanded ? 'Contraer módulo' : 'Expandir módulo'}
+                    >
+                      {isExpanded ? (
+                        <ChevronUp className="w-6 h-6 text-gray-600" />
+                      ) : (
+                        <ChevronDown className="w-6 h-6 text-gray-600" />
+                      )}
+                    </button>
                   </div>
 
                   {/* Social Share Buttons */}
+                  {isExpanded && (
                   <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-200">
                     <span className="text-sm text-gray-600 mr-2">Compartir módulo:</span>
                     <button
@@ -501,9 +530,11 @@ const PrimerosPasosDigitales: React.FC = () => {
                       <span className="hidden sm:inline">{copiedModule === module.id ? 'Copiado!' : 'Copiar enlace'}</span>
                     </button>
                   </div>
+                  )}
                 </div>
 
                 {/* Module Content */}
+                {isExpanded && (
                 <div className="px-6 pb-6 border-t border-gray-100">
                     <div className="pt-6">
                       <h4 className="font-semibold text-gray-900 mb-3">
@@ -611,8 +642,10 @@ const PrimerosPasosDigitales: React.FC = () => {
                       </div>
                     </div>
                   </div>
+                )}
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       </div>
