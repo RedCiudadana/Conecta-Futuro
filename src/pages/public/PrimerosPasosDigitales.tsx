@@ -659,16 +659,22 @@ const PrimerosPasosDigitales: React.FC = () => {
                 const isCompleted = completedModules.has(module.number);
                 const isCurrentExam = currentExam === module.number;
                 const hasResult = examResults[module.number] !== undefined;
+                const isPreviousModuleCompleted = module.number === 1 || completedModules.has(module.number - 1);
+                const isLocked = !isPreviousModuleCompleted;
 
                 return (
                   <div
                     key={`exam-${module.number}`}
-                    className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
+                    className={`bg-white rounded-lg shadow-sm border overflow-hidden ${
+                      isLocked ? 'border-gray-200 opacity-60' : 'border-gray-100'
+                    }`}
                   >
                     <div className="p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
-                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${isCompleted ? 'bg-green-500' : 'bg-gray-300'}`}>
+                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                            isCompleted ? 'bg-green-500' : isLocked ? 'bg-gray-400' : 'bg-gray-300'
+                          }`}>
                             {isCompleted ? (
                               <CheckCircle className="w-6 h-6 text-white" />
                             ) : (
@@ -682,7 +688,7 @@ const PrimerosPasosDigitales: React.FC = () => {
                             <p className="text-gray-600">{module.title}</p>
                           </div>
                         </div>
-                        {!isCompleted && !isCurrentExam && (
+                        {!isCompleted && !isCurrentExam && !isLocked && (
                           <button
                             onClick={() => setCurrentExam(module.number)}
                             className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
@@ -690,12 +696,31 @@ const PrimerosPasosDigitales: React.FC = () => {
                             Iniciar Evaluación
                           </button>
                         )}
+                        {!isCompleted && !isCurrentExam && isLocked && (
+                          <span className="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg font-semibold flex items-center gap-2">
+                            🔒 Bloqueado
+                          </span>
+                        )}
                         {isCompleted && (
                           <span className="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold">
                             ✓ Completado
                           </span>
                         )}
                       </div>
+
+                      {/* Locked Message */}
+                      {isLocked && (
+                        <div className="border-t border-gray-100 pt-6 mt-6">
+                          <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                            <p className="text-yellow-800 flex items-center gap-2">
+                              <span className="text-2xl">🔒</span>
+                              <span>
+                                Completa la evaluación del <strong>Módulo {module.number - 1}</strong> para desbloquear este módulo.
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Exam Questions */}
                       {isCurrentExam && module.questions && (
