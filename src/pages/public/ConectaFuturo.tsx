@@ -1,7 +1,19 @@
-import React from 'react';
-import { Calendar, MapPin, Users, Target, Lightbulb, Globe, Search, Compass, Database, Shield, FileText, Network, CheckCircle, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, MapPin, Users, Target, Lightbulb, Globe, Search, Compass, Database, Shield, FileText, Network, CheckCircle, ExternalLink, Video, ChevronDown, ChevronUp } from 'lucide-react';
+import ReactPlayer from 'react-player';
 
 const ConectaFuturo: React.FC = () => {
+  const [expandedVideos, setExpandedVideos] = useState<Set<number>>(new Set());
+
+  const toggleVideo = (index: number) => {
+    const newExpanded = new Set(expandedVideos);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
+    }
+    setExpandedVideos(newExpanded);
+  };
 
   const objectives = [
     {
@@ -50,6 +62,58 @@ const ConectaFuturo: React.FC = () => {
     {
       icon: Users,
       title: 'Innovación centrada en las personas'
+    }
+  ];
+
+  const sessionsVideos = [
+    {
+      session: 'Sesión 1',
+      title: 'Ciberseguridad y Confianza Digital',
+      description: 'Explorar prioridades, capacidades y próximos pasos en ciberseguridad para el sector público',
+      speaker: 'Germán López (Colombia)',
+      videoUrl: 'https://youtu.be/XfHtGnbJHUk'
+    },
+    {
+      session: 'Sesión 2',
+      title: 'Datos Abiertos',
+      description: 'Introducción a los datos abiertos y su relevancia para la transparencia y el valor público',
+      speaker: 'Daniel Carranza – DATA Uruguay',
+      videoUrl: 'https://youtu.be/1ysPulajGgE'
+    },
+    {
+      session: 'Sesión 3',
+      title: 'Datos Abiertos',
+      description: 'Datos abiertos y medio ambiente: oportunidades, desafíos y ejemplos de impacto',
+      speaker: 'Mercedes De los Santos – Open Data Charter',
+      videoUrl: 'https://youtu.be/4dJQE9Ufkts'
+    },
+    {
+      session: 'Sesión 4',
+      title: 'Datos Abiertos',
+      description: 'Marcos regulatorios y tendencias en políticas de datos abiertos en América Latina',
+      speaker: 'Mike Mora – Organización de los Estados Americanos (OEA)',
+      videoUrl: 'https://youtu.be/VCjVvP-nRGs'
+    },
+    {
+      session: 'Sesión 5',
+      title: 'Datos Abiertos',
+      description: 'El liderazgo del Reino Unido en la agenda global de datos abiertos',
+      speaker: 'Marta Acosta – Embajada del Reino Unido',
+      videoUrl: 'https://youtu.be/sWLKmLconpY'
+    },
+    {
+      session: 'Sesión 6',
+      title: 'Interoperabilidad e Innovación Pública',
+      description: 'Presentación de avances internacionales y modelos exitosos en interoperabilidad',
+      speaker: 'Germán López (Colombia)',
+      videoUrl: 'https://youtu.be/Jx_0mUmW-w4'
+    },
+    {
+      session: 'Sesión 7',
+      title: 'Interoperabilidad e Innovación Pública – SIB - IVE',
+      description: 'Presentación de avances internacionales y modelos exitosos en interoperabilidad',
+      speaker: 'Superintendencia de Bancos – Ing. Manuel Lepe',
+      videoUrl: 'https://youtu.be/T5mQrcA4nGc'
     }
   ];
 
@@ -137,10 +201,10 @@ const ConectaFuturo: React.FC = () => {
         {/* Content */}
         <div className="relative z-10 container mx-auto px-4 py-20 text-center text-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 font-heading">
-            Conecta Futuro 2026
+            Conecta Futuro 2025
           </h1>
           <p className="text-2xl md:text-3xl mb-8 max-w-4xl mx-auto leading-relaxed">
-            Construyamos juntos el Estado digital del próximo año
+            Construimos juntos el Estado digital del futuro
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-lg md:text-xl mb-10">
@@ -156,15 +220,18 @@ const ConectaFuturo: React.FC = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="https://us06web.zoom.us/webinar/register/WN_kVE0zhuKQ-GNFzz6q9jCMw#/registration"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => {
+                const videosSection = document.getElementById('videos');
+                if (videosSection) {
+                  videosSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#0072CE] rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl"
             >
-              Registrarme al evento
-              <ExternalLink className="ml-2 w-5 h-5" />
-            </a>
+              <Video className="mr-2 w-5 h-5" />
+              Ver grabaciones
+            </button>
             <button
               onClick={scrollToAgenda}
               className="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold text-lg hover:bg-white hover:text-[#0072CE] transition-all"
@@ -185,10 +252,10 @@ const ConectaFuturo: React.FC = () => {
                   Un espacio para construir confianza digital
                 </h2>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  Conecta Futuro 2026 es un encuentro virtual organizado por Red Ciudadana que busca inspirar la colaboración entre instituciones públicas, sociedad civil, academia y sector tecnológico.
+                  Conecta Futuro 2025 fue un encuentro virtual organizado por Red Ciudadana que reunió a instituciones públicas, sociedad civil, academia y sector tecnológico.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Durante esta jornada, exploraremos cómo los datos, la interoperabilidad y la ciberseguridad pueden fortalecer la confianza y la eficiencia del Estado guatemalteco.
+                  Durante esta jornada, exploramos cómo los datos, la interoperabilidad y la ciberseguridad pueden fortalecer la confianza y la eficiencia del Estado guatemalteco.
                 </p>
               </div>
               <div className="relative">
@@ -230,6 +297,73 @@ const ConectaFuturo: React.FC = () => {
                 <p className="text-gray-600 leading-relaxed">
                   {objective.description}
                 </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Videos de las Sesiones */}
+      <div id="videos" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4 font-heading">
+              Grabaciones del Evento
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Revive las sesiones de Conecta Futuro 2025 con expertos internacionales
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
+            {sessionsVideos.map((session, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow"
+              >
+                <button
+                  onClick={() => toggleVideo(index)}
+                  className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-[#0072CE] to-blue-600 text-white hover:from-blue-700 hover:to-blue-700 transition-all"
+                >
+                  <div className="flex items-center gap-4 text-left">
+                    <div className="flex-shrink-0 w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                      <Video className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold opacity-90">{session.session}</p>
+                      <h3 className="text-lg font-bold">{session.title}</h3>
+                    </div>
+                  </div>
+                  {expandedVideos.has(index) ? (
+                    <ChevronUp className="w-6 h-6 flex-shrink-0" />
+                  ) : (
+                    <ChevronDown className="w-6 h-6 flex-shrink-0" />
+                  )}
+                </button>
+
+                {expandedVideos.has(index) && (
+                  <div className="p-6">
+                    <div className="mb-4">
+                      <p className="text-gray-700 mb-2 leading-relaxed">{session.description}</p>
+                      <p className="text-sm text-gray-600 font-medium">
+                        <span className="text-[#0072CE]">Expositor:</span> {session.speaker}
+                      </p>
+                    </div>
+                    <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                      <ReactPlayer
+                        url={session.videoUrl}
+                        width="100%"
+                        height="100%"
+                        controls={true}
+                        config={{
+                          youtube: {
+                            playerVars: { showinfo: 1 }
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -315,42 +449,46 @@ const ConectaFuturo: React.FC = () => {
         </div>
       </div>
 
-      {/* CTA Registration */}
+      {/* CTA Videos */}
       <div className="py-20 bg-[#0072CE] text-white">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 font-heading">
-              🎟️ Participa en Conecta Futuro 2026
+              Gracias por ser parte de Conecta Futuro 2025
             </h2>
             <p className="text-xl leading-relaxed mb-8">
-              El evento es gratuito y abierto al público.
+              El evento se realizó exitosamente el 19 de noviembre de 2025. Revive las sesiones y descubre cómo estamos construyendo el Estado digital del futuro.
             </p>
             <div className="bg-white bg-opacity-10 rounded-xl p-6 mb-8 backdrop-blur-sm">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-lg">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-6 h-6" />
-                  <span>19 de noviembre de 2025</span>
+                  <Video className="w-6 h-6" />
+                  <span>7 sesiones grabadas</span>
                 </div>
                 <span className="hidden sm:inline">•</span>
                 <div className="flex items-center gap-2">
-                  <span>🕗 09:00 am a 12:10 pm (hora de Guatemala)</span>
+                  <Users className="w-6 h-6" />
+                  <span>Expertos internacionales</span>
                 </div>
                 <span className="hidden sm:inline">•</span>
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-6 h-6" />
-                  <span>100% virtual vía Zoom</span>
+                  <CheckCircle className="w-6 h-6" />
+                  <span>Acceso gratuito</span>
                 </div>
               </div>
             </div>
-            <a
-              href="https://us06web.zoom.us/webinar/register/WN_kVE0zhuKQ-GNFzz6q9jCMw#/registration"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => {
+                const videosSection = document.getElementById('videos');
+                if (videosSection) {
+                  videosSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="inline-flex items-center justify-center px-10 py-5 bg-white text-[#0072CE] rounded-lg font-bold text-xl hover:bg-gray-100 transition-all shadow-2xl hover:shadow-3xl"
             >
-              Regístrate aquí
-              <ExternalLink className="ml-3 w-6 h-6" />
-            </a>
+              <Video className="mr-3 w-6 h-6" />
+              Ver grabaciones
+            </button>
           </div>
         </div>
       </div>
