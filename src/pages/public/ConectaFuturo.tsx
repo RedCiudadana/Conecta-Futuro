@@ -1,19 +1,8 @@
-import React, { useState } from 'react';
-import { Calendar, MapPin, Users, Target, Lightbulb, Globe, Search, Compass, Database, Shield, FileText, Network, CheckCircle, ExternalLink, Video, ChevronDown, ChevronUp } from 'lucide-react';
+import React from 'react';
+import { Calendar, MapPin, Users, Target, Lightbulb, Globe, Search, Compass, Database, Shield, FileText, Network, CheckCircle, ExternalLink, Video } from 'lucide-react';
 import ReactPlayer from 'react-player';
 
 const ConectaFuturo: React.FC = () => {
-  const [expandedVideos, setExpandedVideos] = useState<Set<number>>(new Set());
-
-  const toggleVideo = (index: number) => {
-    const newExpanded = new Set(expandedVideos);
-    if (newExpanded.has(index)) {
-      newExpanded.delete(index);
-    } else {
-      newExpanded.add(index);
-    }
-    setExpandedVideos(newExpanded);
-  };
 
   const objectives = [
     {
@@ -315,55 +304,45 @@ const ConectaFuturo: React.FC = () => {
             </p>
           </div>
 
-          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
+          <div className="max-w-6xl mx-auto space-y-8">
             {sessionsVideos.map((session, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow"
+                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200"
               >
-                <button
-                  onClick={() => toggleVideo(index)}
-                  className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-[#0072CE] to-blue-600 text-white hover:from-blue-700 hover:to-blue-700 transition-all"
-                >
-                  <div className="flex items-center gap-4 text-left">
+                <div className="p-6 bg-gradient-to-r from-[#0072CE] to-blue-600 text-white">
+                  <div className="flex items-center gap-4">
                     <div className="flex-shrink-0 w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                       <Video className="w-6 h-6" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold opacity-90">{session.session}</p>
-                      <h3 className="text-lg font-bold">{session.title}</h3>
+                      <h3 className="text-xl font-bold">{session.title}</h3>
                     </div>
                   </div>
-                  {expandedVideos.has(index) ? (
-                    <ChevronUp className="w-6 h-6 flex-shrink-0" />
-                  ) : (
-                    <ChevronDown className="w-6 h-6 flex-shrink-0" />
-                  )}
-                </button>
+                </div>
 
-                {expandedVideos.has(index) && (
-                  <div className="p-6">
-                    <div className="mb-4">
-                      <p className="text-gray-700 mb-2 leading-relaxed">{session.description}</p>
-                      <p className="text-sm text-gray-600 font-medium">
-                        <span className="text-[#0072CE]">Expositor:</span> {session.speaker}
-                      </p>
-                    </div>
-                    <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                      <ReactPlayer
-                        url={session.videoUrl}
-                        width="100%"
-                        height="100%"
-                        controls={true}
-                        config={{
-                          youtube: {
-                            playerVars: { showinfo: 1 }
-                          }
-                        }}
-                      />
-                    </div>
+                <div className="p-6">
+                  <div className="mb-4">
+                    <p className="text-gray-700 mb-2 leading-relaxed">{session.description}</p>
+                    <p className="text-sm text-gray-600 font-medium">
+                      <span className="text-[#0072CE] font-semibold">Expositor:</span> {session.speaker}
+                    </p>
                   </div>
-                )}
+                  <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                    <ReactPlayer
+                      url={session.videoUrl}
+                      width="100%"
+                      height="100%"
+                      controls={true}
+                      config={{
+                        youtube: {
+                          playerVars: { showinfo: 1 }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
