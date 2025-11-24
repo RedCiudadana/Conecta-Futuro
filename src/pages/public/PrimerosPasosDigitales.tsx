@@ -67,6 +67,7 @@ const PrimerosPasosDigitales: React.FC = () => {
   const [examResults, setExamResults] = useState<{[key: number]: boolean}>({});
   const [copiedModule, setCopiedModule] = useState<string | null>(null);
   const [expandedModules, setExpandedModules] = useState<Set<number>>(new Set());
+  const [expandedExercises, setExpandedExercises] = useState<Set<number>>(new Set());
   const [completedExercises, setCompletedExercises] = useState<Set<number>>(() => {
     const saved = localStorage.getItem('completedExercises');
     return saved ? new Set(JSON.parse(saved)) : new Set();
@@ -84,6 +85,16 @@ const PrimerosPasosDigitales: React.FC = () => {
       newExpanded.add(moduleNumber);
     }
     setExpandedModules(newExpanded);
+  };
+
+  const toggleExercise = (moduleNumber: number) => {
+    const newExpanded = new Set(expandedExercises);
+    if (newExpanded.has(moduleNumber)) {
+      newExpanded.delete(moduleNumber);
+    } else {
+      newExpanded.add(moduleNumber);
+    }
+    setExpandedExercises(newExpanded);
   };
 
   const handleExerciseComplete = (moduleNumber: number, data: Record<string, string>) => {
@@ -687,7 +698,35 @@ const PrimerosPasosDigitales: React.FC = () => {
                         </div>
                       )}
 
-                      {renderExercise(module.number)}
+                      <div className="mt-6">
+                        <button
+                          onClick={() => toggleExercise(module.number)}
+                          className="w-full flex items-center justify-between bg-green-50 hover:bg-green-100 border-2 border-green-500 rounded-lg px-6 py-4 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Sparkles className="w-6 h-6 text-green-600" />
+                            <div className="text-left">
+                              <h4 className="font-semibold text-green-900 text-lg">
+                                ✏️ Ejercicio Práctico
+                              </h4>
+                              <p className="text-sm text-green-700">
+                                {completedExercises.has(module.number) ? '✅ Completado' : 'Haz clic para practicar'}
+                              </p>
+                            </div>
+                          </div>
+                          {expandedExercises.has(module.number) ? (
+                            <ChevronUp className="w-6 h-6 text-green-600" />
+                          ) : (
+                            <ChevronDown className="w-6 h-6 text-green-600" />
+                          )}
+                        </button>
+
+                        {expandedExercises.has(module.number) && (
+                          <div className="mt-4">
+                            {renderExercise(module.number)}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
