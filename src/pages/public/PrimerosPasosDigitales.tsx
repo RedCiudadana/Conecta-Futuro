@@ -603,6 +603,27 @@ const PrimerosPasosDigitales: React.FC = () => {
                         ))}
                       </ul>
 
+                      {module.videoUrl && (
+                        <div className="mb-6">
+                          <h4 className="font-semibold text-gray-900 mb-3">
+                            🎥 Video explicativo:
+                          </h4>
+                          <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                            <ReactPlayer
+                              url={module.videoUrl}
+                              width="100%"
+                              height="100%"
+                              controls={true}
+                              config={{
+                                youtube: {
+                                  playerVars: { showinfo: 1 }
+                                }
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+
                       {module.audios && module.audios.length > 0 && (
                         <div className="mb-6">
                           <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
@@ -659,27 +680,6 @@ const PrimerosPasosDigitales: React.FC = () => {
                                   attributes: {
                                     controlsList: 'nodownload'
                                   }
-                                }
-                              }}
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {module.videoUrl && (
-                        <div className="mb-6">
-                          <h4 className="font-semibold text-gray-900 mb-3">
-                            🎥 Video explicativo:
-                          </h4>
-                          <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                            <ReactPlayer
-                              url={module.videoUrl}
-                              width="100%"
-                              height="100%"
-                              controls={true}
-                              config={{
-                                youtube: {
-                                  playerVars: { showinfo: 1 }
                                 }
                               }}
                             />
