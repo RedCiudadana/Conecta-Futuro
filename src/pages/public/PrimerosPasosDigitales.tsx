@@ -614,6 +614,7 @@ const PrimerosPasosDigitales: React.FC = () => {
                         ))}
                       </ul>
 
+                      {/* Videos temporalmente ocultos mientras se graban
                       {module.videoUrl && (
                         <div className="mb-6">
                           <h4 className="font-semibold text-gray-900 mb-3">
@@ -634,6 +635,7 @@ const PrimerosPasosDigitales: React.FC = () => {
                           </div>
                         </div>
                       )}
+                      */}
 
                       {module.audios && module.audios.length > 0 && (
                         <div className="mb-6">
