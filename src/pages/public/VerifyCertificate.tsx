@@ -102,7 +102,44 @@ const VerifyCertificate: React.FC = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 mt-8">
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-primary-600 hover:bg-primary-600 rounded-2xl p-8 text-white">
+            <h3 className="text-2xl font-bold mb-4 font-heading">¿Cómo funciona?</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 mb-4">
+                  <Search className="w-8 h-8" />
+                </div>
+                <h4 className="font-semibold mb-2">1. Busca</h4>
+                <p className="text-sm text-primary-100">
+                  Ingresa tu código, nombre o correo electrónico
+                </p>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 mb-4">
+                  <Award className="w-8 h-8" />
+                </div>
+                <h4 className="font-semibold mb-2">2. Verifica</h4>
+                <p className="text-sm text-primary-100">
+                  Visualiza los detalles completos de tu certificado
+                </p>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 mb-4">
+                  <Search className="w-8 h-8" />
+                </div>
+                <h4 className="font-semibold mb-2">3. Comparte</h4>
+                <p className="text-sm text-primary-100">
+                  Comparte tu logro en LinkedIn con un solo clic
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 pb-16">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -247,43 +284,6 @@ const VerifyCertificate: React.FC = () => {
               </p>
             </div>
           )}
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-primary-600 hover:bg-primary-600 rounded-2xl p-8 text-white">
-            <h3 className="text-2xl font-bold mb-4 font-heading">¿Cómo funciona?</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="flex flex-col items-center text-center">
-                <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 mb-4">
-                  <Search className="w-8 h-8" />
-                </div>
-                <h4 className="font-semibold mb-2">1. Busca</h4>
-                <p className="text-sm text-primary-100">
-                  Ingresa tu código, nombre o correo electrónico
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center">
-                <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 mb-4">
-                  <Award className="w-8 h-8" />
-                </div>
-                <h4 className="font-semibold mb-2">2. Verifica</h4>
-                <p className="text-sm text-primary-100">
-                  Visualiza los detalles completos de tu certificado
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center">
-                <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 mb-4">
-                  <Search className="w-8 h-8" />
-                </div>
-                <h4 className="font-semibold mb-2">3. Comparte</h4>
-                <p className="text-sm text-primary-100">
-                  Comparte tu logro en LinkedIn con un solo clic
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
