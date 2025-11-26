@@ -196,12 +196,24 @@ const PrimerosPasosDigitales: React.FC = () => {
       videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
       audios: [
         {
-          title: '¿Qué es lo digital?',
+          title: '¿Qué es el mundo digital?',
           url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo1/Mis-Primeros-Pasos%20Digitales-Modulo1-Audio1.mp3'
         },
         {
           title: '¿Qué es internet?',
           url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo1/Mis-Primeros-Pasos%20Digitales-Modulo1-Audio2.mp3'
+        },
+        {
+          title: 'Uso básico del smartphone',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo1/Mis-Primeros-Pasos%20Digitales-Modulo1-Audio3.mp3'
+        },
+        {
+          title: 'Primeras acciones digitales básicas',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo1/Mis-Primeros-Pasos%20Digitales-Modulo1-Audio4.mp3'
+        },
+        {
+          title: 'Inteligencia Artificial',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo1/Mis-Primeros-Pasos%20Digitales-Modulo1-Audio5.mp3'
         }
       ],
       questions: [
@@ -234,7 +246,36 @@ const PrimerosPasosDigitales: React.FC = () => {
       ],
       exercise: 'Crear catálogo en WhatsApp Business',
       videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
-      audioUrl: 'https://example.com/audio/modulo2.mp3',
+      audios: [
+        {
+          title: '¿Por qué WhatsApp es una herramienta poderosa para ventas?',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo2/Mis-Primeros-Pasos%20Digitales-Modulo2-Audio1.mp3'
+        },
+        {
+          title: '¿Qué es WhatsApp Business?',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo2/Mis-Primeros-Pasos%20Digitales-Modulo2-Audio2.mp3'
+        },
+        {
+          title: 'Configuración del Perfil de Negocio',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo2/Mis-Primeros-Pasos%20Digitales-Modulo2-Audio3.mp3'
+        },
+        {
+          title: 'Estados: una vitrina para sus productos',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo2/Mis-Primeros-Pasos%20Digitales-Modulo2-Audio4.mp3'
+        },
+        {
+          title: 'Respuestas automáticas',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo2/Mis-Primeros-Pasos%20Digitales-Modulo2-Audio5.mp3'
+        },
+        {
+          title: 'Crear su primer catálogo',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo2/Mis-Primeros-Pasos%20Digitales-Modulo2-Audio6.mp3'
+        },
+        {
+          title: 'Inteligencia Artificial para escribir mensajes profesionales en WhatsApp',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo2/Mis-Primeros-Pasos%20Digitales-Modulo2-Audio7.mp3'
+        }
+      ],
       questions: [
         {
           question: '¿Qué es WhatsApp Business?',
@@ -265,7 +306,20 @@ const PrimerosPasosDigitales: React.FC = () => {
       ],
       exercise: 'Publicar una foto de producto con precio y descripción',
       videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
-      audioUrl: 'https://example.com/audio/modulo3.mp3',
+      audios: [
+        {
+          title: '¿Por qué usar redes sociales para vender?',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo3/Mis-Primeros-Pasos%20Digitales-Modulo3-Audio1.mp3'
+        },
+        {
+          title: 'Crear una página de Facebook',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo3/Mis-Primeros-Pasos%20Digitales-Modulo3-Audio2.mp3'
+        },
+        {
+          title: 'Inteligencia Artificial para crear publicaciones de Facebook',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo3/Mis-Primeros-Pasos%20Digitales-Modulo3-Audio3.mp3'
+        }
+      ],
       questions: [
         {
           question: '¿Cuál es la diferencia entre un perfil personal y una página de Facebook?',
@@ -291,7 +345,24 @@ const PrimerosPasosDigitales: React.FC = () => {
       ],
       exercise: 'Diseñar un flyer digital para un producto',
       videoUrl: 'https://youtu.be/gU6sa65YEeM?si=QG407L68K-QtFXSv',
-      audioUrl: 'https://example.com/audio/modulo4.mp3',
+      audios: [
+        {
+          title: '¿Qué es el "contenido que vende"?',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo4/Mis-Primeros-Pasos%20Digitales-Modulo4-Audio1.mp3'
+        },
+        {
+          title: 'Cómo tomar fotos atractivas con el celular',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo4/Mis-Primeros-Pasos%20Digitales-Modulo4-Audio2.mp3'
+        },
+        {
+          title: 'Aplicaciones sencillas para editar contenido',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo4/Mis-Primeros-Pasos%20Digitales-Modulo4-Audio3.mp3'
+        },
+        {
+          title: 'Inteligencia Artificial para generar ideas de fotos, textos y flyers',
+          url: 'https://redciudadana.github.io/RecursosMisPrimerosPasosDigitales/Audios/Modulo4/Mis-Primeros-Pasos%20Digitales-Modulo4-Audio4.mp3'
+        }
+      ],
       questions: [
         {
           question: '¿Qué elemento es más importante en una foto de producto?',
