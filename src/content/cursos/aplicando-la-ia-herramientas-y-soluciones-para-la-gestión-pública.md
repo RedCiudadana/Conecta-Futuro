@@ -7,7 +7,7 @@ descripcion: Este curso intermedio se enfoca en el uso de herramientas
   IA Red Ciudadana y otras soluciones sin código para optimizar trámites,
   analizar datos y crear soluciones digitales básicas.
 nivel: Intermedio
-estado: Por iniciar
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 12 horas
 enlace_contenido: "#"
