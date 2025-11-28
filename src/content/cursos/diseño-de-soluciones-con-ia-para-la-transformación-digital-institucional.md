@@ -8,7 +8,7 @@ descripcion: Este curso está dirigido a líderes técnicos, responsables de
   empresariales. Ideal para quienes desean prototipar soluciones o liderar
   procesos de transformación digital con IA.
 nivel: Avanzado
-estado: Por iniciar
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 12 horas
 enlace_contenido: "#"
