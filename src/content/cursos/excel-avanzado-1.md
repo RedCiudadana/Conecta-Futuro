@@ -23,7 +23,7 @@ descripcion: >-
 
   📌 ¡No dejes pasar esta oportunidad de mejorar tus habilidades! 💡✨
 nivel: Avanzado
-estado: Por iniciar
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 8 horas
 enlace_contenido: "#"
