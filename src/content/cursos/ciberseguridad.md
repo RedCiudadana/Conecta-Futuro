@@ -33,7 +33,7 @@ descripcion: >-
 
   📌 ¡No dejes pasar esta oportunidad de fortalecer tus habilidades digitales y contribuir a instituciones más seguras y modernas! 💡✨
 nivel: Básico
-estado: Por iniciar
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 8 horas
 enlace_contenido: "#"
