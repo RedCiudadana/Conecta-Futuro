@@ -3,7 +3,7 @@ title: Introducción a Datos Abiertos
 image: /uploads/introduccion-a-datos-abiertos.png
 descripcion: Introducción a Datos Abiertos
 nivel: Básico
-estado: Por iniciar
+estado: Finalizado
 categoria: Innovación Pública
 duracion: 12 horas
 enlace_contenido: "#"
