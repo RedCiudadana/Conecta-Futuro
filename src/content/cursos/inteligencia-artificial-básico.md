@@ -7,7 +7,7 @@ descripcion: Este curso introductorio brinda una comprensión clara y práctica 
   clave como algoritmos, datos, machine learning, y aplicaciones comunes como
   asistentes virtuales, automatización de tareas y análisis de datos.
 nivel: Básico
-estado: Por iniciar
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 12 horas
 enlace_contenido: https://redciudadana.org/

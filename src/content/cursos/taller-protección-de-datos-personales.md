@@ -14,7 +14,7 @@ descripcion: >-
 
   la protección efectiva de la privacidad de las personas.
 nivel: Intermedio
-estado: En proceso
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 4 horas
 enlace_contenido: https://redciudadana.org/
