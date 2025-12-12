@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
                 Cursos
               </Link>
               <Link to="/conecta-futuro" className="text-gray-700 hover:text-primary-600 font-medium">
-                Conecta Futuro 2026
+                Conecta Futuro 2025
               </Link>
               <Link to="/verify-certificate" className="text-gray-700 hover:text-primary-600 font-medium">
                 Certificados
@@ -128,7 +128,7 @@ const Navbar: React.FC = () => {
                 Cursos
               </Link>
               <Link to="/conecta-futuro" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
-                Conecta Futuro 2026
+                Conecta Futuro 2025
               </Link>
               <Link to="/verify-certificate" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Certificados
