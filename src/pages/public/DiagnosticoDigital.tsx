@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   ArrowLeft,
@@ -9,7 +9,15 @@ import {
   AlertCircle,
   Sparkles,
   Target,
-  BarChart3
+  BarChart3,
+  Store,
+  Users as UsersIcon,
+  MessageSquare,
+  Globe,
+  Calculator,
+  Brain,
+  Package,
+  Briefcase
 } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
@@ -41,8 +49,7 @@ interface DiagnosticResult {
 }
 
 const DiagnosticoDigital: React.FC = () => {
-  const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState<'intro' | 'questions' | 'info' | 'result'>('intro');
+  const [currentStep, setCurrentStep] = useState<'info' | 'questions' | 'user-info' | 'result'>('info');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
   const [userInfo, setUserInfo] = useState({ name: '', email: '', businessName: '' });
@@ -254,7 +261,7 @@ const DiagnosticoDigital: React.FC = () => {
       }, 300);
     } else {
       setTimeout(() => {
-        setCurrentStep('info');
+        setCurrentStep('user-info');
       }, 300);
     }
   };
@@ -271,10 +278,10 @@ const DiagnosticoDigital: React.FC = () => {
     setResult(diagnosticResult);
 
     try {
-      const answersArray = questions.map(q => ({
+      const answersArray = questions.map((q, index) => ({
         question_id: q.id,
         question: q.question,
-        answer_value: answers[questions.indexOf(q)],
+        answer_value: answers[index],
         dimension: q.dimension
       }));
 
@@ -297,84 +304,244 @@ const DiagnosticoDigital: React.FC = () => {
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
-  if (currentStep === 'intro') {
+  if (currentStep === 'info') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-primary-600 to-primary-700 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
+      <div className="min-h-screen bg-white">
+        <div className="bg-gradient-to-b from-primary-600 to-primary-700 text-white py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
               <BarChart3 className="w-20 h-20 mx-auto mb-6" />
               <h1 className="text-4xl md:text-5xl font-bold mb-4 font-heading">
                 Diagnóstico de Madurez Digital
               </h1>
-              <p className="text-xl text-primary-100">
+              <p className="text-xl text-primary-100 mb-8">
                 Digitaliza tu PyME – Conecta Futuro
               </p>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-8">
-              <h2 className="text-2xl font-bold mb-4">¿Para qué sirve este diagnóstico?</h2>
-              <p className="mb-4 text-primary-100">Este diagnóstico te ayudará a:</p>
-              <ul className="space-y-3 mb-6">
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                  <span>Conocer el nivel digital actual de tu negocio</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                  <span>Identificar áreas de mejora</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                  <span>Recibir una ruta de formación personalizada</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                  <span>Aprovechar mejor el programa Digitaliza tu PyME</span>
-                </li>
-              </ul>
-
-              <div className="bg-blue-900/30 border-l-4 border-blue-300 p-4 rounded">
-                <p className="text-blue-100">
-                  <strong>Importante:</strong> No hay respuestas correctas o incorrectas.
-                  Responde según la realidad de tu negocio hoy.
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-8">
-              <h3 className="text-xl font-bold mb-4">🧩 Dimensiones del diagnóstico</h3>
-              <p className="text-primary-100 mb-4">Las 10 preguntas evalúan 5 áreas clave:</p>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span>Organización y procesos</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span>Ventas y relación con clientes</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span>Presencia digital</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span>Gestión financiera</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span>Uso de tecnología e IA</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="text-center">
               <button
                 onClick={() => setCurrentStep('questions')}
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-white text-primary-600 font-semibold hover:bg-gray-100 transition-colors text-lg shadow-lg"
               >
-                Iniciar diagnóstico
+                Hacer diagnóstico (5 min)
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg mb-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">¿Para qué sirve este diagnóstico?</h2>
+              <p className="text-gray-700 mb-4">Este diagnóstico te ayudará a:</p>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Conocer el nivel digital actual de tu negocio</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Identificar áreas de mejora</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Recibir una ruta de formación personalizada</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Aprovechar mejor el programa Digitaliza tu PyME</span>
+                </li>
+              </ul>
+              <div className="mt-6 bg-white p-4 rounded border-l-4 border-yellow-400">
+                <p className="text-gray-800">
+                  <strong>No hay respuestas correctas o incorrectas.</strong> Responde según la realidad de tu negocio hoy.
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">🧩 Dimensiones del diagnóstico</h2>
+              <p className="text-gray-700 mb-6">Las 10 preguntas evalúan 5 áreas clave:</p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <Store className="w-8 h-8 text-primary-600 flex-shrink-0" />
+                  <span className="font-semibold text-gray-900">Organización y procesos</span>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <UsersIcon className="w-8 h-8 text-primary-600 flex-shrink-0" />
+                  <span className="font-semibold text-gray-900">Ventas y relación con clientes</span>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <Globe className="w-8 h-8 text-primary-600 flex-shrink-0" />
+                  <span className="font-semibold text-gray-900">Presencia digital</span>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <Calculator className="w-8 h-8 text-primary-600 flex-shrink-0" />
+                  <span className="font-semibold text-gray-900">Gestión financiera</span>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg md:col-span-2">
+                  <Brain className="w-8 h-8 text-primary-600 flex-shrink-0" />
+                  <span className="font-semibold text-gray-900">Uso de tecnología e IA</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">📝 Las 10 preguntas del diagnóstico</h2>
+              <div className="space-y-6">
+                {questions.map((question, index) => (
+                  <div key={question.id} className="bg-gray-50 rounded-lg p-6">
+                    <div className="flex items-start gap-4 mb-4">
+                      <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold">
+                        {index + 1}
+                      </span>
+                      <div className="flex-1">
+                        <span className="text-sm font-semibold text-primary-600 uppercase tracking-wide">
+                          {question.dimension}
+                        </span>
+                        <h3 className="text-lg font-bold text-gray-900 mt-1">{question.question}</h3>
+                      </div>
+                    </div>
+                    <div className="ml-12 space-y-2">
+                      {question.options.map((option) => (
+                        <div key={option.label} className="flex items-start gap-3">
+                          <span className="font-bold text-gray-600">{option.label})</span>
+                          <span className="text-gray-700">{option.text}</span>
+                        </div>
+                      ))}
+                      <p className="text-sm text-gray-500 mt-3">
+                        ➡️ Módulos relacionados: {question.relatedModules}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">🧮 Sistema de puntuación</h2>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                  <div className="text-center p-4 bg-white rounded-lg">
+                    <span className="text-2xl font-bold text-gray-900">A = 1</span>
+                  </div>
+                  <div className="text-center p-4 bg-white rounded-lg">
+                    <span className="text-2xl font-bold text-gray-900">B = 2</span>
+                  </div>
+                  <div className="text-center p-4 bg-white rounded-lg">
+                    <span className="text-2xl font-bold text-gray-900">C = 3</span>
+                  </div>
+                  <div className="text-center p-4 bg-white rounded-lg">
+                    <span className="text-2xl font-bold text-gray-900">D = 4</span>
+                  </div>
+                </div>
+                <div className="flex justify-between text-center">
+                  <div>
+                    <p className="text-sm text-gray-600">Puntaje mínimo</p>
+                    <p className="text-2xl font-bold text-gray-900">10 puntos</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Puntaje máximo</p>
+                    <p className="text-2xl font-bold text-gray-900">40 puntos</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">📈 Niveles de Madurez Digital</h2>
+              <div className="space-y-6">
+                <div className="border-l-8 border-red-500 bg-red-50 rounded-lg p-6">
+                  <div className="flex items-start gap-4 mb-4">
+                    <span className="text-4xl">🔴</span>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">Nivel 1 – Inicial (10–17 puntos)</h3>
+                      <p className="text-lg italic text-gray-700 mt-2">"Mi negocio apenas empieza en lo digital"</p>
+                    </div>
+                  </div>
+                  <div className="ml-16">
+                    <h4 className="font-bold text-gray-900 mb-2">Características:</h4>
+                    <ul className="space-y-1 mb-4">
+                      <li className="text-gray-700">• Procesos manuales</li>
+                      <li className="text-gray-700">• Poco uso de tecnología</li>
+                      <li className="text-gray-700">• Mucho esfuerzo operativo</li>
+                    </ul>
+                    <h4 className="font-bold text-gray-900 mb-2">Ruta recomendada:</h4>
+                    <p className="text-primary-600 font-semibold">👉 Módulos 1, 2, 3, 4, 5</p>
+                  </div>
+                </div>
+
+                <div className="border-l-8 border-orange-500 bg-orange-50 rounded-lg p-6">
+                  <div className="flex items-start gap-4 mb-4">
+                    <span className="text-4xl">🟠</span>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">Nivel 2 – En Proceso (18–26 puntos)</h3>
+                      <p className="text-lg italic text-gray-700 mt-2">"Mi negocio ya usa tecnología, pero puede mejorar"</p>
+                    </div>
+                  </div>
+                  <div className="ml-16">
+                    <h4 className="font-bold text-gray-900 mb-2">Características:</h4>
+                    <ul className="space-y-1 mb-4">
+                      <li className="text-gray-700">• Uso básico de herramientas</li>
+                      <li className="text-gray-700">• Presencia digital parcial</li>
+                      <li className="text-gray-700">• Poca automatización</li>
+                    </ul>
+                    <h4 className="font-bold text-gray-900 mb-2">Ruta recomendada:</h4>
+                    <p className="text-primary-600 font-semibold">👉 Módulos 3, 4, 5, 6, 7</p>
+                  </div>
+                </div>
+
+                <div className="border-l-8 border-yellow-500 bg-yellow-50 rounded-lg p-6">
+                  <div className="flex items-start gap-4 mb-4">
+                    <span className="text-4xl">🟡</span>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">Nivel 3 – Digital Activo (27–34 puntos)</h3>
+                      <p className="text-lg italic text-gray-700 mt-2">"Mi negocio está digitalizado y listo para crecer"</p>
+                    </div>
+                  </div>
+                  <div className="ml-16">
+                    <h4 className="font-bold text-gray-900 mb-2">Características:</h4>
+                    <ul className="space-y-1 mb-4">
+                      <li className="text-gray-700">• Procesos digitales</li>
+                      <li className="text-gray-700">• Ventas organizadas</li>
+                      <li className="text-gray-700">• Uso incipiente de IA</li>
+                    </ul>
+                    <h4 className="font-bold text-gray-900 mb-2">Ruta recomendada:</h4>
+                    <p className="text-primary-600 font-semibold">👉 Módulos 6, 7, 8, 9</p>
+                  </div>
+                </div>
+
+                <div className="border-l-8 border-green-500 bg-green-50 rounded-lg p-6">
+                  <div className="flex items-start gap-4 mb-4">
+                    <span className="text-4xl">🟢</span>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">Nivel 4 – Avanzado (35–40 puntos)</h3>
+                      <p className="text-lg italic text-gray-700 mt-2">"Mi negocio usa tecnología de forma estratégica"</p>
+                    </div>
+                  </div>
+                  <div className="ml-16">
+                    <h4 className="font-bold text-gray-900 mb-2">Características:</h4>
+                    <ul className="space-y-1 mb-4">
+                      <li className="text-gray-700">• Automatización</li>
+                      <li className="text-gray-700">• Uso de IA</li>
+                      <li className="text-gray-700">• Toma de decisiones basada en datos</li>
+                    </ul>
+                    <h4 className="font-bold text-gray-900 mb-2">Ruta recomendada:</h4>
+                    <p className="text-primary-600 font-semibold">👉 Módulos 7, 8, 9 (nivel avanzado / mentoría)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg p-8 text-center text-white">
+              <h2 className="text-3xl font-bold mb-4">¿Listo para descubrir tu nivel?</h2>
+              <p className="text-xl text-primary-100 mb-6">
+                Responde las 10 preguntas y recibe tu diagnóstico personalizado
+              </p>
+              <button
+                onClick={() => setCurrentStep('questions')}
+                className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-white text-primary-600 font-semibold hover:bg-gray-100 transition-colors text-lg shadow-lg"
+              >
+                Iniciar diagnóstico ahora
                 <ArrowRight className="ml-2 h-5 w-5" />
               </button>
               <p className="text-primary-100 text-sm mt-4">
@@ -393,7 +560,6 @@ const DiagnosticoDigital: React.FC = () => {
       <div className="min-h-screen bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            {/* Progress Bar */}
             <div className="mb-8">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">
@@ -463,7 +629,7 @@ const DiagnosticoDigital: React.FC = () => {
 
                 {currentQuestion === questions.length - 1 && answers[currentQuestion] && (
                   <button
-                    onClick={() => setCurrentStep('info')}
+                    onClick={() => setCurrentStep('user-info')}
                     className="inline-flex items-center px-6 py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
                   >
                     Continuar
@@ -478,7 +644,7 @@ const DiagnosticoDigital: React.FC = () => {
     );
   }
 
-  if (currentStep === 'info') {
+  if (currentStep === 'user-info') {
     return (
       <div className="min-h-screen bg-gray-50 py-16">
         <div className="container mx-auto px-4">
