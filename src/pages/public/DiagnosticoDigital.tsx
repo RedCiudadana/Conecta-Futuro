@@ -12,18 +12,24 @@ import {
   BarChart3,
   Store,
   Users as UsersIcon,
-  MessageSquare,
   Globe,
   Calculator,
-  Brain,
-  Package,
-  Briefcase
+  Brain
 } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+let supabase: ReturnType<typeof createClient> | null = null;
+
+try {
+  if (supabaseUrl && supabaseAnonKey) {
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
+  }
+} catch (error) {
+  console.error('Error initializing Supabase:', error);
+}
 
 interface Question {
   id: number;
@@ -48,6 +54,201 @@ interface DiagnosticResult {
   color: string;
 }
 
+const QUESTIONS: Question[] = [
+  {
+    id: 1,
+    dimension: 'Organización y procesos',
+    question: '¿Cómo organizas las tareas diarias de tu negocio?',
+    relatedModules: '3, 7',
+    options: [
+      { label: 'A', text: 'Todo está en mi cabeza o en papel', value: 1 },
+      { label: 'B', text: 'Uso WhatsApp o notas del celular', value: 2 },
+      { label: 'C', text: 'Uso herramientas digitales para organizarme', value: 3 },
+      { label: 'D', text: 'Tengo procesos digitales claros y automatizados', value: 4 }
+    ]
+  },
+  {
+    id: 2,
+    dimension: 'Organización y procesos',
+    question: '¿Cuánto tiempo dedicas a tareas repetitivas (mensajes, registros, cotizaciones)?',
+    relatedModules: '3, 7',
+    options: [
+      { label: 'A', text: 'Mucho tiempo, casi todos los días', value: 1 },
+      { label: 'B', text: 'Bastante tiempo', value: 2 },
+      { label: 'C', text: 'Poco tiempo', value: 3 },
+      { label: 'D', text: 'Muy poco, la mayoría está automatizado', value: 4 }
+    ]
+  },
+  {
+    id: 3,
+    dimension: 'Ventas y relación con clientes',
+    question: '¿Cómo gestionas a tus clientes y ventas?',
+    relatedModules: '4, 5',
+    options: [
+      { label: 'A', text: 'No llevo registro', value: 1 },
+      { label: 'B', text: 'Solo mensajes y llamadas', value: 2 },
+      { label: 'C', text: 'Tengo registros digitales', value: 3 },
+      { label: 'D', text: 'Uso herramientas para seguimiento y análisis', value: 4 }
+    ]
+  },
+  {
+    id: 4,
+    dimension: 'Ventas y relación con clientes',
+    question: '¿Cómo atiendes a tus clientes?',
+    relatedModules: '4, 7',
+    options: [
+      { label: 'A', text: 'Respondo cuando puedo', value: 1 },
+      { label: 'B', text: 'Respondo manualmente', value: 2 },
+      { label: 'C', text: 'Uso mensajes predeterminados', value: 3 },
+      { label: 'D', text: 'Tengo respuestas automáticas y flujos', value: 4 }
+    ]
+  },
+  {
+    id: 5,
+    dimension: 'Presencia digital',
+    question: '¿Tu negocio tiene presencia en internet?',
+    relatedModules: '5',
+    options: [
+      { label: 'A', text: 'No', value: 1 },
+      { label: 'B', text: 'Solo WhatsApp', value: 2 },
+      { label: 'C', text: 'Redes sociales activas', value: 3 },
+      { label: 'D', text: 'Redes + catálogo o página', value: 4 }
+    ]
+  },
+  {
+    id: 6,
+    dimension: 'Presencia digital',
+    question: '¿Cómo creas contenido para promocionar tu negocio?',
+    relatedModules: '4, 5',
+    options: [
+      { label: 'A', text: 'No creo contenido', value: 1 },
+      { label: 'B', text: 'Publico ocasionalmente', value: 2 },
+      { label: 'C', text: 'Tengo contenido planificado', value: 3 },
+      { label: 'D', text: 'Uso herramientas digitales o IA', value: 4 }
+    ]
+  },
+  {
+    id: 7,
+    dimension: 'Gestión financiera',
+    question: '¿Cómo llevas el control de ingresos y gastos?',
+    relatedModules: '6',
+    options: [
+      { label: 'A', text: 'No llevo control', value: 1 },
+      { label: 'B', text: 'En libreta', value: 2 },
+      { label: 'C', text: 'En Excel o herramientas digitales', value: 3 },
+      { label: 'D', text: 'Analizo datos y hago proyecciones', value: 4 }
+    ]
+  },
+  {
+    id: 8,
+    dimension: 'Gestión financiera',
+    question: '¿Cómo controlas tu inventario o servicios?',
+    relatedModules: '6, 7',
+    options: [
+      { label: 'A', text: 'No llevo control', value: 1 },
+      { label: 'B', text: 'Control mental o en papel', value: 2 },
+      { label: 'C', text: 'Control digital básico', value: 3 },
+      { label: 'D', text: 'Control digital con alertas', value: 4 }
+    ]
+  },
+  {
+    id: 9,
+    dimension: 'Uso de tecnología',
+    question: '¿Usas herramientas digitales o IA en tu negocio?',
+    relatedModules: '3, 7',
+    options: [
+      { label: 'A', text: 'No uso', value: 1 },
+      { label: 'B', text: 'Uso herramientas básicas', value: 2 },
+      { label: 'C', text: 'Uso varias herramientas', value: 3 },
+      { label: 'D', text: 'Uso IA para apoyar decisiones', value: 4 }
+    ]
+  },
+  {
+    id: 10,
+    dimension: 'Uso de tecnología',
+    question: '¿Tu negocio tiene un plan para crecer usando tecnología?',
+    relatedModules: '9',
+    options: [
+      { label: 'A', text: 'No', value: 1 },
+      { label: 'B', text: 'Tengo ideas, pero no plan', value: 2 },
+      { label: 'C', text: 'Tengo un plan básico', value: 3 },
+      { label: 'D', text: 'Tengo una ruta digital clara', value: 4 }
+    ]
+  }
+];
+
+const calculateResult = (answers: { [key: number]: number }): DiagnosticResult => {
+  const totalScore = Object.values(answers).reduce((sum, val) => sum + val, 0);
+  let maturityLevel: number;
+  let levelName: string;
+  let levelDescription: string;
+  let characteristics: string[];
+  let recommendedModules: string;
+  let emoji: string;
+  let color: string;
+
+  if (totalScore >= 10 && totalScore <= 17) {
+    maturityLevel = 1;
+    levelName = 'Inicial';
+    levelDescription = 'Mi negocio apenas empieza en lo digital';
+    characteristics = [
+      'Procesos manuales',
+      'Poco uso de tecnología',
+      'Mucho esfuerzo operativo'
+    ];
+    recommendedModules = '1, 2, 3, 4, 5';
+    emoji = '🔴';
+    color = 'red';
+  } else if (totalScore >= 18 && totalScore <= 26) {
+    maturityLevel = 2;
+    levelName = 'En Proceso';
+    levelDescription = 'Mi negocio ya usa tecnología, pero puede mejorar';
+    characteristics = [
+      'Uso básico de herramientas',
+      'Presencia digital parcial',
+      'Poca automatización'
+    ];
+    recommendedModules = '3, 4, 5, 6, 7';
+    emoji = '🟠';
+    color = 'orange';
+  } else if (totalScore >= 27 && totalScore <= 34) {
+    maturityLevel = 3;
+    levelName = 'Digital Activo';
+    levelDescription = 'Mi negocio está digitalizado y listo para crecer';
+    characteristics = [
+      'Procesos digitales',
+      'Ventas organizadas',
+      'Uso incipiente de IA'
+    ];
+    recommendedModules = '6, 7, 8, 9';
+    emoji = '🟡';
+    color = 'yellow';
+  } else {
+    maturityLevel = 4;
+    levelName = 'Avanzado';
+    levelDescription = 'Mi negocio usa tecnología de forma estratégica';
+    characteristics = [
+      'Automatización',
+      'Uso de IA',
+      'Toma de decisiones basada en datos'
+    ];
+    recommendedModules = '7, 8, 9 (nivel avanzado / mentoría)';
+    emoji = '🟢';
+    color = 'green';
+  }
+
+  return {
+    totalScore,
+    maturityLevel,
+    levelName,
+    levelDescription,
+    characteristics,
+    recommendedModules,
+    emoji,
+    color
+  };
+};
+
 const DiagnosticoDigital: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<'info' | 'questions' | 'user-info' | 'result'>('info');
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -56,206 +257,11 @@ const DiagnosticoDigital: React.FC = () => {
   const [result, setResult] = useState<DiagnosticResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const questions: Question[] = [
-    {
-      id: 1,
-      dimension: 'Organización y procesos',
-      question: '¿Cómo organizas las tareas diarias de tu negocio?',
-      relatedModules: '3, 7',
-      options: [
-        { label: 'A', text: 'Todo está en mi cabeza o en papel', value: 1 },
-        { label: 'B', text: 'Uso WhatsApp o notas del celular', value: 2 },
-        { label: 'C', text: 'Uso herramientas digitales para organizarme', value: 3 },
-        { label: 'D', text: 'Tengo procesos digitales claros y automatizados', value: 4 }
-      ]
-    },
-    {
-      id: 2,
-      dimension: 'Organización y procesos',
-      question: '¿Cuánto tiempo dedicas a tareas repetitivas (mensajes, registros, cotizaciones)?',
-      relatedModules: '3, 7',
-      options: [
-        { label: 'A', text: 'Mucho tiempo, casi todos los días', value: 1 },
-        { label: 'B', text: 'Bastante tiempo', value: 2 },
-        { label: 'C', text: 'Poco tiempo', value: 3 },
-        { label: 'D', text: 'Muy poco, la mayoría está automatizado', value: 4 }
-      ]
-    },
-    {
-      id: 3,
-      dimension: 'Ventas y relación con clientes',
-      question: '¿Cómo gestionas a tus clientes y ventas?',
-      relatedModules: '4, 5',
-      options: [
-        { label: 'A', text: 'No llevo registro', value: 1 },
-        { label: 'B', text: 'Solo mensajes y llamadas', value: 2 },
-        { label: 'C', text: 'Tengo registros digitales', value: 3 },
-        { label: 'D', text: 'Uso herramientas para seguimiento y análisis', value: 4 }
-      ]
-    },
-    {
-      id: 4,
-      dimension: 'Ventas y relación con clientes',
-      question: '¿Cómo atiendes a tus clientes?',
-      relatedModules: '4, 7',
-      options: [
-        { label: 'A', text: 'Respondo cuando puedo', value: 1 },
-        { label: 'B', text: 'Respondo manualmente', value: 2 },
-        { label: 'C', text: 'Uso mensajes predeterminados', value: 3 },
-        { label: 'D', text: 'Tengo respuestas automáticas y flujos', value: 4 }
-      ]
-    },
-    {
-      id: 5,
-      dimension: 'Presencia digital',
-      question: '¿Tu negocio tiene presencia en internet?',
-      relatedModules: '5',
-      options: [
-        { label: 'A', text: 'No', value: 1 },
-        { label: 'B', text: 'Solo WhatsApp', value: 2 },
-        { label: 'C', text: 'Redes sociales activas', value: 3 },
-        { label: 'D', text: 'Redes + catálogo o página', value: 4 }
-      ]
-    },
-    {
-      id: 6,
-      dimension: 'Presencia digital',
-      question: '¿Cómo creas contenido para promocionar tu negocio?',
-      relatedModules: '4, 5',
-      options: [
-        { label: 'A', text: 'No creo contenido', value: 1 },
-        { label: 'B', text: 'Publico ocasionalmente', value: 2 },
-        { label: 'C', text: 'Tengo contenido planificado', value: 3 },
-        { label: 'D', text: 'Uso herramientas digitales o IA', value: 4 }
-      ]
-    },
-    {
-      id: 7,
-      dimension: 'Gestión financiera',
-      question: '¿Cómo llevas el control de ingresos y gastos?',
-      relatedModules: '6',
-      options: [
-        { label: 'A', text: 'No llevo control', value: 1 },
-        { label: 'B', text: 'En libreta', value: 2 },
-        { label: 'C', text: 'En Excel o herramientas digitales', value: 3 },
-        { label: 'D', text: 'Analizo datos y hago proyecciones', value: 4 }
-      ]
-    },
-    {
-      id: 8,
-      dimension: 'Gestión financiera',
-      question: '¿Cómo controlas tu inventario o servicios?',
-      relatedModules: '6, 7',
-      options: [
-        { label: 'A', text: 'No llevo control', value: 1 },
-        { label: 'B', text: 'Control mental o en papel', value: 2 },
-        { label: 'C', text: 'Control digital básico', value: 3 },
-        { label: 'D', text: 'Control digital con alertas', value: 4 }
-      ]
-    },
-    {
-      id: 9,
-      dimension: 'Uso de tecnología',
-      question: '¿Usas herramientas digitales o IA en tu negocio?',
-      relatedModules: '3, 7',
-      options: [
-        { label: 'A', text: 'No uso', value: 1 },
-        { label: 'B', text: 'Uso herramientas básicas', value: 2 },
-        { label: 'C', text: 'Uso varias herramientas', value: 3 },
-        { label: 'D', text: 'Uso IA para apoyar decisiones', value: 4 }
-      ]
-    },
-    {
-      id: 10,
-      dimension: 'Uso de tecnología',
-      question: '¿Tu negocio tiene un plan para crecer usando tecnología?',
-      relatedModules: '9',
-      options: [
-        { label: 'A', text: 'No', value: 1 },
-        { label: 'B', text: 'Tengo ideas, pero no plan', value: 2 },
-        { label: 'C', text: 'Tengo un plan básico', value: 3 },
-        { label: 'D', text: 'Tengo una ruta digital clara', value: 4 }
-      ]
-    }
-  ];
-
-  const calculateResult = (answers: { [key: number]: number }): DiagnosticResult => {
-    const totalScore = Object.values(answers).reduce((sum, val) => sum + val, 0);
-    let maturityLevel: number;
-    let levelName: string;
-    let levelDescription: string;
-    let characteristics: string[];
-    let recommendedModules: string;
-    let emoji: string;
-    let color: string;
-
-    if (totalScore >= 10 && totalScore <= 17) {
-      maturityLevel = 1;
-      levelName = 'Inicial';
-      levelDescription = 'Mi negocio apenas empieza en lo digital';
-      characteristics = [
-        'Procesos manuales',
-        'Poco uso de tecnología',
-        'Mucho esfuerzo operativo'
-      ];
-      recommendedModules = '1, 2, 3, 4, 5';
-      emoji = '🔴';
-      color = 'red';
-    } else if (totalScore >= 18 && totalScore <= 26) {
-      maturityLevel = 2;
-      levelName = 'En Proceso';
-      levelDescription = 'Mi negocio ya usa tecnología, pero puede mejorar';
-      characteristics = [
-        'Uso básico de herramientas',
-        'Presencia digital parcial',
-        'Poca automatización'
-      ];
-      recommendedModules = '3, 4, 5, 6, 7';
-      emoji = '🟠';
-      color = 'orange';
-    } else if (totalScore >= 27 && totalScore <= 34) {
-      maturityLevel = 3;
-      levelName = 'Digital Activo';
-      levelDescription = 'Mi negocio está digitalizado y listo para crecer';
-      characteristics = [
-        'Procesos digitales',
-        'Ventas organizadas',
-        'Uso incipiente de IA'
-      ];
-      recommendedModules = '6, 7, 8, 9';
-      emoji = '🟡';
-      color = 'yellow';
-    } else {
-      maturityLevel = 4;
-      levelName = 'Avanzado';
-      levelDescription = 'Mi negocio usa tecnología de forma estratégica';
-      characteristics = [
-        'Automatización',
-        'Uso de IA',
-        'Toma de decisiones basada en datos'
-      ];
-      recommendedModules = '7, 8, 9 (nivel avanzado / mentoría)';
-      emoji = '🟢';
-      color = 'green';
-    }
-
-    return {
-      totalScore,
-      maturityLevel,
-      levelName,
-      levelDescription,
-      characteristics,
-      recommendedModules,
-      emoji,
-      color
-    };
-  };
-
   const handleAnswer = (value: number) => {
     const newAnswers = { ...answers, [currentQuestion]: value };
     setAnswers(newAnswers);
 
-    if (currentQuestion < questions.length - 1) {
+    if (currentQuestion < QUESTIONS.length - 1) {
       setTimeout(() => {
         setCurrentQuestion(currentQuestion + 1);
       }, 300);
@@ -278,22 +284,24 @@ const DiagnosticoDigital: React.FC = () => {
     setResult(diagnosticResult);
 
     try {
-      const answersArray = questions.map((q, index) => ({
-        question_id: q.id,
-        question: q.question,
-        answer_value: answers[index],
-        dimension: q.dimension
-      }));
+      if (supabase) {
+        const answersArray = QUESTIONS.map((q, index) => ({
+          question_id: q.id,
+          question: q.question,
+          answer_value: answers[index],
+          dimension: q.dimension
+        }));
 
-      await supabase.from('diagnostic_results').insert({
-        name: userInfo.name || null,
-        email: userInfo.email || null,
-        business_name: userInfo.businessName || null,
-        answers: answersArray,
-        total_score: diagnosticResult.totalScore,
-        maturity_level: diagnosticResult.maturityLevel,
-        recommended_modules: diagnosticResult.recommendedModules.split(', ')
-      });
+        await supabase.from('diagnostic_results').insert({
+          name: userInfo.name || null,
+          email: userInfo.email || null,
+          business_name: userInfo.businessName || null,
+          answers: answersArray,
+          total_score: diagnosticResult.totalScore,
+          maturity_level: diagnosticResult.maturityLevel,
+          recommended_modules: diagnosticResult.recommendedModules.split(', ')
+        });
+      }
     } catch (error) {
       console.error('Error saving diagnostic:', error);
     }
@@ -302,7 +310,7 @@ const DiagnosticoDigital: React.FC = () => {
     setCurrentStep('result');
   };
 
-  const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const progress = ((currentQuestion + 1) / QUESTIONS.length) * 100;
 
   if (currentStep === 'info') {
     return (
@@ -388,7 +396,7 @@ const DiagnosticoDigital: React.FC = () => {
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">📝 Las 10 preguntas del diagnóstico</h2>
               <div className="space-y-6">
-                {questions.map((question, index) => (
+                {QUESTIONS.map((question, index) => (
                   <div key={question.id} className="bg-gray-50 rounded-lg p-6">
                     <div className="flex items-start gap-4 mb-4">
                       <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold">
@@ -555,7 +563,7 @@ const DiagnosticoDigital: React.FC = () => {
   }
 
   if (currentStep === 'questions') {
-    const question = questions[currentQuestion];
+    const question = QUESTIONS[currentQuestion];
     return (
       <div className="min-h-screen bg-gray-50 py-16">
         <div className="container mx-auto px-4">
@@ -563,7 +571,7 @@ const DiagnosticoDigital: React.FC = () => {
             <div className="mb-8">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">
-                  Pregunta {currentQuestion + 1} de {questions.length}
+                  Pregunta {currentQuestion + 1} de {QUESTIONS.length}
                 </span>
                 <span className="text-sm font-semibold text-primary-600">
                   {Math.round(progress)}%
@@ -627,7 +635,7 @@ const DiagnosticoDigital: React.FC = () => {
                   Anterior
                 </button>
 
-                {currentQuestion === questions.length - 1 && answers[currentQuestion] && (
+                {currentQuestion === QUESTIONS.length - 1 && answers[currentQuestion] && (
                   <button
                     onClick={() => setCurrentStep('user-info')}
                     className="inline-flex items-center px-6 py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
