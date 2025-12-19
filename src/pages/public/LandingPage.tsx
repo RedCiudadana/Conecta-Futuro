@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Users, Award, ArrowRight, CheckCircle, HelpCircle, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
-import Slider from '../../assets/slider/slider.png';
+import SliderImage1 from '../../assets/slider/whatsapp_image_2025-12-18_at_12.17.25_pm.jpeg';
+import SliderImage2 from '../../assets/slider/whatsapp_image_2025-11-12_at_6.29.32_am.jpeg';
+import SliderImage3 from '../../assets/slider/whatsapp_image_2025-09-26_at_12.02.22_pm.jpeg';
 import Icono1 from '../../assets/iconos/EC-23.png';
 import Icono2 from '../../assets/iconos/EC-24.png';
 import Icono3 from '../../assets/iconos/EC-25.png';
@@ -25,21 +27,21 @@ const LandingPage: React.FC = () => {
       description: 'Impulsa tu desarrollo profesional con cursos gratuitos sobre innovación, emprendimiento, gobierno digital y tecnología.',
       buttonText: 'Ver Cursos',
       buttonLink: '/courses',
-      image: Slider
+      image: SliderImage1
     },
     {
       title: 'Aprende a tu Ritmo',
       description: 'Accede a contenido de calidad diseñado por expertos, disponible 24/7 para que aprendas cuando y donde quieras.',
       buttonText: 'Explorar Cursos',
       buttonLink: '/courses',
-      image: Slider
+      image: SliderImage2
     },
     {
       title: 'Certificación Profesional',
       description: 'Obtén certificados avalados que validan tus nuevas competencias y habilidades digitales.',
       buttonText: 'Certificaciones',
       buttonLink: '/courses',
-      image: Slider
+      image: SliderImage3
     }
   ];
 
@@ -202,7 +204,7 @@ const LandingPage: React.FC = () => {
                       <img
                         src={slide.image}
                         alt={slide.title}
-                        className="w-full max-w-[280px] sm:max-w-xs md:max-w-md rounded-lg"
+                        className="w-full max-w-[280px] sm:max-w-xs md:max-w-md lg:max-w-lg rounded-lg shadow-2xl object-cover"
                       />
                     </div>
                   </div>
