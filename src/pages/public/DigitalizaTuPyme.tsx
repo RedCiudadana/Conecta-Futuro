@@ -292,13 +292,13 @@ const DigitalizaTuPyme: React.FC = () => {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="#diagnostico"
+              <Link
+                to="/diagnostico-digital"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition-colors text-lg"
               >
                 Hacer diagnóstico (5 min)
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
+              </Link>
               <a
                 href="#modulos"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-white text-gray-900 font-semibold hover:bg-gray-100 transition-colors text-lg"
@@ -395,7 +395,7 @@ const DigitalizaTuPyme: React.FC = () => {
 
           <div className="text-center">
             <Link
-              to="/contact"
+              to="/diagnostico-digital"
               className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-white text-primary-600 font-semibold hover:bg-gray-100 transition-colors text-lg shadow-lg"
             >
               Iniciar diagnóstico
@@ -545,7 +545,7 @@ const DigitalizaTuPyme: React.FC = () => {
 
             <div className="text-center">
               <Link
-                to="/contact"
+                to="/diagnostico-digital"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors text-lg"
               >
                 Hacer diagnóstico
@@ -783,7 +783,7 @@ const DigitalizaTuPyme: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/contact"
+              to="/diagnostico-digital"
               className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition-colors text-lg"
             >
               Hacer diagnóstico ahora

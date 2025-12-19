@@ -16,6 +16,7 @@ import Community from './pages/public/Community';
 import CommunityDetails from './pages/public/CommunityDetails';
 import PrimerosPasosDigitales from './pages/public/PrimerosPasosDigitales';
 import DigitalizaTuPyme from './pages/public/DigitalizaTuPyme';
+import DiagnosticoDigital from './pages/public/DiagnosticoDigital';
 import ConectaFuturo from './pages/public/ConectaFuturo';
 import VerifyCertificate from './pages/public/VerifyCertificate';
 import Tutoriales from './pages/public/Tutoriales';
@@ -41,6 +42,7 @@ function App() {
           <Route path="mobile-api" element={<MobileApi />} />
           <Route path="primeros-pasos-digitales" element={<PrimerosPasosDigitales />} />
           <Route path="digitaliza-tu-pyme" element={<DigitalizaTuPyme />} />
+          <Route path="diagnostico-digital" element={<DiagnosticoDigital />} />
           <Route path="conecta-futuro" element={<ConectaFuturo />} />
           <Route path="verify-certificate" element={<VerifyCertificate />} />
           <Route path="tutoriales" element={<Tutoriales />} />
