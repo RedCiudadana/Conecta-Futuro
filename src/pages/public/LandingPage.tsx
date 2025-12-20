@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Users, Award, ArrowRight, CheckCircle, HelpCircle, Star, ChevronLeft, ChevronRight } from 'lucide-react';
-import Fondo from '../../assets/slider/fondo.png';
 import SliderImage1 from '../../assets/slider/whatsapp_image_2025-12-18_at_12.17.25_pm.jpeg';
 import SliderImage2 from '../../assets/slider/whatsapp_image_2025-11-12_at_6.29.32_am.jpeg';
 import SliderImage3 from '../../assets/slider/whatsapp_image_2025-09-26_at_12.02.22_pm.jpeg';
@@ -166,46 +165,48 @@ const LandingPage: React.FC = () => {
 
       {/* Hero Slider */}
       <div className="relative overflow-hidden">
-        <div
-          className="relative bg-cover bg-center text-white"
-          style={{ backgroundImage: `url(${Fondo})` }}
-        >
+        {/* Background Images */}
+        {slides.map((slide, index) => (
+          <div
+            key={`bg-${index}`}
+            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ backgroundImage: `url(${slide.image})` }}
+          >
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+          </div>
+        ))}
+
+        <div className="relative">
           {/* Slides Container */}
-          <div className="relative z-10 container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:py-28">
-            <div className="relative">
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-24 lg:py-32">
+            <div className="relative min-h-[400px] sm:min-h-[450px] md:min-h-[500px] flex items-center">
               {slides.map((slide, index) => (
                 <div
                   key={index}
-                  className={`transition-opacity duration-700 ${
-                    index === currentSlide ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'
+                  className={`absolute inset-0 transition-opacity duration-700 ${
+                    index === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'
                   }`}
                 >
-                  <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                    {/* Columna izquierda - Texto */}
-                    <div className="md:w-1/2 text-center md:text-left space-y-4 sm:space-y-6">
-                      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight">
+                  <div className="flex items-center justify-center md:justify-start h-full">
+                    {/* Content */}
+                    <div className="max-w-2xl text-center md:text-left space-y-6 sm:space-y-8 text-white">
+                      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-heading leading-tight drop-shadow-2xl">
                         {slide.title}
                       </h1>
-                      <p className="text-lg sm:text-xl md:text-2xl text-primary-100 max-w-md mx-auto md:mx-0">
+                      <p className="text-xl sm:text-2xl md:text-3xl text-white/90 drop-shadow-lg">
                         {slide.description}
                       </p>
-                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
                         <Link
                           to={slide.buttonLink}
-                          className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-black text-white font-semibold transition-colors text-base sm:text-lg hover:bg-gray-800 text-center"
+                          className="px-8 sm:px-10 py-4 sm:py-5 rounded-lg bg-white text-black font-bold transition-all text-lg sm:text-xl hover:bg-gray-100 hover:scale-105 text-center shadow-2xl"
                         >
                           {slide.buttonText}
                         </Link>
                       </div>
-                    </div>
-
-                    {/* Columna derecha - Imagen */}
-                    <div className="md:w-1/2 flex justify-center">
-                      <img
-                        src={slide.image}
-                        alt={slide.title}
-                        className="w-full max-w-[280px] sm:max-w-xs md:max-w-md lg:max-w-lg rounded-lg shadow-2xl object-cover"
-                      />
                     </div>
                   </div>
                 </div>
