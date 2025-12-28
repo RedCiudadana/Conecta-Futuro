@@ -15,6 +15,7 @@ import Icono8 from '../../assets/iconos/EC-30.png';
 import Icono9 from '../../assets/iconos/EC-31.png';
 import Icono10 from '../../assets/iconos/EC-32.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
+import Fondo from '../../assets/slider/fondo.png';
 import ConectaFuturoPopup from '../../components/ui/ConectaFuturoPopup';
 
 const LandingPage: React.FC = () => {
