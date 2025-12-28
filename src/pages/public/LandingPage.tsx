@@ -162,7 +162,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <ConectaFuturoPopup />
+      {/* <ConectaFuturoPopup /> */}
 
       {/* Hero Slider */}
       <div className="relative overflow-hidden">
