@@ -16,20 +16,7 @@ import {
   Calculator,
   Brain
 } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-
-let supabase: ReturnType<typeof createClient> | null = null;
-
-try {
-  if (supabaseUrl && supabaseAnonKey) {
-    supabase = createClient(supabaseUrl, supabaseAnonKey);
-  }
-} catch (error) {
-  console.error('Error initializing Supabase:', error);
-}
+import { appendToDiagnosticCSV } from '../../utils/csvExport';
 
 interface Question {
   id: number;
@@ -284,24 +271,23 @@ const DiagnosticoDigital: React.FC = () => {
     setResult(diagnosticResult);
 
     try {
-      if (supabase) {
-        const answersArray = QUESTIONS.map((q, index) => ({
-          question_id: q.id,
-          question: q.question,
-          answer_value: answers[index],
-          dimension: q.dimension
-        }));
+      const answersArray = QUESTIONS.map((q, index) => ({
+        question_id: q.id,
+        question: q.question,
+        answer_value: answers[index],
+        dimension: q.dimension
+      }));
 
-        await supabase.from('diagnostic_results').insert({
-          name: userInfo.name || null,
-          email: userInfo.email || null,
-          business_name: userInfo.businessName || null,
-          answers: answersArray,
-          total_score: diagnosticResult.totalScore,
-          maturity_level: diagnosticResult.maturityLevel,
-          recommended_modules: diagnosticResult.recommendedModules.split(', ')
-        });
-      }
+      appendToDiagnosticCSV({
+        name: userInfo.name || null,
+        email: userInfo.email || null,
+        businessName: userInfo.businessName || null,
+        answers: answersArray,
+        totalScore: diagnosticResult.totalScore,
+        maturityLevel: diagnosticResult.maturityLevel,
+        recommendedModules: diagnosticResult.recommendedModules.split(', '),
+        timestamp: new Date().toISOString()
+      });
     } catch (error) {
       console.error('Error saving diagnostic:', error);
     }
