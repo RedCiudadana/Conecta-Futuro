@@ -21,11 +21,15 @@ teoria: >-
   * Datos abiertos y democracia.
 
 
-
   🎯 **Objetivo de aprendizaje:**
 
 
   Comprender el valor de los datos abiertos y reconocer su potencial para resolver problemas públicos.
+
+
+  **Zoom:**
+
+  <https://us06web.zoom.us/j/87227387208?pwd=kFVQtnuKDwbUTqxOe8s5BbL0fhPi3f.1>
 handout: /uploads/sesión-1_-introducción-a-los-datos-abiertos.pdf
 numero: 1
 ---
