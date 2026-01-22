@@ -15,5 +15,5 @@ duracion: 16 horas
 enlace_contenido: "#"
 enlace_registro: https://forms.gle/Br3SSqqEjsB5zZRW9
 instructor: Red Ciudadana
-password: "#"
+password: DatosAbiertos2026
 ---
