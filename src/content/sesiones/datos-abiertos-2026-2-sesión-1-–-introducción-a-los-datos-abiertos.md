@@ -1,6 +1,7 @@
 ---
 title: Datos Abiertos 2026 - 2. Sesión 1 – Introducción a los Datos Abiertos
 curso: Datos Abiertos 2026
+bienvenida: https://www.youtube.com/embed/c6VKkUUJLiM?si=xO6pJHzVNE165juA
 teoria: >-
   En esta sesión conocerás los **conceptos fundamentales de los datos abiertos**
   y su relación con la transparencia, la innovación pública y el control
