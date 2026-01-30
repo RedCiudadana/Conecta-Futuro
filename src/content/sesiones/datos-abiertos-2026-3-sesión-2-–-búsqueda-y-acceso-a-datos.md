@@ -30,5 +30,6 @@ teoria: >-
 
 
   * <https://us06web.zoom.us/j/87816207470?pwd=Y8mOmZWAsvHek9qDXulxzTZOVwPUGB.1>
+video_zoom: https://www.youtube.com/embed/uW02Q4bo8es?si=Pe16WIf_C6Q_yLzM
 numero: 2
 ---
