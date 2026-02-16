@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, ExternalLink, Shield, TrendingUp, Users, BookOpen } from 'lucide-react';
+import { Search, Filter, ExternalLink, Shield, TrendingUp, Users, BookOpen, Info, X } from 'lucide-react';
 import { aiTools, categories, userTypes, riskLevels, maturityLevels } from '../../data/aiToolsData';
 import { FilterState } from '../../types/aiTool';
 
@@ -13,6 +13,8 @@ const DirectorioIA: React.FC = () => {
   });
 
   const [showFilters, setShowFilters] = useState(false);
+  const [showRiskModal, setShowRiskModal] = useState(false);
+  const [showMaturityModal, setShowMaturityModal] = useState(false);
 
   const filteredTools = useMemo(() => {
     return aiTools.filter(tool => {
@@ -73,6 +75,190 @@ const DirectorioIA: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Risk Level Info Modal */}
+      {showRiskModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <h3 className="text-2xl font-bold text-gray-800 flex items-center">
+                <Shield className="mr-3 text-blue-600" size={28} />
+                Niveles de Riesgo de Datos
+              </h3>
+              <button
+                onClick={() => setShowRiskModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6 space-y-6">
+              <p className="text-gray-600">
+                El nivel de riesgo indica qué tan sensible puede ser el uso de la herramienta con datos institucionales o ciudadanos.
+              </p>
+
+              <div className="space-y-4">
+                <div className="border-l-4 border-green-500 bg-green-50 p-4 rounded">
+                  <h4 className="font-bold text-green-900 mb-2 flex items-center">
+                    <Shield className="mr-2" size={20} />
+                    Bajo - Uso con datos públicos
+                  </h4>
+                  <p className="text-green-800 text-sm mb-2">
+                    Estas herramientas son seguras para usar con información pública y no sensible.
+                  </p>
+                  <ul className="list-disc list-inside text-green-700 text-sm space-y-1">
+                    <li>Información ya publicada o de dominio público</li>
+                    <li>Datos estadísticos agregados sin identificadores personales</li>
+                    <li>Contenido educativo y comunicacional público</li>
+                    <li>Análisis de datos abiertos gubernamentales</li>
+                  </ul>
+                </div>
+
+                <div className="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded">
+                  <h4 className="font-bold text-yellow-900 mb-2 flex items-center">
+                    <Shield className="mr-2" size={20} />
+                    Medio - Requiere anonimización
+                  </h4>
+                  <p className="text-yellow-800 text-sm mb-2">
+                    Se pueden usar con precaución, asegurando que los datos estén anonimizados.
+                  </p>
+                  <ul className="list-disc list-inside text-yellow-700 text-sm space-y-1">
+                    <li>Requiere eliminar datos personales antes de usarlos</li>
+                    <li>Preferir versiones empresariales con acuerdos de privacidad</li>
+                    <li>Revisar políticas de retención de datos de la herramienta</li>
+                    <li>Usar con datos internos no clasificados</li>
+                  </ul>
+                </div>
+
+                <div className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
+                  <h4 className="font-bold text-red-900 mb-2 flex items-center">
+                    <Shield className="mr-2" size={20} />
+                    Alto - Requiere versión enterprise
+                  </h4>
+                  <p className="text-red-800 text-sm mb-2">
+                    Solo deben usarse versiones empresariales con contratos específicos de protección de datos.
+                  </p>
+                  <ul className="list-disc list-inside text-red-700 text-sm space-y-1">
+                    <li>NO usar versiones gratuitas con datos institucionales</li>
+                    <li>Exigir contratos de procesamiento de datos (DPA)</li>
+                    <li>Verificar cumplimiento de normativas locales</li>
+                    <li>Implementar solo con aprobación de seguridad institucional</li>
+                    <li>Evitar datos personales sensibles sin autorización expresa</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Recomendación:</strong> Siempre consulte con el equipo de seguridad y protección de datos de su institución antes de implementar cualquier herramienta de IA, especialmente si manejará información sensible o datos personales.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Maturity Level Info Modal */}
+      {showMaturityModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <h3 className="text-2xl font-bold text-gray-800 flex items-center">
+                <TrendingUp className="mr-3 text-blue-600" size={28} />
+                Niveles de Madurez Digital
+              </h3>
+              <button
+                onClick={() => setShowMaturityModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6 space-y-6">
+              <p className="text-gray-600">
+                El nivel de madurez indica la complejidad técnica y organizacional requerida para implementar exitosamente la herramienta.
+              </p>
+
+              <div className="space-y-4">
+                <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+                  <h4 className="font-bold text-blue-900 mb-2 flex items-center">
+                    <TrendingUp className="mr-2" size={20} />
+                    Básico - Adopción inmediata
+                  </h4>
+                  <p className="text-blue-800 text-sm mb-2">
+                    Herramientas listas para usar sin necesidad de infraestructura compleja.
+                  </p>
+                  <ul className="list-disc list-inside text-blue-700 text-sm space-y-1">
+                    <li>Interfaz intuitiva, fácil de aprender</li>
+                    <li>No requiere conocimientos técnicos avanzados</li>
+                    <li>Implementación rápida (días o semanas)</li>
+                    <li>Ideal para pruebas piloto y casos de uso específicos</li>
+                    <li>Capacitación mínima requerida</li>
+                  </ul>
+                </div>
+
+                <div className="bg-blue-100 border-l-4 border-blue-500 p-4 rounded">
+                  <h4 className="font-bold text-blue-900 mb-2 flex items-center">
+                    <TrendingUp className="mr-2" size={20} />
+                    Intermedio - Requiere coordinación
+                  </h4>
+                  <p className="text-blue-800 text-sm mb-2">
+                    Necesita planificación y coordinación entre áreas para implementación exitosa.
+                  </p>
+                  <ul className="list-disc list-inside text-blue-700 text-sm space-y-1">
+                    <li>Requiere capacitación formal del personal</li>
+                    <li>Integración con sistemas existentes</li>
+                    <li>Configuración y personalización necesarias</li>
+                    <li>Implementación en fases (1-3 meses)</li>
+                    <li>Soporte técnico interno o externo recomendado</li>
+                  </ul>
+                </div>
+
+                <div className="bg-blue-200 border-l-4 border-blue-600 p-4 rounded">
+                  <h4 className="font-bold text-blue-950 mb-2 flex items-center">
+                    <TrendingUp className="mr-2" size={20} />
+                    Avanzado - Requiere equipo especializado
+                  </h4>
+                  <p className="text-blue-900 text-sm mb-2">
+                    Implementación compleja que requiere recursos técnicos especializados.
+                  </p>
+                  <ul className="list-disc list-inside text-blue-800 text-sm space-y-1">
+                    <li>Equipo técnico dedicado necesario</li>
+                    <li>Infraestructura tecnológica robusta</li>
+                    <li>Integración profunda con sistemas institucionales</li>
+                    <li>Proyecto de implementación estructurado (3-6 meses)</li>
+                    <li>Gestión del cambio organizacional</li>
+                  </ul>
+                </div>
+
+                <div className="bg-blue-300 border-l-4 border-blue-700 p-4 rounded">
+                  <h4 className="font-bold text-blue-950 mb-2 flex items-center">
+                    <TrendingUp className="mr-2" size={20} />
+                    Estratégico - Transformación institucional
+                  </h4>
+                  <p className="text-blue-900 text-sm mb-2">
+                    Soluciones empresariales que requieren decisión de alto nivel y transformación organizacional.
+                  </p>
+                  <ul className="list-disc list-inside text-blue-900 text-sm space-y-1">
+                    <li>Aprobación y patrocinio de alta dirección</li>
+                    <li>Inversión significativa de recursos</li>
+                    <li>Cambios en procesos y estructura organizacional</li>
+                    <li>Implementación de largo plazo (6+ meses)</li>
+                    <li>Requiere arquitectura empresarial definida</li>
+                    <li>Medición de impacto y ROI institucional</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Recomendación:</strong> Comience con herramientas de nivel básico o intermedio para ganar experiencia y generar casos de éxito antes de implementar soluciones más complejas. La madurez digital se construye gradualmente.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20 px-4">
         <div className="container mx-auto max-w-6xl text-center">
@@ -161,7 +347,16 @@ const DirectorioIA: React.FC = () => {
 
               {/* Risk Level Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Nivel de Riesgo</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center justify-between">
+                  <span>Nivel de Riesgo</span>
+                  <button
+                    onClick={() => setShowRiskModal(true)}
+                    className="text-blue-600 hover:text-blue-800 transition-colors"
+                    title="Más información sobre niveles de riesgo"
+                  >
+                    <Info size={18} />
+                  </button>
+                </label>
                 <select
                   value={filters.riskLevel}
                   onChange={(e) => setFilters({ ...filters, riskLevel: e.target.value })}
@@ -176,7 +371,16 @@ const DirectorioIA: React.FC = () => {
 
               {/* Maturity Level Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Nivel de Madurez</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center justify-between">
+                  <span>Nivel de Madurez</span>
+                  <button
+                    onClick={() => setShowMaturityModal(true)}
+                    className="text-blue-600 hover:text-blue-800 transition-colors"
+                    title="Más información sobre niveles de madurez"
+                  >
+                    <Info size={18} />
+                  </button>
+                </label>
                 <select
                   value={filters.maturityLevel}
                   onChange={(e) => setFilters({ ...filters, maturityLevel: e.target.value })}
