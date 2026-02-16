@@ -278,6 +278,13 @@ const DirectorioIA: React.FC = () => {
       </div>
 
       <div className="container mx-auto max-w-7xl px-4 py-12">
+        {/* Last Update Info */}
+        <div className="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-4 mb-8">
+          <p className="text-sm text-gray-700">
+            <span className="font-semibold text-blue-800">Última actualización:</span> 16 de febrero de 2026
+          </p>
+        </div>
+
         {/* Filters Section */}
         <div id="tools-section" className="bg-white rounded-lg shadow-md p-6 mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
