@@ -20,6 +20,7 @@ import DiagnosticoDigital from './pages/public/DiagnosticoDigital';
 import ConectaFuturo from './pages/public/ConectaFuturo';
 import VerifyCertificate from './pages/public/VerifyCertificate';
 import Tutoriales from './pages/public/Tutoriales';
+import DirectorioIA from './pages/public/DirectorioIA';
 import ScrollToTop from './components/scrolltotop';
 import ScrollTopButton from './components/scrolltotopButton';
 
@@ -46,6 +47,7 @@ function App() {
           <Route path="conecta-futuro" element={<ConectaFuturo />} />
           <Route path="verify-certificate" element={<VerifyCertificate />} />
           <Route path="tutoriales" element={<Tutoriales />} />
+          <Route path="directorio-ia" element={<DirectorioIA />} />
           <Route path="course/:slug" element={<CourseDetails />} />
           <Route path="course/:slug/session" element={<CourseSession />} />
           <Route path="about" element={<AboutUs />} />
