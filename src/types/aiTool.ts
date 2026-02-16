@@ -5,6 +5,7 @@ export interface AITool {
   description: string;
   useCase: string;
   link: string;
+  logoUrl: string;
   riskLevel: 'Bajo' | 'Medio' | 'Alto';
   maturityLevel: 'Básico' | 'Intermedio' | 'Avanzado' | 'Estratégico';
   targetUsers: string[];

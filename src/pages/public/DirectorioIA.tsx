@@ -414,7 +414,18 @@ const DirectorioIA: React.FC = () => {
               key={tool.id}
               className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col"
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="flex-shrink-0">
+                  <img
+                    src={tool.logoUrl}
+                    alt={`${tool.name} logo`}
+                    className="w-16 h-16 object-contain rounded-lg border border-gray-200 p-2 bg-white"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
+                </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-gray-800 mb-2">{tool.name}</h3>
                   <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
