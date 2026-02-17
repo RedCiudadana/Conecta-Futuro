@@ -59,6 +59,11 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/banco-prompts" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  Banco de Prompts
+                </Link>
+              </li>
+              <li>
                 <Link to="/community" className="text-gray-400 hover:text-white transition-colors duration-200">
                   Comunidad
                 </Link>
