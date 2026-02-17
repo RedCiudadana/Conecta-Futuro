@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Search, X, Copy, Check, AlertTriangle, BookOpen, Lightbulb, Shield, Filter } from 'lucide-react';
+import { Search, X, Copy, Check, AlertTriangle, BookOpen, Lightbulb, Shield, Filter, Calendar, FileText } from 'lucide-react';
 import { promptsData, categories, levels, risks } from '../../data/promptsData';
 import { Prompt, RiskLevel, PromptLevel } from '../../types/prompt';
 
@@ -67,9 +67,19 @@ const BancoPrompts = () => {
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
               Banco de Prompts para Funcionarios Públicos
             </h1>
-            <p className="text-xl sm:text-2xl mb-8 text-blue-100">
+            <p className="text-xl sm:text-2xl mb-6 text-blue-100">
               Prompts prácticos y estructurados para mejorar la redacción, análisis, automatización y toma de decisiones en el sector público.
             </p>
+            <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
+              <div className="flex items-center gap-2 bg-blue-700 bg-opacity-50 px-4 py-2 rounded-lg">
+                <FileText className="text-blue-100" size={20} />
+                <span className="text-white font-semibold">{promptsData.length} prompts disponibles</span>
+              </div>
+              <div className="flex items-center gap-2 bg-blue-700 bg-opacity-50 px-4 py-2 rounded-lg">
+                <Calendar className="text-blue-100" size={20} />
+                <span className="text-white font-semibold">Última actualización: 17 de febrero de 2026</span>
+              </div>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={scrollToPrompts}
@@ -201,11 +211,14 @@ const BancoPrompts = () => {
                 </div>
               </div>
 
-              {(searchTerm || selectedCategory || selectedLevel || selectedRisk) && (
-                <div className="flex items-center justify-between pt-2">
-                  <p className="text-sm text-gray-600">
-                    Mostrando {filteredPrompts.length} de {promptsData.length} prompts
-                  </p>
+              <div className="flex items-center justify-between pt-2">
+                <p className="text-sm text-gray-600 font-medium">
+                  {filteredPrompts.length === promptsData.length
+                    ? `Mostrando todos los ${promptsData.length} prompts`
+                    : `Mostrando ${filteredPrompts.length} de ${promptsData.length} prompts`
+                  }
+                </p>
+                {(searchTerm || selectedCategory || selectedLevel || selectedRisk) && (
                   <button
                     onClick={() => {
                       setSearchTerm('');
@@ -217,8 +230,8 @@ const BancoPrompts = () => {
                   >
                     Limpiar filtros
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
 
