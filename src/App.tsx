@@ -21,6 +21,7 @@ import ConectaFuturo from './pages/public/ConectaFuturo';
 import VerifyCertificate from './pages/public/VerifyCertificate';
 import Tutoriales from './pages/public/Tutoriales';
 import DirectorioIA from './pages/public/DirectorioIA';
+import BancoPrompts from './pages/public/BancoPrompts';
 import ScrollToTop from './components/scrolltotop';
 import ScrollTopButton from './components/scrolltotopButton';
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="verify-certificate" element={<VerifyCertificate />} />
           <Route path="tutoriales" element={<Tutoriales />} />
           <Route path="directorio-ia" element={<DirectorioIA />} />
+          <Route path="banco-prompts" element={<BancoPrompts />} />
           <Route path="course/:slug" element={<CourseDetails />} />
           <Route path="course/:slug/session" element={<CourseSession />} />
           <Route path="about" element={<AboutUs />} />
