@@ -9,11 +9,11 @@ descripcion: >-
 
   Este programa forma parte del proyecto Conectando Sociedad Civil a través de los Datos Abiertos, implementado por Red Ciudadana y aliados regionales.
 nivel: Básico
-estado: Por iniciar
+estado: En proceso
 categoria: Transformación Digital
 duracion: 16 horas
 enlace_contenido: "#"
 enlace_registro: https://forms.gle/Br3SSqqEjsB5zZRW9
-instructor: Red Ciudadana
+instructor: Daniel Carranza
 password: DatosAbiertos2026
 ---
