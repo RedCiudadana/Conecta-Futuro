@@ -29,5 +29,6 @@ teoria: >-
   **Zoom**:
 
   <https://us06web.zoom.us/j/89182097881?pwd=p8X8d5O3zcZPW6EGvbZFrj1Axpmjrg.1>
+video_zoom: https://www.youtube.com/embed/utE6Aeq7j7k?si=sDpiJrQHa_y59tj8
 numero: 5
 ---
