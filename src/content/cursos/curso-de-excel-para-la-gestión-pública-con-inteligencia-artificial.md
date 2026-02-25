@@ -18,6 +18,6 @@ categoria: Transformación Digital
 duracion: "8"
 enlace_contenido: "#"
 enlace_registro: https://forms.gle/wgFZEc7U3RmjUaqy6
-instructor: Red Ciudadana
+instructor: Alex Villeda
 password: "#ExcelconIA2026"
 ---
