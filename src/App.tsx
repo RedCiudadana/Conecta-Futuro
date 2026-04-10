@@ -15,8 +15,13 @@ import NotFound from './pages/public/NotFound';
 import Community from './pages/public/Community';
 import CommunityDetails from './pages/public/CommunityDetails';
 import PrimerosPasosDigitales from './pages/public/PrimerosPasosDigitales';
+import DigitalizaTuPyme from './pages/public/DigitalizaTuPyme';
+import DiagnosticoDigital from './pages/public/DiagnosticoDigital';
 import ConectaFuturo from './pages/public/ConectaFuturo';
 import VerifyCertificate from './pages/public/VerifyCertificate';
+import Tutoriales from './pages/public/Tutoriales';
+import DirectorioIA from './pages/public/DirectorioIA';
+import BancoPrompts from './pages/public/BancoPrompts';
 import ScrollToTop from './components/scrolltotop';
 import ScrollTopButton from './components/scrolltotopButton';
 
@@ -38,8 +43,13 @@ function App() {
           <Route path="learning-paths" element={<LearningPaths />} />
           <Route path="mobile-api" element={<MobileApi />} />
           <Route path="primeros-pasos-digitales" element={<PrimerosPasosDigitales />} />
+          <Route path="digitaliza-tu-pyme" element={<DigitalizaTuPyme />} />
+          <Route path="diagnostico-digital" element={<DiagnosticoDigital />} />
           <Route path="conecta-futuro" element={<ConectaFuturo />} />
           <Route path="verify-certificate" element={<VerifyCertificate />} />
+          <Route path="tutoriales" element={<Tutoriales />} />
+          <Route path="directorio-ia" element={<DirectorioIA />} />
+          <Route path="banco-prompts" element={<BancoPrompts />} />
           <Route path="course/:slug" element={<CourseDetails />} />
           <Route path="course/:slug/session" element={<CourseSession />} />
           <Route path="about" element={<AboutUs />} />

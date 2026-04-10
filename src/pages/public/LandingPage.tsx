@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Users, Award, ArrowRight, CheckCircle, HelpCircle, Star } from 'lucide-react';
-import Fondo from '../../assets/slider/fondo.png';
-import Slider from '../../assets/slider/slider.png';
+import { BookOpen, Users, Award, ArrowRight, CheckCircle, HelpCircle, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import SliderImage1 from '../../assets/slider/whatsapp_image_2025-12-18_at_12.17.25_pm.jpeg';
+import SliderImage2 from '../../assets/slider/whatsapp_image_2025-11-12_at_6.29.32_am.jpeg';
+import SliderImage3 from '../../assets/slider/whatsapp_image_2025-09-26_at_12.02.22_pm.jpeg';
 import Icono1 from '../../assets/iconos/EC-23.png';
 import Icono2 from '../../assets/iconos/EC-24.png';
 import Icono3 from '../../assets/iconos/EC-25.png';
@@ -14,9 +15,55 @@ import Icono8 from '../../assets/iconos/EC-30.png';
 import Icono9 from '../../assets/iconos/EC-31.png';
 import Icono10 from '../../assets/iconos/EC-32.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
+import Fondo from '../../assets/slider/fondo.png';
 import ConectaFuturoPopup from '../../components/ui/ConectaFuturoPopup';
 
 const LandingPage: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      title: 'Escuela Conecta Futuro',
+      description: 'Impulsa tu desarrollo profesional con cursos gratuitos sobre innovación, emprendimiento, gobierno digital y tecnología.',
+      buttonText: 'Ver Cursos',
+      buttonLink: '/courses',
+      image: SliderImage1
+    },
+    {
+      title: 'Aprende a tu Ritmo',
+      description: 'Accede a contenido de calidad diseñado por expertos, disponible 24/7 para que aprendas cuando y donde quieras.',
+      buttonText: 'Explorar Cursos',
+      buttonLink: '/courses',
+      image: SliderImage2
+    },
+    {
+      title: 'Certificación Profesional',
+      description: 'Obtén certificados avalados que validan tus nuevas competencias y habilidades digitales.',
+      buttonText: 'Certificaciones',
+      buttonLink: '/courses',
+      image: SliderImage3
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
   const features = [
     {
       icon: Icono1,
@@ -115,42 +162,89 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <ConectaFuturoPopup />
+      {/* <ConectaFuturoPopup /> */}
 
-      {/* Hero Section */}
-      <div
-        className="relative bg-cover bg-center text-white"
-        style={{ backgroundImage: `url(${Fondo})` }}
-      >
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:py-28">
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+      {/* Hero Slider */}
+      <div className="relative overflow-hidden">
+        {/* Background Images */}
+        {slides.map((slide, index) => (
+          <div
+            key={`bg-${index}`}
+            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ backgroundImage: `url(${slide.image})` }}
+          >
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+          </div>
+        ))}
 
-            {/* Columna izquierda - Texto */}
-            <div className="md:w-1/2 text-center md:text-left space-y-4 sm:space-y-6">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight">
-                Escuela Conecta Futuro
-              </h1>
-              <p className="text-lg sm:text-xl md:text-2xl text-primary-100 max-w-md mx-auto md:mx-0">
-                Impulsa tu desarrollo profesional con cursos gratuitos sobre innovación, emprendimiento, gobierno digital y tecnología.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
-                <Link
-                  to="/courses"
-                  className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-black text-white font-semibold transition-colors text-base sm:text-lg hover:bg-gray-800 text-center"
+        <div className="relative">
+          {/* Slides Container */}
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-24 lg:py-32">
+            <div className="relative min-h-[400px] sm:min-h-[450px] md:min-h-[500px] flex items-center">
+              {slides.map((slide, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 transition-opacity duration-700 ${
+                    index === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
                 >
-                  Ver Cursos
-                </Link>
-              </div>
+                  <div className="flex items-center justify-center md:justify-start h-full">
+                    {/* Content */}
+                    <div className="max-w-2xl text-center md:text-left space-y-6 sm:space-y-8 text-white">
+                      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-heading leading-tight drop-shadow-2xl">
+                        {slide.title}
+                      </h1>
+                      <p className="text-xl sm:text-2xl md:text-3xl text-white/90 drop-shadow-lg">
+                        {slide.description}
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                        <Link
+                          to={slide.buttonLink}
+                          className="px-8 sm:px-10 py-4 sm:py-5 rounded-lg bg-white text-black font-bold transition-all text-lg sm:text-xl hover:bg-gray-100 hover:scale-105 text-center shadow-2xl"
+                        >
+                          {slide.buttonText}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Columna derecha - Imagen */}
-            <div className="md:w-1/2 flex justify-center">
-              <img
-                src={Slider}
-                alt="Innovación"
-                className="w-full max-w-[280px] sm:max-w-xs md:max-w-md rounded-lg"
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-2 sm:p-3 rounded-full transition-all backdrop-blur-sm"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-2 sm:p-3 rounded-full transition-all backdrop-blur-sm"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {/* Dots Navigation */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 sm:gap-3">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`transition-all ${
+                  index === currentSlide
+                    ? 'w-8 sm:w-10 h-2 sm:h-2.5 bg-white'
+                    : 'w-2 sm:w-2.5 h-2 sm:h-2.5 bg-white/50 hover:bg-white/75'
+                } rounded-full`}
+                aria-label={`Go to slide ${index + 1}`}
               />
-            </div>
+            ))}
           </div>
         </div>
       </div>

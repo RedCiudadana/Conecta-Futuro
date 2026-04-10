@@ -846,170 +846,154 @@ const PrimerosPasosDigitales: React.FC = () => {
               </p>
             </div>
 
-            {/* Module Exams */}
+            {/* Module Exams - Progressive Display */}
             <div className="space-y-4">
-              {modules.map((module) => {
-                const isCompleted = completedModules.has(module.number);
-                const isCurrentExam = currentExam === module.number;
-                const hasResult = examResults[module.number] !== undefined;
-                const isPreviousModuleCompleted = module.number === 1 || completedModules.has(module.number - 1);
-                const isLocked = !isPreviousModuleCompleted;
+              {modules
+                .filter((module) => {
+                  // Only show completed modules and the next available module
+                  const isCompleted = completedModules.has(module.number);
+                  const isPreviousModuleCompleted = module.number === 1 || completedModules.has(module.number - 1);
+                  return isCompleted || isPreviousModuleCompleted;
+                })
+                .map((module) => {
+                  const isCompleted = completedModules.has(module.number);
+                  const isCurrentExam = currentExam === module.number;
+                  const hasResult = examResults[module.number] !== undefined;
 
-                return (
-                  <div
-                    key={`exam-${module.number}`}
-                    className={`bg-white rounded-lg shadow-sm border overflow-hidden ${
-                      isLocked ? 'border-gray-200 opacity-60' : 'border-gray-100'
-                    }`}
-                  >
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-4">
-                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                            isCompleted ? 'bg-green-500' : isLocked ? 'bg-gray-400' : 'bg-gray-300'
-                          }`}>
-                            {isCompleted ? (
-                              <CheckCircle className="w-6 h-6 text-white" />
-                            ) : (
-                              <Circle className="w-6 h-6 text-white" />
-                            )}
+                  return (
+                    <div
+                      key={`exam-${module.number}`}
+                      className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
+                    >
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                              isCompleted ? 'bg-green-500' : 'bg-primary-600'
+                            }`}>
+                              {isCompleted ? (
+                                <CheckCircle className="w-6 h-6 text-white" />
+                              ) : (
+                                <Circle className="w-6 h-6 text-white" />
+                              )}
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900">
+                                Evaluación Módulo {module.number}
+                              </h3>
+                              <p className="text-gray-600">{module.title}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900">
-                              Evaluación Módulo {module.number}
-                            </h3>
-                            <p className="text-gray-600">{module.title}</p>
-                          </div>
-                        </div>
-                        {!isCompleted && !isCurrentExam && !isLocked && (
-                          <button
-                            onClick={() => setCurrentExam(module.number)}
-                            className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-                          >
-                            Iniciar Evaluación
-                          </button>
-                        )}
-                        {!isCompleted && !isCurrentExam && isLocked && (
-                          <span className="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg font-semibold flex items-center gap-2">
-                            🔒 Bloqueado
-                          </span>
-                        )}
-                        {isCompleted && (
-                          <span className="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold">
-                            ✓ Completado
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Locked Message */}
-                      {isLocked && (
-                        <div className="border-t border-gray-100 pt-6 mt-6">
-                          <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
-                            <p className="text-yellow-800 flex items-center gap-2">
-                              <span className="text-2xl">🔒</span>
-                              <span>
-                                Completa la evaluación del <strong>Módulo {module.number - 1}</strong> para desbloquear este módulo.
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Exam Questions */}
-                      {isCurrentExam && module.questions && (
-                        <div className="border-t border-gray-100 pt-6 mt-6">
-                          <h4 className="font-semibold text-gray-900 mb-4">
-                            Responde las siguientes preguntas:
-                          </h4>
-                          <div className="space-y-6">
-                            {module.questions.map((q, qIndex) => (
-                              <div key={qIndex} className="bg-gray-50 rounded-lg p-4">
-                                <p className="font-semibold text-gray-900 mb-3">
-                                  {qIndex + 1}. {q.question}
-                                </p>
-                                <div className="space-y-2">
-                                  {q.options.map((option, oIndex) => (
-                                    <label
-                                      key={oIndex}
-                                      className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                                        examAnswers[qIndex] === oIndex
-                                          ? 'border-primary-600 bg-primary-50'
-                                          : 'border-gray-200 hover:border-gray-300'
-                                      }`}
-                                    >
-                                      <input
-                                        type="radio"
-                                        name={`question-${module.number}-${qIndex}`}
-                                        value={oIndex}
-                                        checked={examAnswers[qIndex] === oIndex}
-                                        onChange={() => setExamAnswers({...examAnswers, [qIndex]: oIndex})}
-                                        className="mr-3"
-                                      />
-                                      <span className="text-gray-700">{option}</span>
-                                    </label>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="flex gap-4 mt-6">
+                          {!isCompleted && !isCurrentExam && (
                             <button
-                              onClick={() => {
-                                const allAnswered = module.questions?.every((_, idx) => examAnswers[idx] !== undefined);
-                                if (allAnswered) {
-                                  const allCorrect = module.questions?.every((q, idx) => examAnswers[idx] === q.correctAnswer);
-                                  if (allCorrect) {
-                                    setCompletedModules(new Set([...completedModules, module.number]));
-                                    setExamResults({...examResults, [module.number]: true});
+                              onClick={() => setCurrentExam(module.number)}
+                              className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                            >
+                              Iniciar Evaluación
+                            </button>
+                          )}
+                          {isCompleted && (
+                            <span className="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold">
+                              ✓ Completado
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Exam Questions */}
+                        {isCurrentExam && module.questions && (
+                          <div className="border-t border-gray-100 pt-6 mt-6">
+                            <h4 className="font-semibold text-gray-900 mb-4">
+                              Responde las siguientes preguntas:
+                            </h4>
+                            <div className="space-y-6">
+                              {module.questions.map((q, qIndex) => (
+                                <div key={qIndex} className="bg-gray-50 rounded-lg p-4">
+                                  <p className="font-semibold text-gray-900 mb-3">
+                                    {qIndex + 1}. {q.question}
+                                  </p>
+                                  <div className="space-y-2">
+                                    {q.options.map((option, oIndex) => (
+                                      <label
+                                        key={oIndex}
+                                        className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                                          examAnswers[qIndex] === oIndex
+                                            ? 'border-primary-600 bg-primary-50'
+                                            : 'border-gray-200 hover:border-gray-300'
+                                        }`}
+                                      >
+                                        <input
+                                          type="radio"
+                                          name={`question-${module.number}-${qIndex}`}
+                                          value={oIndex}
+                                          checked={examAnswers[qIndex] === oIndex}
+                                          onChange={() => setExamAnswers({...examAnswers, [qIndex]: oIndex})}
+                                          className="mr-3"
+                                        />
+                                        <span className="text-gray-700">{option}</span>
+                                      </label>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="flex gap-4 mt-6">
+                              <button
+                                onClick={() => {
+                                  const allAnswered = module.questions?.every((_, idx) => examAnswers[idx] !== undefined);
+                                  if (allAnswered) {
+                                    const allCorrect = module.questions?.every((q, idx) => examAnswers[idx] === q.correctAnswer);
+                                    if (allCorrect) {
+                                      setCompletedModules(new Set([...completedModules, module.number]));
+                                      setExamResults({...examResults, [module.number]: true});
+                                    } else {
+                                      setExamResults({...examResults, [module.number]: false});
+                                    }
+                                    setCurrentExam(null);
+                                    setExamAnswers({});
                                   } else {
-                                    setExamResults({...examResults, [module.number]: false});
+                                    alert('Por favor responde todas las preguntas');
                                   }
+                                }}
+                                className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold"
+                              >
+                                Enviar Respuestas
+                              </button>
+                              <button
+                                onClick={() => {
                                   setCurrentExam(null);
                                   setExamAnswers({});
-                                } else {
-                                  alert('Por favor responde todas las preguntas');
-                                }
-                              }}
-                              className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold"
-                            >
-                              Enviar Respuestas
-                            </button>
-                            <button
-                              onClick={() => {
-                                setCurrentExam(null);
-                                setExamAnswers({});
-                              }}
-                              className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-                            >
-                              Cancelar
-                            </button>
+                                }}
+                                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                              >
+                                Cancelar
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {/* Result Message */}
-                      {hasResult && !isCurrentExam && !isCompleted && (
-                        <div className="border-t border-gray-100 pt-6 mt-6">
-                          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
-                            <p className="text-red-800">
-                              No aprobaste esta evaluación. Revisa el contenido del módulo e inténtalo nuevamente.
-                            </p>
-                            <button
-                              onClick={() => {
-                                setCurrentExam(module.number);
-                                setExamResults({...examResults, [module.number]: undefined});
-                              }}
-                              className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                            >
-                              Reintentar
-                            </button>
+                        {/* Result Message */}
+                        {hasResult && !isCurrentExam && !isCompleted && (
+                          <div className="border-t border-gray-100 pt-6 mt-6">
+                            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                              <p className="text-red-800">
+                                No aprobaste esta evaluación. Revisa el contenido del módulo e inténtalo nuevamente.
+                              </p>
+                              <button
+                                onClick={() => {
+                                  setCurrentExam(module.number);
+                                  setExamResults({...examResults, [module.number]: undefined});
+                                }}
+                                className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                              >
+                                Reintentar
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
 
             {/* Generate Diploma */}
