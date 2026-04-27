@@ -9,7 +9,7 @@ descripcion: >-
 
   Este programa forma parte del proyecto Conectando Sociedad Civil a través de los Datos Abiertos, implementado por Red Ciudadana y aliados regionales.
 nivel: Básico
-estado: En proceso
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 16 horas
 enlace_contenido: "#"
