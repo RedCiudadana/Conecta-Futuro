@@ -13,7 +13,7 @@ descripcion: >-
 
   Más que aprender Excel, este programa fortalece la capacidad institucional para trabajar con datos de manera estratégica, eficiente y orientada a resultados.
 nivel: Intermedio
-estado: Por iniciar
+estado: Finalizado
 categoria: Transformación Digital
 duracion: "8"
 enlace_contenido: "#"
