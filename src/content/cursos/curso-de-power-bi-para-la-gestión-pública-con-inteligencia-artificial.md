@@ -18,7 +18,7 @@ descripcion: >-
 
   Este programa no solo enseña una herramienta tecnológica; promueve una cultura institucional basada en datos, transparencia activa y eficiencia pública.
 nivel: Básico
-estado: En proceso
+estado: Finalizado
 categoria: Transformación Digital
 duracion: 8 horas
 enlace_contenido: "#"
