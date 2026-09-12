@@ -23,7 +23,10 @@ const Seo: React.FC<SeoProps> = ({
   type = 'website',
   jsonLd,
 }) => {
-  const ogImage = image ? image : DEFAULT_OG_IMAGE;
+  const ogImage = image
+    ? (image.startsWith('http') ? image : `${SITE_URL}${image.startsWith('/') ? '' : '/'}${image}`)
+    : DEFAULT_OG_IMAGE;
+  const cleanDescription = description.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
   const canonicalUrl = canonical
     ? `${SITE_URL}${canonical.startsWith('/') ? canonical : `/${canonical}`}`
     : SITE_URL;
@@ -37,12 +40,12 @@ const Seo: React.FC<SeoProps> = ({
   return (
     <Helmet>
       <title>{title}</title>
-      <meta name="description" content={description} />
+      <meta name="description" content={cleanDescription} />
       <link rel="canonical" href={canonicalUrl} />
 
       {/* Open Graph */}
       <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={cleanDescription} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content={type} />
@@ -52,7 +55,7 @@ const Seo: React.FC<SeoProps> = ({
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:description" content={cleanDescription} />
       <meta name="twitter:image" content={ogImage} />
 
       {/* JSON-LD */}

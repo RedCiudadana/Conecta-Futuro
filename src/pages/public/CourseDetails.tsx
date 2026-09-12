@@ -124,11 +124,18 @@ const CourseDetails: React.FC = () => {
   }
 
   /* -------------------- Render ----------------------------- */
+  const cleanCourseDesc = (course.descripcion || '')
+    .replace(/[#*`]/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const seoDescription = cleanCourseDesc.slice(0, 157).trim() + '...' || 'Curso de la Escuela Conecta Futuro de Red Ciudadana.';
+
   const courseJsonLd = course ? {
     "@context": "https://schema.org",
     "@type": "Course",
     "name": course.title,
-    "description": course.descripcion?.replace(/[#*`]/g, '').slice(0, 300),
+    "description": cleanCourseDesc.slice(0, 300),
     "provider": {
       "@type": "Organization",
       "name": "Red Ciudadana",
@@ -142,7 +149,7 @@ const CourseDetails: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <Seo
         title={`${course.title} – Escuela Conecta Futuro`}
-        description={course.descripcion?.replace(/[#*`]/g, '').slice(0, 160) || 'Curso de la Escuela Conecta Futuro de Red Ciudadana.'}
+        description={seoDescription}
         image={course.thumbnail ?? undefined}
         canonical={`/course/${slug}`}
         type="article"

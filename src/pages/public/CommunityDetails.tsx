@@ -41,11 +41,17 @@ const CommunityDetails = () => {
     );
   }
 
+  const cleanDesc = (noticia.descripcion || '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const seoDesc = cleanDesc.slice(0, 157).trim() + '...' || noticia.title;
+
   return (
     <div className="min-h-screen bg-white py-16">
       <Seo
         title={`${noticia.title} – Escuela Conecta Futuro`}
-        description={noticia.descripcion?.slice(0, 160) || noticia.title}
+        description={seoDesc}
         image={noticia.image}
         canonical={`/community/${noticia.slug}`}
         type="article"
@@ -53,7 +59,7 @@ const CommunityDetails = () => {
           "@context": "https://schema.org",
           "@type": "NewsArticle",
           "headline": noticia.title,
-          "description": noticia.descripcion?.slice(0, 300) || '',
+          "description": cleanDesc.slice(0, 300),
           "image": noticia.image,
           "datePublished": noticia.date,
           "author": { "@type": "Organization", "name": "Red Ciudadana" },

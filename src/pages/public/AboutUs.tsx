@@ -43,8 +43,44 @@ const AboutUs = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="prose prose-lg">
-          <p>About us content will go here.</p>
+        <div className="max-w-4xl mx-auto">
+          <div className="prose prose-lg">
+            <h2>Nuestra Misión</h2>
+            <p>
+              Red Ciudadana es una organización guatemalteca sin fines de lucro que promueve la
+              transparencia, la innovación pública y la transformación digital. A través de la
+              Escuela Conecta Futuro, formamos gratuitamente a servidores públicos, emprendedores y
+              ciudadanos en habilidades digitales esenciales para el siglo XXI.
+            </p>
+
+            <h2>Qué hacemos</h2>
+            <p>
+              Diseñamos y facilitamos cursos sobre datos abiertos, inteligencia artificial, Excel,
+              Power BI, ciberseguridad, protección de datos personales e innovación pública. Todos
+              nuestros cursos son gratuitos y están diseñados para el contexto guatemalteco y
+              latinoamericano.
+            </p>
+            <p>
+              También organizamos eventos como <strong>Conecta Futuro</strong>, un encuentro virtual
+              que reúne a instituciones públicas, academia y sociedad civil para compartir
+              experiencias sobre interoperabilidad, datos abiertos y confianza digital.
+            </p>
+
+            <h2>Nuestro impacto</h2>
+            <p>
+              Desde nuestra fundición, hemos capacitado a más de 5,000 personas en 15 países, con
+              más de 50 cursos disponibles y 1,000 certificaciones emitidas. Trabajamos en alianza
+              con gobiernos locales, organismos internacionales y organizaciones de la sociedad
+              civil para impulsar un Estado más transparente, colaborativo y eficiente.
+            </p>
+
+            <h2>Únete a la comunidad</h2>
+            <p>
+              Puedes formar parte de nuestra comunidad de aprendizaje inscribiéndote en cualquiera
+              de nuestros cursos gratuitos. También puedes seguirnos en redes sociales para
+              mantenerte al día sobre nuevas formaciones, eventos y oportunidades.
+            </p>
+          </div>
         </div>
       </div>
     </div>
