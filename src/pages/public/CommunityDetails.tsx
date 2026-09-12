@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLoaderData } from 'react-router-dom';
 import { comunidadContentService } from '../../services/comunidadService';
 import type { Comunidad } from '../../types/community';
 import ReactMarkdown from 'react-markdown';
@@ -9,11 +9,12 @@ import { SITE_URL } from '../../config/seo';
 
 const CommunityDetails = () => {
   const { slug } = useParams();
-  const [noticia, setNoticia] = useState<Comunidad | null>(null);
-  const [otrasNoticias, setOtrasNoticias] = useState<Comunidad[]>([]);
+  const loaderData = useLoaderData() as { noticia: Comunidad | null; otrasNoticias: Comunidad[] } | undefined;
+  const [noticia, setNoticia] = useState<Comunidad | null>(loaderData?.noticia ?? null);
+  const [otrasNoticias, setOtrasNoticias] = useState<Comunidad[]>(loaderData?.otrasNoticias ?? []);
 
   useEffect(() => {
-    if (slug) {
+    if (slug && !loaderData) {
       comunidadContentService.getComunidades().then((todas) => {
         const actual = todas.find((n) => n.slug === slug) ?? null;
         setNoticia(actual);
@@ -21,7 +22,7 @@ const CommunityDetails = () => {
         setOtrasNoticias(otras);
       });
     }
-  }, [slug]);
+  }, [slug, loaderData]);
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {

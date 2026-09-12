@@ -6,16 +6,19 @@ import FeedbackButton from '../ui/FeedbackButton';
 import Loader from '../loader';
 
 const PublicLayout: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    return typeof window !== 'undefined';
+  });
 
   useEffect(() => {
+    if (!isLoading) return;
     const timer = setTimeout(() => {
       setIsLoading(false);
       document.body.style.overflow = 'visible';
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isLoading]);
 
   return (
     <div className="flex flex-col min-h-screen relative">

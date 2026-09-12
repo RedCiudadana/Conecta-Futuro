@@ -8,8 +8,15 @@ export default defineConfig({
     react(),
     mdPlugin({
       mode: [Mode.REACT, Mode.TOC, Mode.MARKDOWN],
-    })
+    }),
   ],
+  ssgOptions: {
+    dirStyle: 'nested',
+    script: 'defer',
+  },
+  ssr: {
+    noExternal: ['react-player'],
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
   },

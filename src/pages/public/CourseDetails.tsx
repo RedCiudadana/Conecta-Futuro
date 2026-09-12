@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLoaderData } from 'react-router-dom';
 import {
   Clock,
   Award,
@@ -61,15 +61,17 @@ function getResourceIcon(key: keyof SessionFM) {
 
 const CourseDetails: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const loaderData = useLoaderData() as { course: CourseFull | null; related: WithSlug<CourseFM>[] } | undefined;
 
-  const [course, setCourse] = useState<CourseFull | null>(null);
-  const [related, setRelated] = useState<WithSlug<CourseFM>[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [course, setCourse] = useState<CourseFull | null>(loaderData?.course ?? null);
+  const [related, setRelated] = useState<WithSlug<CourseFM>[]>(loaderData?.related ?? []);
+  const [loading, setLoading] = useState(!loaderData);
   const [showNoSessionsModal, setShowNoSessionsModal] = useState(false);
 
   /* -------------------- Carga del curso --------------------------- */
   useEffect(() => {
     if (!slug) return;
+    if (loaderData) return;
 
     async function loadData() {
       setLoading(true);
@@ -95,7 +97,7 @@ const CourseDetails: React.FC = () => {
     }
 
     loadData();
-  }, [slug]);
+  }, [slug, loaderData]);
 
   /* -------------------- Estados base ----------------------------- */
   if (loading) {

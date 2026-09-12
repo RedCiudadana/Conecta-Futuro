@@ -3,8 +3,6 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
-// Your Firebase configuration
-// For production, these values should be in environment variables
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "demo-api-key",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "demo-project.firebaseapp.com",
@@ -14,12 +12,12 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abcdef123456"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize services
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+const isBrowser = typeof window !== 'undefined';
+
+const auth = isBrowser ? getAuth(app) : ({} as ReturnType<typeof getAuth>);
+const db = isBrowser ? getFirestore(app) : ({} as ReturnType<typeof getFirestore>);
+const storage = isBrowser ? getStorage(app) : ({} as ReturnType<typeof getStorage>);
 
 export { auth, db, storage };

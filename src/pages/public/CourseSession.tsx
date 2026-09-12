@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLoaderData } from 'react-router-dom';
 import {
   ChevronLeft,
   ChevronRight,
@@ -20,12 +20,17 @@ export default function CourseSession() {
   /* URL */
   const { slug } = useParams();
   const navigate = useNavigate();
+  const loaderData = useLoaderData() as { course: FullCourse | null } | undefined;
 
   /* estado global */
-  const [course, setCourse] = useState<FullCourse | null>(null);
+  const [course, setCourse] = useState<FullCourse | null>(loaderData?.course ?? null);
   const [currentSession, setCurrentSession] = useState(0);
-  const [currentSection, setCurrentSection] = useState<SectionId | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [currentSection, setCurrentSection] = useState<SectionId | null>(
+    loaderData?.course && loaderData.course.sesiones.length > 0
+      ? firstSection(loaderData.course.sesiones[0])
+      : null
+  );
+  const [loading, setLoading] = useState(!loaderData);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [inputPassword, setInputPassword] = useState('');
   const STORAGE_KEY = 'access_course_';
@@ -33,6 +38,7 @@ export default function CourseSession() {
   /* cargar curso + sesiones */
   useEffect(() => {
     if (!slug) return;
+    if (loaderData) return;
 
     decapContentService.getCourseBySlug(slug).then(c => {
       if (!c) return navigate('/courses');
@@ -47,7 +53,7 @@ export default function CourseSession() {
         setIsAuthorized(true);
       }
     }).finally(() => setLoading(false));
-  }, [slug]);
+  }, [slug, loaderData, navigate]);
 
 
   /* helpers ------------------------------------------------------- */

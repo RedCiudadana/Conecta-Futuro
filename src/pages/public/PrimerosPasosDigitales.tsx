@@ -71,10 +71,12 @@ const PrimerosPasosDigitales: React.FC = () => {
   const [expandedModules, setExpandedModules] = useState<Set<number>>(new Set());
   const [expandedExercises, setExpandedExercises] = useState<Set<number>>(new Set());
   const [completedExercises, setCompletedExercises] = useState<Set<number>>(() => {
+    if (typeof window === 'undefined') return new Set();
     const saved = localStorage.getItem('completedExercises');
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
   const [exerciseData, setExerciseData] = useState<Record<number, Record<string, string>>>(() => {
+    if (typeof window === 'undefined') return {};
     const saved = localStorage.getItem('exerciseData');
     return saved ? JSON.parse(saved) : {};
   });
