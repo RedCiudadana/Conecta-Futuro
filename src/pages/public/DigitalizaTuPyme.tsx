@@ -24,6 +24,8 @@ import {
 } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
 import Icono11 from '../../assets/iconos/EC-33.png';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const DigitalizaTuPyme: React.FC = () => {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
@@ -250,6 +252,7 @@ const DigitalizaTuPyme: React.FC = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo {...SEO['/digitaliza-tu-pyme']} canonical="/digitaliza-tu-pyme" />
       {/* Hero Section */}
       <div
         className="relative bg-cover bg-center text-white"

@@ -14,6 +14,8 @@ import {
   ChevronUp
 } from 'lucide-react';
 import Fondo from '../../assets/slider/fondo.png';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 interface Tutorial {
   id: string;
@@ -127,6 +129,7 @@ const Tutoriales: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Seo {...SEO['/tutoriales']} canonical="/tutoriales" />
       <div
         className="relative bg-cover bg-center text-white py-20"
         style={{ backgroundImage: `url(${Fondo})` }}

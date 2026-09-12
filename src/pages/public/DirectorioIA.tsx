@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Filter, ExternalLink, Shield, TrendingUp, Users, BookOpen, Info, X } from 'lucide-react';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 import { aiTools, categories, userTypes, riskLevels, maturityLevels } from '../../data/aiToolsData';
 import { FilterState } from '../../types/aiTool';
 
@@ -75,6 +77,7 @@ const DirectorioIA: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Seo {...SEO['/directorio-ia']} canonical="/directorio-ia" />
       {/* Risk Level Info Modal */}
       {showRiskModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">

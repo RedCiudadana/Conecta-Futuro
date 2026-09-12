@@ -1,6 +1,8 @@
 import React from 'react';
 import { Calendar, MapPin, Users, Target, Lightbulb, Globe, Search, Compass, Database, Shield, FileText, Network, CheckCircle, ExternalLink, Video } from 'lucide-react';
 import ReactPlayer from 'react-player';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const ConectaFuturo: React.FC = () => {
 
@@ -172,6 +174,7 @@ const ConectaFuturo: React.FC = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo {...SEO['/conecta-futuro']} canonical="/conecta-futuro" />
       {/* Hero Section */}
       <div className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
         {/* Background with overlay */}

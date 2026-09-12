@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { Search, Award, AlertCircle, Loader2 } from 'lucide-react';
 import { CertificateRecord } from '../../types';
 import Fondo from '../../assets/slider/fondo.png';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 import {
   searchCertificateByCode,
   searchCertificatesByName,
@@ -86,6 +88,7 @@ const VerifyCertificate: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Seo {...SEO['/verify-certificate']} canonical="/verify-certificate" />
       <div className="relative bg-cover bg-center text-white py-16" style={{ backgroundImage: `url(${Fondo})` }}>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">

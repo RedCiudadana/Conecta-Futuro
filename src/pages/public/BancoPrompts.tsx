@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import { Search, X, Copy, Check, AlertTriangle, BookOpen, Lightbulb, Shield, Filter, Calendar, FileText } from 'lucide-react';
 import { promptsData, categories, levels, risks } from '../../data/promptsData';
 import { Prompt, RiskLevel, PromptLevel } from '../../types/prompt';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const BancoPrompts = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -61,6 +63,7 @@ const BancoPrompts = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Seo {...SEO['/banco-prompts']} canonical="/banco-prompts" />
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">

@@ -24,6 +24,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
 import CourseCard from '../../components/courses/CourseCard';
+import Seo from '../../components/Seo';
+import { SITE_URL } from '../../config/seo';
 
 /* --------------------------------------------------------------------
  *  Tipos auxiliares
@@ -120,8 +122,30 @@ const CourseDetails: React.FC = () => {
   }
 
   /* -------------------- Render ----------------------------- */
+  const courseJsonLd = course ? {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": course.title,
+    "description": course.descripcion?.replace(/[#*`]/g, '').slice(0, 300),
+    "provider": {
+      "@type": "Organization",
+      "name": "Red Ciudadana",
+      "url": SITE_URL
+    },
+    "inLanguage": "es",
+    "courseMode": "online"
+  } : undefined;
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Seo
+        title={`${course.title} – Escuela Conecta Futuro`}
+        description={course.descripcion?.replace(/[#*`]/g, '').slice(0, 160) || 'Curso de la Escuela Conecta Futuro de Red Ciudadana.'}
+        image={course.thumbnail ?? undefined}
+        canonical={`/course/${slug}`}
+        type="article"
+        jsonLd={courseJsonLd}
+      />
       {/* Encabezado */}
       <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
         <div className="grid md:grid-cols-2 gap-8">

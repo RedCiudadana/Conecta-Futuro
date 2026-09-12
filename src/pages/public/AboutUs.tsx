@@ -1,9 +1,12 @@
 import React from 'react';
 import { Users, Award, Globe, BookOpen } from 'lucide-react';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const AboutUs = () => {
   return (
     <div>
+      <Seo {...SEO['/about']} canonical="/about" />
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-900 text-white">
         <div className="container mx-auto px-4 py-16">

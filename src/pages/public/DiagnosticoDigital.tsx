@@ -17,6 +17,8 @@ import {
   Brain
 } from 'lucide-react';
 import { appendToDiagnosticCSV } from '../../utils/csvExport';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 interface Question {
   id: number;
@@ -301,6 +303,7 @@ const DiagnosticoDigital: React.FC = () => {
   if (currentStep === 'info') {
     return (
       <div className="min-h-screen bg-white">
+        <Seo {...SEO['/diagnostico-digital']} canonical="/diagnostico-digital" />
         <div className="bg-gradient-to-b from-primary-600 to-primary-700 text-white py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">

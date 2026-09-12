@@ -4,6 +4,8 @@ import { comunidadContentService } from '../../services/comunidadService';
 import { Link } from 'react-router-dom';
 import type { Comunidad } from '../../types/community';
 import Slider from '../../assets/slider/community.png';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const Community = () => {
   const [news, setNews] = useState<Comunidad[]>([]);
@@ -23,6 +25,7 @@ const Community = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Seo {...SEO['/community']} canonical="/community" />
       {/* Hero */}
       <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Slider})` }}>
         <div className="container mx-auto px-4 py-16">

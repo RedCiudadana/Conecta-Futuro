@@ -5,6 +5,8 @@ import { powerBiCourse } from '../../data/courses/power-bi';
 import { excelCourse } from '../../data/courses/excel';
 import { dataExchangeCourse } from '../../data/courses/data-exchange';
 import { Clock, BookOpen, Video, FileText, Users, Award, ChevronDown, ChevronUp, Search, Filter, CheckCircle, Rocket } from 'lucide-react';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const courses = [dataProtectionCourse, powerBiCourse, excelCourse, dataExchangeCourse];
 
@@ -74,6 +76,7 @@ const CourseSessions = () => {
 
   return (
     <div>
+      <Seo {...SEO['/course-sessions']} canonical="/course-sessions" />
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary-800 via-primary-900 to-primary-800 text-white">
         <div className="container mx-auto px-4 py-16">

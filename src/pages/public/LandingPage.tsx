@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Seo from '../../components/Seo';
+import { SEO, SITE_URL } from '../../config/seo';
 import { Link } from 'react-router-dom';
 import { BookOpen, Users, Award, ArrowRight, CheckCircle, HelpCircle, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import SliderImage1 from '../../assets/slider/whatsapp_image_2025-12-18_at_12.17.25_pm.jpeg';
@@ -162,6 +164,25 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo
+        title={SEO['/'].title}
+        description={SEO['/'].description}
+        canonical="/"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Red Ciudadana",
+          "url": SITE_URL,
+          "logo": `${SITE_URL}/logo/redciudadana.png`,
+          "description": "Organización guatemalteca que promueve la transparencia, la innovación pública y la transformación digital.",
+          "sameAs": [
+            "https://www.facebook.com/Redciudadanagt",
+            "https://twitter.com/redxguate",
+            "https://www.instagram.com/redxguate/",
+            "https://www.youtube.com/c/RedciudadanaOrgGt"
+          ]
+        }}
+      />
       {/* <ConectaFuturoPopup /> */}
 
       {/* Hero Slider */}

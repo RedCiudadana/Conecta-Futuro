@@ -4,6 +4,8 @@ import { comunidadContentService } from '../../services/comunidadService';
 import type { Comunidad } from '../../types/community';
 import ReactMarkdown from 'react-markdown';
 import { ArrowRight } from 'lucide-react';
+import Seo from '../../components/Seo';
+import { SITE_URL } from '../../config/seo';
 
 const CommunityDetails = () => {
   const { slug } = useParams();
@@ -40,6 +42,23 @@ const CommunityDetails = () => {
 
   return (
     <div className="min-h-screen bg-white py-16">
+      <Seo
+        title={`${noticia.title} – Escuela Conecta Futuro`}
+        description={noticia.descripcion?.slice(0, 160) || noticia.title}
+        image={noticia.image}
+        canonical={`/community/${noticia.slug}`}
+        type="article"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "NewsArticle",
+          "headline": noticia.title,
+          "description": noticia.descripcion?.slice(0, 300) || '',
+          "image": noticia.image,
+          "datePublished": noticia.date,
+          "author": { "@type": "Organization", "name": "Red Ciudadana" },
+          "publisher": { "@type": "Organization", "name": "Red Ciudadana", "url": SITE_URL }
+        }}
+      />
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Título */}
         <h1 className="text-4xl font-bold text-gray-900 mb-4">{noticia.title}</h1>

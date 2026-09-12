@@ -7,6 +7,8 @@ import {
   Heart, FileText, MessageSquare, Camera
 } from 'lucide-react';
 import Slider from '../../assets/slider/learningpaths.png';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const LearningPaths = () => {
   const paths = [
@@ -131,6 +133,7 @@ const LearningPaths = () => {
 
   return (
     <div >
+      <Seo {...SEO['/learning-paths']} canonical="/learning-paths" />
 
       {/* Hero */}
       <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Slider})` }}>

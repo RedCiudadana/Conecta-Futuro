@@ -8,6 +8,8 @@ import type { CourseFM, Nivel, WithSlug } from '../../types/course';
 
 const levels: Nivel[] = ['Básico', 'Intermedio', 'Avanzado'];
 import Fondo from '../../assets/slider/fondo.png';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 export default function CourseCatalog() {
   /* ---------- Estado ---------- */
@@ -86,6 +88,7 @@ export default function CourseCatalog() {
     /* ---------- UI ---------- */
   return (
     <div>
+      <Seo {...SEO['/courses']} canonical="/courses" />
       {/* Hero */}
       <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Fondo})` }}>
         <div className="container mx-auto px-4 py-16">

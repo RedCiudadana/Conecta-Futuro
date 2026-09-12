@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ReactPlayer from 'react-player';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 import {
   Smartphone,
   MessageCircle,
@@ -490,6 +492,7 @@ const PrimerosPasosDigitales: React.FC = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo {...SEO['/primeros-pasos-digitales']} canonical="/primeros-pasos-digitales" />
       {/* Hero Section */}
       <div
         className="relative bg-cover bg-center text-white"

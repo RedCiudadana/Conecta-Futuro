@@ -1,9 +1,12 @@
 import React from 'react';
 import { FileText, Video, Users, Award, Plus, Edit, Trash2, Search, BookOpen, Calendar, Clock } from 'lucide-react';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const Documentation = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      <Seo {...SEO['/documentation']} canonical="/documentation" />
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Documentación del Sistema</h1>
 
       {/* Acceso al Panel de Administración */}

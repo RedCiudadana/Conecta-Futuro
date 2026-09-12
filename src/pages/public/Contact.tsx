@@ -4,6 +4,8 @@ import Redes2 from '../../assets/contacto/REDES-44.png';
 import Redes3 from '../../assets/contacto/REDES-45.png';
 import Redes4 from '../../assets/contacto/REDES-46.png';
 import Slider from '../../assets/slider/contact.png';
+import Seo from '../../components/Seo';
+import { SEO } from '../../config/seo';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -58,6 +60,7 @@ const Contact: React.FC = () => {
 
   return (
     <div>
+      <Seo {...SEO['/contact']} canonical="/contact" />
       {/* Hero */}
       <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Slider})` }}>
         <div className="container mx-auto px-4 py-16">
