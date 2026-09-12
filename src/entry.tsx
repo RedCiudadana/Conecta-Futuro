@@ -1,6 +1,7 @@
 import { ViteReactSSG } from 'vite-react-ssg';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import './index.css';
 import { AuthProvider } from './contexts/AuthContext';
 import ScrollToTop from './components/scrolltotop';
 import ScrollTopButton from './components/scrolltotopButton';
