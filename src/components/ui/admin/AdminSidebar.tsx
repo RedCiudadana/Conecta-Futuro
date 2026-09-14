@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { X, LayoutDashboard, BookOpen, Users, FileBarChart } from 'lucide-react';
+import { X, LayoutDashboard, Users, GraduationCap, ClipboardCheck, BookOpen, ArrowLeft } from 'lucide-react';
 
 interface AdminSidebarProps {
   onClose: () => void;
@@ -8,42 +8,41 @@ interface AdminSidebarProps {
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
   const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'Course Management', href: '/admin/courses', icon: BookOpen },
-    { name: 'User Management', href: '/admin/users', icon: Users },
-    { name: 'Reports', href: '/admin/reports', icon: FileBarChart },
+    { name: 'Panel General', href: '/admin', icon: LayoutDashboard },
+    { name: 'Participantes', href: '/admin/participantes', icon: Users },
+    { name: 'Inscripciones', href: '/admin/inscripciones', icon: GraduationCap },
+    { name: 'Asistencia', href: '/admin/asistencia', icon: ClipboardCheck },
+    { name: 'Cursos', href: '/admin/cursos', icon: BookOpen },
   ];
 
   return (
     <div className="h-full flex flex-col bg-white">
-      {/* Close button - mobile only */}
       <div className="lg:hidden p-4">
         <button
           onClick={onClose}
           className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
         >
-          <span className="sr-only">Close sidebar</span>
+          <span className="sr-only">Cerrar menú</span>
           <X className="h-6 w-6" />
         </button>
       </div>
 
-      {/* Logo */}
-      <div className="px-6 pt-4 pb-8">
-        <h1 className="text-2xl font-bold text-accent-600">EduAdmin</h1>
-        <p className="text-sm text-gray-500 mt-1">Administration Portal</p>
+      <div className="px-6 pt-4 pb-6">
+        <h1 className="text-xl font-bold text-sky-700">Escuela Red Ciudadana</h1>
+        <p className="text-sm text-gray-500 mt-1">Gestión de Participantes</p>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 px-3 space-y-1">
         {navigation.map((item) => (
           <NavLink
             key={item.name}
             to={item.href}
+            end={item.href === '/admin'}
             className={({ isActive }) =>
-              `flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              `flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                 isActive
-                  ? 'bg-accent-50 text-accent-600'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-accent-600'
+                  ? 'bg-sky-50 text-sky-700'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-sky-700'
               }`
             }
             onClick={() => onClose()}
@@ -53,6 +52,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
           </NavLink>
         ))}
       </nav>
+
+      <div className="px-3 pb-4">
+        <NavLink
+          to="/"
+          className="flex items-center px-3 py-2.5 text-sm font-medium text-gray-500 rounded-lg hover:bg-gray-50 hover:text-gray-700 transition-colors"
+        >
+          <ArrowLeft className="mr-3 h-5 w-5 flex-shrink-0" />
+          Volver al sitio
+        </NavLink>
+      </div>
     </div>
   );
 };

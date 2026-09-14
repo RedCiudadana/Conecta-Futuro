@@ -6,8 +6,18 @@ import { AuthProvider } from './contexts/AuthContext';
 import ScrollToTop from './components/scrolltotop';
 import ScrollTopButton from './components/scrolltotopButton';
 import PublicLayout from './components/layouts/PublicLayout';
+import AdminLayout from './components/layouts/AdminLayout';
 import { decapContentService } from './services/courseService';
 import { comunidadContentService } from './services/comunidadService';
+
+// Admin pages
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import ParticipantListPage from './pages/admin/ParticipantListPage';
+import ParticipantFormPage from './pages/admin/ParticipantFormPage';
+import ParticipantProfilePage from './pages/admin/ParticipantProfilePage';
+import EnrollmentPage from './pages/admin/EnrollmentPage';
+import AttendancePage from './pages/admin/AttendancePage';
+import CourseManagementPage from './pages/admin/CourseManagementPage';
 
 // Public pages
 import LandingPage from './pages/public/LandingPage';
@@ -112,6 +122,24 @@ export const routes = [
           return { noticia, otrasNoticias };
         },
       },
+    ],
+  },
+  {
+    path: '/admin',
+    element: (
+      <AuthProvider>
+        <AdminLayout />
+      </AuthProvider>
+    ),
+    children: [
+      { index: true, element: <AdminDashboardPage /> },
+      { path: 'participantes', element: <ParticipantListPage /> },
+      { path: 'participantes/nuevo', element: <ParticipantFormPage /> },
+      { path: 'participantes/:id', element: <ParticipantProfilePage /> },
+      { path: 'participantes/:id/editar', element: <ParticipantFormPage /> },
+      { path: 'inscripciones', element: <EnrollmentPage /> },
+      { path: 'asistencia', element: <AttendancePage /> },
+      { path: 'cursos', element: <CourseManagementPage /> },
     ],
   },
   { path: '/*', element: <NotFound /> },
