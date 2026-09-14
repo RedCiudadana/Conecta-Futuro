@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
               <img src={LogoRedNegro} style={{ filter: 'invert(1) hue-rotate(180deg) contrast(1.2) brightness(1.1)' }} />
             </div>
             <p className="text-gray-400 mb-4">
-              La plataforma educativa de Red Ciudadana para la innovación pública y transformación digital en América Latina.
+              Una plataforma de aprendizaje e innovación que desarrolla habilidades digitales y acerca oportunidades a personas, emprendedores, instituciones y comunidades.
             </p>
             <div className="flex space-x-4">
               <a href="https://www.facebook.com/Redciudadanagt/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">
@@ -126,7 +126,7 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
-            &copy; {currentYear} Red Ciudadana. Todos los derechos reservados.
+            &copy; {currentYear} Red Ciudadana. Una iniciativa de Red Ciudadana.
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <Link to="/privacy-policy" className="text-gray-500 hover:text-white text-sm transition-colors duration-200">

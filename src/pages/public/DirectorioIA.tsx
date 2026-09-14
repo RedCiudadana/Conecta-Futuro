@@ -266,16 +266,16 @@ const DirectorioIA: React.FC = () => {
       <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20 px-4">
         <div className="container mx-auto max-w-6xl text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Directorio de Herramientas de Inteligencia Artificial para el Sector Público
+            Encuentra herramientas. Aprende a utilizarlas. Resuelve problemas.
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-blue-100">
-            Explora más de 50 herramientas de IA que pueden mejorar la eficiencia, transparencia y calidad de los servicios públicos.
+            Nuestro Directorio de Inteligencia Artificial ayuda a encontrar herramientas de IA según las necesidades de cada persona, negocio u organización. No queremos únicamente listar aplicaciones: queremos facilitar que más personas puedan identificar y utilizar tecnología de forma práctica y responsable.
           </p>
           <button
             onClick={scrollToTools}
             className="bg-white text-blue-700 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 shadow-lg"
           >
-            Explorar herramientas
+            Explorar herramientas de IA
           </button>
         </div>
       </div>
@@ -505,7 +505,7 @@ const DirectorioIA: React.FC = () => {
           <div className="flex items-center mb-6">
             <BookOpen className="text-blue-700 mr-3" size={32} />
             <h2 className="text-3xl font-bold text-gray-800">
-              Recomendaciones para el uso responsable de IA en el sector público
+              Recomendaciones para el uso responsable de IA
             </h2>
           </div>
 

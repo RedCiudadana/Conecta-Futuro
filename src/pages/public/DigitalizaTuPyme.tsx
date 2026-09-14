@@ -238,7 +238,7 @@ const DigitalizaTuPyme: React.FC = () => {
     },
     {
       question: '¿Tiene costo?',
-      answer: 'El programa es completamente gratuito. Solo necesitas compromiso y ganas de aprender.'
+      answer: 'Combinamos programas abiertos, formación patrocinada, alianzas institucionales y servicios especializados para ampliar el acceso. Este programa está disponible sin costo para emprendedores y pequeños negocios.'
     },
     {
       question: '¿Qué pasa si no tengo redes sociales?',
@@ -271,10 +271,10 @@ const DigitalizaTuPyme: React.FC = () => {
               Digitaliza tu PyME
             </h1>
             <p className="text-xl sm:text-2xl text-primary-100 max-w-3xl mx-auto mb-4">
-              Tecnología sencilla e Inteligencia Artificial para trabajar mejor, vender más y organizar tu negocio
+              Tecnología práctica para pequeños negocios
             </p>
             <p className="text-lg text-primary-100 max-w-2xl mx-auto mb-8">
-              No necesitas experiencia previa. Aprende a tu ritmo desde tu celular o computadora.
+              Ayudamos a emprendedores y pequeños negocios a utilizar herramientas digitales para mejorar su productividad, comunicación, organización y acceso a nuevas oportunidades. No se trata solamente de aprender aplicaciones: el objetivo es ayudar a cada negocio a identificar problemas concretos y utilizar tecnología para resolverlos.
             </p>
 
             {/* Badges */}
@@ -299,14 +299,14 @@ const DigitalizaTuPyme: React.FC = () => {
                 to="/diagnostico-digital"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition-colors text-lg"
               >
-                Hacer diagnóstico (5 min)
+                Diagnostica tu negocio (5 min)
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <a
                 href="#modulos"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-white text-gray-900 font-semibold hover:bg-gray-100 transition-colors text-lg"
               >
-                Ver módulos del programa
+                Ver cómo funciona
               </a>
             </div>
           </div>
@@ -321,7 +321,7 @@ const DigitalizaTuPyme: React.FC = () => {
               Un programa hecho para negocios reales
             </h2>
             <p className="text-lg text-gray-600 mb-8">
-              Digitaliza tu PyME es un programa de Conecta Futuro que ayuda a emprendedores y MIPYMES a dar pasos prácticos de digitalización: ordenar procesos, mejorar ventas, fortalecer presencia digital y usar herramientas de IA de forma sencilla y responsable.
+              Ayudamos a emprendedores y pequeños negocios a dar pasos prácticos de digitalización: ordenar procesos, mejorar ventas, fortalecer presencia digital y usar herramientas de IA de forma sencilla y responsable. No necesitas experiencia previa. Aprende a tu ritmo desde tu celular o computadora.
             </p>
           </div>
 
@@ -782,21 +782,21 @@ const DigitalizaTuPyme: React.FC = () => {
             ¿Listo para digitalizar tu negocio?
           </h2>
           <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-            Da el primer paso hacia la transformación digital de tu PyME. Comienza con el diagnóstico gratuito.
+            Da el primer paso. Identifica las necesidades digitales de tu negocio y comienza a utilizar tecnología para resolverlas.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/diagnostico-digital"
               className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition-colors text-lg"
             >
-              Hacer diagnóstico ahora
+              Digitalizar mi negocio
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
               to="/contact"
               className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-white text-gray-900 font-semibold hover:bg-gray-100 transition-colors text-lg"
             >
-              Contáctanos
+              Conversemos
             </Link>
           </div>
         </div>

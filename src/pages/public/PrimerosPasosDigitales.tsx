@@ -510,20 +510,26 @@ const PrimerosPasosDigitales: React.FC = () => {
               />
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading mb-6">
-              Mis Primeros Pasos Digitales
+              Primeros Pasos Digitales
             </h1>
-            <p className="text-xl sm:text-2xl text-primary-100 max-w-2xl mx-auto mb-8">
-              Aprende lo básico para emprender en línea con herramientas digitales
+            <p className="text-xl sm:text-2xl text-primary-100 max-w-3xl mx-auto mb-8">
+              Una puerta de entrada a las oportunidades digitales
+            </p>
+            <p className="text-lg text-primary-100 max-w-2xl mx-auto mb-8">
+              Un programa pensado para personas que quieren comenzar a utilizar herramientas digitales de manera práctica, sencilla y segura. Aprende desde cero a comunicarte, organizarte, promocionar productos y desenvolverte mejor en entornos digitales.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <span className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold text-lg">
-                🎉 Curso Gratuito
+                Desde cero
               </span>
               <span className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold text-lg">
-                📱 100% Práctico
+                Práctico
               </span>
               <span className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold text-lg">
-                📚 8 Módulos
+                Avanza a tu ritmo
+              </span>
+              <span className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold text-lg">
+                Aplicable desde hoy
               </span>
             </div>
           </div>
@@ -535,34 +541,33 @@ const PrimerosPasosDigitales: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 font-heading">
-              ¿Para quién es este curso?
+              Aprende haciendo, no solo viendo
             </h2>
             <p className="text-lg text-gray-600 mb-8">
-              Este curso está diseñado especialmente para emprendedoras con pocos conocimientos digitales
-              que quieren aprender a usar herramientas básicas para vender sus productos en línea.
-              No necesitas experiencia previa, solo ganas de aprender y un teléfono celular.
+              No necesitas experiencia previa. Solo ganas de aprender y un teléfono celular.
+              Cada módulo incluye audios, ejercicios prácticos y evaluaciones para que desarrolles habilidades que puedes aplicar inmediatamente.
             </p>
             <div className="grid sm:grid-cols-3 gap-6">
               <div className="p-6 bg-gray-50 rounded-lg">
                 <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Smartphone className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Sin experiencia necesaria</h3>
-                <p className="text-gray-600 text-sm">Empezamos desde cero, paso a paso</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Desde cero</h3>
+                <p className="text-gray-600 text-sm">No necesitas experiencia previa</p>
               </div>
               <div className="p-6 bg-gray-50 rounded-lg">
                 <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Award className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Certificado incluido</h3>
-                <p className="text-gray-600 text-sm">Comparte tu logro al terminar</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Aplicable</h3>
+                <p className="text-gray-600 text-sm">Utiliza inmediatamente lo aprendido</p>
               </div>
               <div className="p-6 bg-gray-50 rounded-lg">
                 <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <FileText className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Ejercicios prácticos</h3>
-                <p className="text-gray-600 text-sm">Aprende haciendo, no solo viendo</p>
+                <p className="text-gray-600 text-sm">Aprende utilizando herramientas reales</p>
               </div>
             </div>
           </div>
@@ -1034,17 +1039,17 @@ const PrimerosPasosDigitales: React.FC = () => {
       >
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-heading">
-            ¿Lista para comenzar tu transformación digital?
+            Da tus primeros pasos digitales
           </h2>
           <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-            Este es solo el comienzo. Tenemos más cursos gratuitos esperándote para seguir creciendo.
+            Este es el comienzo. Tenemos más recursos y oportunidades esperándote para seguir avanzando.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/courses"
               className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-black text-white font-semibold transition-colors text-lg"
             >
-              Ver todos los cursos
+              Explorar más oportunidades
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
