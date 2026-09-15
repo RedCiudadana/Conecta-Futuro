@@ -125,7 +125,7 @@ export const routes = [
     ],
   },
   {
-    path: '/admin',
+    path: '/dashboard',
     element: (
       <AuthProvider>
         <AdminLayout />

@@ -8,11 +8,11 @@ interface AdminSidebarProps {
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
   const navigation = [
-    { name: 'Panel General', href: '/admin', icon: LayoutDashboard },
-    { name: 'Participantes', href: '/admin/participantes', icon: Users },
-    { name: 'Inscripciones', href: '/admin/inscripciones', icon: GraduationCap },
-    { name: 'Asistencia', href: '/admin/asistencia', icon: ClipboardCheck },
-    { name: 'Cursos', href: '/admin/cursos', icon: BookOpen },
+    { name: 'Panel General', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Participantes', href: '/dashboard/participantes', icon: Users },
+    { name: 'Inscripciones', href: '/dashboard/inscripciones', icon: GraduationCap },
+    { name: 'Asistencia', href: '/dashboard/asistencia', icon: ClipboardCheck },
+    { name: 'Cursos', href: '/dashboard/cursos', icon: BookOpen },
   ];
 
   return (
@@ -37,7 +37,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
           <NavLink
             key={item.name}
             to={item.href}
-            end={item.href === '/admin'}
+            end={item.href === '/dashboard'}
             className={({ isActive }) =>
               `flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                 isActive

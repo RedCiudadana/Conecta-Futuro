@@ -55,7 +55,7 @@ const ParticipantProfilePage: React.FC = () => {
   const handleDelete = async () => {
     if (!id) return;
     await deleteParticipant(id);
-    navigate('/admin/participantes');
+    navigate('/dashboard/participantes');
   };
 
   if (loading) {
@@ -70,7 +70,7 @@ const ParticipantProfilePage: React.FC = () => {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500">Participante no encontrado.</p>
-        <Link to="/admin/participantes" className="text-sky-600 hover:underline text-sm mt-2 inline-block">
+        <Link to="/dashboard/participantes" className="text-sky-600 hover:underline text-sm mt-2 inline-block">
           Volver a la lista
         </Link>
       </div>
@@ -118,7 +118,7 @@ const ParticipantProfilePage: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link to={`/admin/participantes/${id}/editar`}
+          <Link to={`/dashboard/participantes/${id}/editar`}
             className="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 text-sm font-medium">
             <Edit className="h-4 w-4 mr-2" />
             Editar

@@ -63,7 +63,7 @@ const AdminDashboardPage: React.FC = () => {
           <p className="text-gray-500 mt-1">Indicadores clave del ecosistema de participantes</p>
         </div>
         <Link
-          to="/admin/participantes/nuevo"
+          to="/dashboard/participantes/nuevo"
           className="inline-flex items-center px-4 py-2.5 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors text-sm font-medium shadow-sm"
         >
           <UserPlus className="h-4 w-4 mr-2" />
@@ -73,11 +73,11 @@ const AdminDashboardPage: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <StatCard label="Total Participantes" value={kpis.totalParticipants} icon={<Users className="h-6 w-6 text-sky-600" />} color="bg-sky-50" to="/admin/participantes" />
+        <StatCard label="Total Participantes" value={kpis.totalParticipants} icon={<Users className="h-6 w-6 text-sky-600" />} color="bg-sky-50" to="/dashboard/participantes" />
         <StatCard label="Activos" value={kpis.activeParticipants} icon={<TrendingUp className="h-6 w-6 text-emerald-600" />} color="bg-emerald-50" />
-        <StatCard label="Inscripciones" value={kpis.totalEnrollments} icon={<GraduationCap className="h-6 w-6 text-blue-600" />} color="bg-blue-50" to="/admin/inscripciones" />
+        <StatCard label="Inscripciones" value={kpis.totalEnrollments} icon={<GraduationCap className="h-6 w-6 text-blue-600" />} color="bg-blue-50" to="/dashboard/inscripciones" />
         <StatCard label="Tasa Completación" value={`${kpis.completionRate}%`} icon={<Award className="h-6 w-6 text-amber-600" />} color="bg-amber-50" />
-        <StatCard label="Asistencia Prom." value={`${kpis.averageAttendance}%`} icon={<ClipboardCheck className="h-6 w-6 text-violet-600" />} color="bg-violet-50" to="/admin/asistencia" />
+        <StatCard label="Asistencia Prom." value={`${kpis.averageAttendance}%`} icon={<ClipboardCheck className="h-6 w-6 text-violet-600" />} color="bg-violet-50" to="/dashboard/asistencia" />
         <StatCard label="Certificados" value={kpis.certificatesIssued} icon={<Award className="h-6 w-6 text-rose-600" />} color="bg-rose-50" />
       </div>
 

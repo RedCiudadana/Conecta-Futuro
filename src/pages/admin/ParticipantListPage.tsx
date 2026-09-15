@@ -86,7 +86,7 @@ const ParticipantListPage: React.FC = () => {
             Exportar CSV
           </button>
           <Link
-            to="/admin/participantes/nuevo"
+            to="/dashboard/participantes/nuevo"
             className="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors text-sm font-medium shadow-sm"
           >
             <UserPlus className="h-4 w-4 mr-2" />
@@ -220,7 +220,7 @@ const ParticipantListPage: React.FC = () => {
                 {participants.map(p => (
                   <tr
                     key={p.id}
-                    onClick={() => navigate(`/admin/participantes/${p.id}`)}
+                    onClick={() => navigate(`/dashboard/participantes/${p.id}`)}
                     className="hover:bg-sky-50/50 cursor-pointer transition-colors"
                   >
                     <td className="px-6 py-4">

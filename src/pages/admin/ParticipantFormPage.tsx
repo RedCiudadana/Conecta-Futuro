@@ -126,10 +126,10 @@ const ParticipantFormPage: React.FC = () => {
 
       if (isEditing) {
         await updateParticipant(id, payload);
-        navigate(`/admin/participantes/${id}`);
+        navigate(`/dashboard/participantes/${id}`);
       } else {
         const created = await createParticipant(payload);
-        navigate(`/admin/participantes/${created.id}`);
+        navigate(`/dashboard/participantes/${created.id}`);
       }
     } catch (e: any) {
       setError(e.message || 'Error al guardar participante.');
