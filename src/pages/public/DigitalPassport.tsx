@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Award, BookOpen, Clock, Star, GraduationCap, ChevronRight,
   Shield, Route, Lock, LogIn, Sparkles, TrendingUp, Share2, Check, Link as LinkIcon,
+  Mail, KeyRound, ArrowRight, AlertCircle, Loader2, LogOut,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../config/supabase';
@@ -43,65 +44,210 @@ const DigitalPassport: React.FC = () => {
   const [shareToggeling, setShareToggeling] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  // Email + code access flow (for non-authenticated users)
+  const [accessEmail, setAccessEmail] = useState('');
+  const [accessCode, setAccessCode] = useState('');
+  const [codeSent, setCodeSent] = useState(false);
+  const [sendingCode, setSendingCode] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [accessError, setAccessError] = useState<string | null>(null);
+  const [verifiedParticipantId, setVerifiedParticipantId] = useState<string | null>(null);
+
   useEffect(() => {
-    if (!user?.email) { setLoading(false); return; }
-    loadPassport(user.email);
-  }, [user?.email]);
+    if (user?.email) { loadPassport(user.email); }
+    else if (verifiedParticipantId) { loadPassportById(verifiedParticipantId); }
+    else { setLoading(false); }
+  }, [user?.email, verifiedParticipantId]);
 
   async function loadPassport(email: string) {
     setLoading(true);
     try {
-      const { data: participant } = await supabase
-        .from('participants')
-        .select('id, first_name, last_name, primary_email, created_at, public_profile_enabled, profile_slug')
-        .eq('primary_email', email.toLowerCase().trim())
-        .maybeSingle();
-
-      if (!participant) { setData(null); setLoading(false); return; }
-
-      const [enrollRes, certRes, skills, badges, pathProgress, recommendations, pathsRes] = await Promise.all([
-        supabase.from('enrollments').select('*, course:courses(*)').eq('participant_id', participant.id).order('enrolled_at', { ascending: false }),
-        supabase.from('certificates').select('*, course:courses(*)').eq('participant_id', participant.id).neq('status', 'revoked').order('issued_at', { ascending: false }),
-        getParticipantEffectiveSkills(participant.id),
-        getParticipantBadges(participant.id),
-        getParticipantPathProgress(participant.id),
-        getRecommendations(participant.id, 4),
-        supabase.from('learning_paths').select('id, name, slug').eq('status', 'active').eq('is_visible', true),
-      ]);
-
-      checkAndAwardSkillBadges(participant.id).catch(() => {});
-      checkMilestoneBadges(participant.id).catch(() => {});
-
-      setProfileEnabled(participant.public_profile_enabled ?? false);
-      setProfileSlug(participant.profile_slug ?? null);
-      setData({
-        participant,
-        enrollments: enrollRes.data ?? [],
-        certificates: certRes.data ?? [],
-        skills,
-        badges,
-        pathProgress,
-        recommendations,
-        paths: pathsRes.data ?? [],
-      });
-    } catch {
-      setData(null);
-    }
+      const { data: p } = await supabase.rpc('lookup_participant_for_passport', { p_email: email });
+      if (p && p.length > 0) { await loadPassportData(p[0]); }
+      else { setData(null); }
+    } catch { setData(null); }
     setLoading(false);
   }
 
-  if (!user) {
+  async function loadPassportById(participantId: string) {
+    setLoading(true);
+    try {
+      const { data: p } = await supabase
+        .from('participants')
+        .select('id, first_name, last_name, primary_email, created_at, public_profile_enabled, profile_slug')
+        .eq('id', participantId)
+        .maybeSingle();
+      if (p) { await loadPassportData(p); }
+      else { setData(null); }
+    } catch { setData(null); }
+    setLoading(false);
+  }
+
+  async function loadPassportData(participant: any) {
+    const [enrollRes, certRes, skills, badges, pathProgress, recommendations, pathsRes] = await Promise.all([
+      supabase.from('enrollments').select('*, course:courses(*)').eq('participant_id', participant.id).order('enrolled_at', { ascending: false }),
+      supabase.from('certificates').select('*, course:courses(*)').eq('participant_id', participant.id).neq('status', 'revoked').order('issued_at', { ascending: false }),
+      getParticipantEffectiveSkills(participant.id),
+      getParticipantBadges(participant.id),
+      getParticipantPathProgress(participant.id),
+      getRecommendations(participant.id, 4),
+      supabase.from('learning_paths').select('id, name, slug').eq('status', 'active').eq('is_visible', true),
+    ]);
+    checkAndAwardSkillBadges(participant.id).catch(() => {});
+    checkMilestoneBadges(participant.id).catch(() => {});
+    setProfileEnabled(participant.public_profile_enabled ?? false);
+    setProfileSlug(participant.profile_slug ?? null);
+    setData({
+      participant,
+      enrollments: enrollRes.data ?? [],
+      certificates: certRes.data ?? [],
+      skills,
+      badges,
+      pathProgress,
+      recommendations,
+      paths: pathsRes.data ?? [],
+    });
+  }
+
+  async function sendAccessCode() {
+    if (!accessEmail.trim()) { setAccessError('Ingresa tu correo electronico'); return; }
+    setSendingCode(true);
+    setAccessError(null);
+    try {
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-passport-code`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: accessEmail }),
+      });
+      const result = await res.json();
+      if (!res.ok) { setAccessError(result.error || 'Error al enviar el codigo'); }
+      else { setCodeSent(true); }
+    } catch { setAccessError('Error de conexion'); }
+    setSendingCode(false);
+  }
+
+  async function verifyAccessCode() {
+    if (!accessCode.trim()) { setAccessError('Ingresa el codigo de 6 digitos'); return; }
+    setVerifying(true);
+    setAccessError(null);
+    try {
+      const { data: codeRow } = await supabase
+        .from('passport_access_codes')
+        .select('id, participant_id, expires_at, used_at')
+        .eq('email', accessEmail.toLowerCase().trim())
+        .eq('code', accessCode.trim())
+        .is('used_at', null)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (!codeRow) { setAccessError('Codigo invalido'); setVerifying(false); return; }
+      if (new Date(codeRow.expires_at) < new Date()) { setAccessError('El codigo ha expirado. Solicita uno nuevo.'); setVerifying(false); return; }
+      if (!codeRow.participant_id) { setAccessError('No se encontro participante asociado'); setVerifying(false); return; }
+
+      await supabase.from('passport_access_codes').update({ used_at: new Date().toISOString() }).eq('id', codeRow.id);
+      setVerifiedParticipantId(codeRow.participant_id);
+    } catch { setAccessError('Error al verificar'); }
+    setVerifying(false);
+  }
+
+  if (!user && !verifiedParticipantId) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center px-4">
-        <div className="text-center max-w-md">
-          <div className="w-16 h-16 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Lock className="h-8 w-8 text-sky-600" />
+      <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Shield className="h-8 w-8 text-sky-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Mi Pasaporte Conecta Futuro</h1>
+            <p className="text-gray-500">Accede a tu trayectoria: certificados, insignias, habilidades y avances.</p>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Mi Pasaporte Conecta Futuro</h1>
-          <p className="text-gray-500 mb-6">Inicia sesion para ver tu trayectoria de aprendizaje, certificados, insignias y habilidades.</p>
-          <Link to="/login" className="inline-flex items-center px-6 py-3 bg-sky-600 text-white rounded-xl font-medium hover:bg-sky-700 transition-colors">
-            <LogIn className="h-5 w-5 mr-2" />Iniciar Sesion
-          </Link>
+
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-5">
+            {!codeSent ? (
+              <>
+                <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <Mail className="h-4 w-4 text-sky-500" /> Ingresa tu correo electronico
+                </div>
+                <p className="text-xs text-gray-500">
+                  Te enviaremos un codigo de 6 digitos para verificar tu identidad y proteger tus datos.
+                </p>
+                <input
+                  type="email"
+                  value={accessEmail}
+                  onChange={e => setAccessEmail(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && sendAccessCode()}
+                  placeholder="tu.correo@ejemplo.com"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                />
+                {accessError && (
+                  <div className="flex items-center gap-2 text-xs text-red-600"><AlertCircle className="h-3.5 w-3.5" />{accessError}</div>
+                )}
+                <button
+                  onClick={sendAccessCode}
+                  disabled={sendingCode}
+                  className="w-full px-4 py-3 bg-sky-600 text-white rounded-xl text-sm font-medium hover:bg-sky-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {sendingCode ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Mail className="h-4 w-4" /> Enviar codigo</>}
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <KeyRound className="h-4 w-4 text-sky-500" /> Ingresa el codigo
+                </div>
+                <p className="text-xs text-gray-500">
+                  Enviamos un codigo de 6 digitos a <strong className="text-gray-700">{accessEmail}</strong>. Expira en 10 minutos.
+                </p>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={accessCode}
+                  onChange={e => setAccessCode(e.target.value.replace(/\D/g, ''))}
+                  onKeyDown={e => e.key === 'Enter' && verifyAccessCode()}
+                  placeholder="123456"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-center text-2xl font-bold tracking-widest focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                />
+                {accessError && (
+                  <div className="flex items-center gap-2 text-xs text-red-600"><AlertCircle className="h-3.5 w-3.5" />{accessError}</div>
+                )}
+                <button
+                  onClick={verifyAccessCode}
+                  disabled={verifying || accessCode.length !== 6}
+                  className="w-full px-4 py-3 bg-sky-600 text-white rounded-xl text-sm font-medium hover:bg-sky-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <><ArrowRight className="h-4 w-4" /> Acceder</>}
+                </button>
+                <button
+                  onClick={() => { setCodeSent(false); setAccessCode(''); setAccessError(null); }}
+                  className="w-full text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  Cambiar correo
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Data protection notice */}
+          <div className="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="flex items-start gap-2">
+              <Shield className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+              <p className="text-xs text-gray-500 leading-relaxed">
+                Proteccion de datos: Solo tu puedes ver tu informacion completa. No compartimos tus datos personales (DPI, telefono, direccion) con nadie. Tu pasaporte muestra unicamente tus logros academicos: cursos, certificados, insignias y habilidades.
+              </p>
+            </div>
+          </div>
+
+          {user === null && (
+            <div className="mt-4 text-center">
+              <p className="text-xs text-gray-400">¿Ya tienes cuenta?</p>
+              <Link to="/login" className="text-sm text-sky-600 hover:text-sky-700 font-medium">
+                Inicia sesion
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -139,6 +285,7 @@ const DigitalPassport: React.FC = () => {
     return acc;
   }, {});
   const levelDots: Record<SkillLevel, number> = { basico: 1, intermedio: 2, avanzado: 3, especializado: 4 };
+  const isGuestAccess = !user && !!verifiedParticipantId;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
@@ -150,6 +297,14 @@ const DigitalPassport: React.FC = () => {
           <p className="text-sky-200 text-sm font-medium uppercase tracking-wider mb-2">Pasaporte Digital</p>
           <h1 className="text-3xl font-bold mb-1">{participant.first_name} {participant.last_name}</h1>
           <p className="text-sky-100 text-sm">Miembro desde {memberSince}</p>
+          {isGuestAccess && (
+            <button
+              onClick={() => { setVerifiedParticipantId(null); setData(null); setCodeSent(false); setAccessCode(''); setAccessEmail(''); }}
+              className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 rounded-lg text-xs font-medium text-white transition-colors"
+            >
+              <LogOut className="h-3.5 w-3.5" /> Salir
+            </button>
+          )}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-6">
             <StatCard icon={<BookOpen className="h-5 w-5" />} value={completed.length} label="Completados" />
             <StatCard icon={<Award className="h-5 w-5" />} value={certificates.length} label="Certificados" />

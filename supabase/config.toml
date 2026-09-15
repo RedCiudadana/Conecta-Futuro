@@ -1,2 +1,5 @@
 [functions.send-registration-email]
 verify_jwt = false
+
+[functions.send-passport-code]
+verify_jwt = false
