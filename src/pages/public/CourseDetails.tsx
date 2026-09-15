@@ -188,7 +188,7 @@ const CourseDetails: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <Seo
-        title={`${course.title} – Escuela Conecta Futuro`}
+        title={`${course.title} | Escuela Red Ciudadana`}
         description={seoDescription}
         image={course.thumbnail ?? undefined}
         canonical={`/course/${slug}`}

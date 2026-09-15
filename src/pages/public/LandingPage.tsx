@@ -208,14 +208,21 @@ const LandingPage: React.FC = () => {
         title={SEO['/'].title}
         description={SEO['/'].description}
         canonical="/"
+        image="/og/escuela-default.png"
         jsonLd={{
           "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": "Red Ciudadana",
+          "@type": "EducationalOrganization",
+          "name": "Escuela Red Ciudadana",
           "url": SITE_URL,
           "logo": `${SITE_URL}/logo/redciudadana.png`,
           "description":
             "Plataforma de aprendizaje e innovación que desarrolla habilidades digitales y acerca oportunidades a personas, emprendedores, instituciones y comunidades.",
+          "parentOrganization": {
+            "@type": "NGO",
+            "name": "Asociación Civil Red Ciudadana",
+            "url": SITE_URL,
+            "logo": `${SITE_URL}/logo/redciudadana.png`
+          },
           "sameAs": [
             "https://www.facebook.com/Redciudadanagt",
             "https://twitter.com/redxguate",

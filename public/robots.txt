@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /login
+Disallow: /mi-pasaporte
+Disallow: /perfil/
+Disallow: /asistencia/
+Disallow: /admin
+
+Sitemap: https://escuelaredciudadana.org.gt/sitemap.xml
