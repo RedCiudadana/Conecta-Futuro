@@ -27,7 +27,7 @@ export const enrollmentImportConfig: ImportConfig = {
       key: 'email',
       label: 'Email participante',
       required: true,
-      autoMatchPatterns: ['email', 'correo', 'correo electronico', 'correo electrónico'],
+      autoMatchPatterns: ['email', 'correo', 'correo electronico', 'studentemail', 'student email'],
       description: 'Correo electrónico del participante. Debe coincidir exactamente con un participante ya registrado en el sistema.',
       example: 'juana.perez@muni.gob.gt',
     },
@@ -35,7 +35,7 @@ export const enrollmentImportConfig: ImportConfig = {
       key: 'course_name',
       label: 'Nombre o slug del curso',
       required: true,
-      autoMatchPatterns: ['curso', 'course', 'nombre_curso', 'nombre del curso', 'course_name'],
+      autoMatchPatterns: ['curso', 'course', 'nombre_curso', 'nombre del curso', 'coursename', 'course name'],
       description: 'Nombre completo del curso tal como aparece en el sistema, o su slug (ej: excel-para-la-gestion-publica). Debe coincidir con un curso existente.',
       example: 'Excel para la Gestión Pública',
     },
@@ -43,7 +43,7 @@ export const enrollmentImportConfig: ImportConfig = {
       key: 'enrolled_at',
       label: 'Fecha inscripción',
       required: false,
-      autoMatchPatterns: ['fecha', 'date', 'enrolled', 'fecha_inscripcion', 'fecha inscripción'],
+      autoMatchPatterns: ['fecha', 'date', 'enrolled', 'fecha_inscripcion', 'fecha inscripción', 'enrolledat', 'enrolled at', 'completiondate', 'completion date'],
       description: 'Fecha en que el participante se inscribió. Se acepta formato YYYY-MM-DD (2026-01-15) o DD/MM/YYYY (15/01/2026). Si se omite, se usa la fecha actual.',
       example: '2026-01-15',
     },
@@ -70,7 +70,7 @@ export const certificateImportConfig: ImportConfig = {
       key: 'email',
       label: 'Email participante',
       required: true,
-      autoMatchPatterns: ['email', 'correo', 'correo electronico'],
+      autoMatchPatterns: ['email', 'correo', 'correo electronico', 'studentemail', 'student email'],
       description: 'Correo electrónico del participante. Debe coincidir exactamente con un participante ya registrado en el sistema.',
       example: 'juana.perez@muni.gob.gt',
     },
@@ -78,7 +78,7 @@ export const certificateImportConfig: ImportConfig = {
       key: 'course_name',
       label: 'Nombre o slug del curso',
       required: true,
-      autoMatchPatterns: ['curso', 'course', 'nombre_curso', 'nombre del curso'],
+      autoMatchPatterns: ['curso', 'course', 'nombre_curso', 'nombre del curso', 'coursename', 'course name'],
       description: 'Nombre completo del curso tal como aparece en el sistema, o su slug. Debe coincidir con un curso existente.',
       example: 'Introducción a Datos Abiertos',
     },
@@ -86,7 +86,7 @@ export const certificateImportConfig: ImportConfig = {
       key: 'certificate_code',
       label: 'Código certificado',
       required: true,
-      autoMatchPatterns: ['codigo', 'code', 'certificate', 'certificado', 'certificate_code', 'codigo_certificado'],
+      autoMatchPatterns: ['codigo', 'code', 'certificate', 'certificado', 'certificate_code', 'codigo_certificado', 'certificatecode', 'codigo certificado'],
       description: 'Código único del certificado. Si ya existe un certificado con el mismo código, se omite (no se duplica).',
       example: 'RC-2025AB3-XK42',
     },
@@ -94,7 +94,7 @@ export const certificateImportConfig: ImportConfig = {
       key: 'issued_at',
       label: 'Fecha emisión',
       required: false,
-      autoMatchPatterns: ['fecha', 'date', 'issued', 'emision', 'fecha_emision', 'issued_at'],
+      autoMatchPatterns: ['fecha', 'date', 'issued', 'emision', 'fecha_emision', 'issued_at', 'issuedate', 'issue date', 'fecha emision'],
       description: 'Fecha de emisión del certificado. Formato YYYY-MM-DD (2026-01-15) o DD/MM/YYYY (15/01/2026). Si se omite, se usa la fecha actual.',
       example: '2026-01-20',
     },
@@ -102,7 +102,7 @@ export const certificateImportConfig: ImportConfig = {
       key: 'verification_url',
       label: 'URL verificación',
       required: false,
-      autoMatchPatterns: ['url', 'verificacion', 'link', 'verification_url'],
+      autoMatchPatterns: ['url', 'verificacion', 'link', 'verification_url', 'certificateurl', 'certificate url'],
       description: 'Enlace para verificar el certificado en línea. Debe ser una URL completa (incluyendo https://). Si se omite, el certificado no tendrá enlace de verificación.',
       example: 'https://redciudadana.org/verify?code=RC-2025AB3-XK42',
     },
@@ -157,9 +157,13 @@ export function autoMapFields(headers: string[], config: ImportConfig): Record<s
   const mapping: Record<string, string> = {};
   for (const field of config.fields) {
     const normalizedPatterns = field.autoMatchPatterns.map(p => p.toLowerCase().replace(/[_\s]/g, ''));
+    const normalizedKey = field.key.toLowerCase().replace(/[_\s]/g, '');
     const match = headers.find(h => {
       const normalized = h.toLowerCase().replace(/[_\s]/g, '');
-      return normalizedPatterns.includes(normalized) || normalized === field.key.toLowerCase().replace(/[_\s]/g, '');
+      return normalizedPatterns.includes(normalized) ||
+        normalized === normalizedKey ||
+        normalizedPatterns.some(p => normalized.includes(p)) ||
+        normalized.includes(normalizedKey);
     });
     if (match) mapping[field.key] = match;
   }
