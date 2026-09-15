@@ -17,6 +17,8 @@ const AttendanceForm: React.FC = () => {
   const [expired, setExpired] = useState(false);
 
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [institution, setInstitution] = useState('');
   const [step, setStep] = useState<FormStep>('form');
   const [errorMsg, setErrorMsg] = useState('');
   const [participantName, setParticipantName] = useState('');
@@ -52,7 +54,12 @@ const AttendanceForm: React.FC = () => {
     setErrorMsg('');
 
     try {
-      const result = await publicRecordAttendance(token, email.trim());
+      const result = await publicRecordAttendance(
+        token,
+        email.trim(),
+        name.trim() || undefined,
+        institution.trim() || undefined
+      );
       setParticipantName(result.participantName || '');
       setStep(result.alreadyRecorded ? 'already' : 'success');
     } catch (err: any) {
@@ -65,6 +72,8 @@ const AttendanceForm: React.FC = () => {
     setStep('form');
     setErrorMsg('');
   };
+
+  const isFormValid = email.trim() && email.includes('@');
 
   if (loading) {
     return (
@@ -205,28 +214,74 @@ const AttendanceForm: React.FC = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tu correo electronico *
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="tu@correo.com"
-              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              autoFocus
-              disabled={step === 'submitting'}
-            />
-            <p className="text-xs text-gray-400 mt-2">
-              Usa el mismo correo con el que te registraste al curso.
-            </p>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 space-y-4">
+            {/* Email - required */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Correo electronico <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="tu@correo.com"
+                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow"
+                autoFocus
+                disabled={step === 'submitting'}
+              />
+              <p className="text-xs text-gray-400 mt-1.5">
+                Usa el mismo correo con el que te registraste al curso.
+              </p>
+            </div>
+
+            <hr className="border-gray-100" />
+
+            {/* Secondary validation fields */}
+            <div>
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">
+                Verificacion adicional
+              </p>
+              <div className="space-y-3">
+                {/* Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Nombre completo
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Tu nombre y apellido"
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow"
+                    disabled={step === 'submitting'}
+                  />
+                </div>
+
+                {/* Institution */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Institucion
+                  </label>
+                  <input
+                    type="text"
+                    value={institution}
+                    onChange={e => setInstitution(e.target.value)}
+                    placeholder="Nombre de tu institucion u organizacion"
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow"
+                    disabled={step === 'submitting'}
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 mt-2">
+                Estos campos son opcionales, pero ayudan a confirmar tu identidad.
+              </p>
+            </div>
           </div>
 
           <button
             type="submit"
-            disabled={!email.trim() || !email.includes('@') || step === 'submitting'}
+            disabled={!isFormValid || step === 'submitting'}
             className="w-full inline-flex items-center justify-center px-6 py-3.5 bg-primary-600 text-white rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-colors font-medium text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
           >
             {step === 'submitting' ? (

@@ -977,7 +977,9 @@ export async function toggleAttendanceLinkActive(linkId: string, isActive: boole
 
 export async function publicRecordAttendance(
   token: string,
-  email: string
+  email: string,
+  verifyName?: string,
+  verifyInstitution?: string
 ): Promise<{ success: boolean; alreadyRecorded: boolean; participantName?: string }> {
   const linkData = await getAttendanceLinkByToken(token);
   if (!linkData) throw new Error('Enlace no válido');
@@ -994,12 +996,28 @@ export async function publicRecordAttendance(
 
   const { data: participant } = await supabase
     .from('participants')
-    .select('id, first_name, last_name')
+    .select('id, first_name, last_name, institution')
     .eq('primary_email', normalizedEmail)
     .maybeSingle();
 
   if (!participant) {
     throw new Error('No se encontró un participante registrado con este correo electrónico. Asegúrate de usar el mismo correo con el que te inscribiste al curso.');
+  }
+
+  if (verifyName && verifyName.trim()) {
+    const dbFullName = `${participant.first_name} ${participant.last_name}`.toLowerCase();
+    const inputName = verifyName.trim().toLowerCase();
+    if (!dbFullName.includes(inputName) && !inputName.includes(dbFullName.split(' ')[0])) {
+      throw new Error('El nombre ingresado no coincide con el participante registrado con este correo.');
+    }
+  }
+
+  if (verifyInstitution && verifyInstitution.trim() && (participant as any).institution) {
+    const dbInst = ((participant as any).institution as string).toLowerCase();
+    const inputInst = verifyInstitution.trim().toLowerCase();
+    if (!dbInst.includes(inputInst) && !inputInst.includes(dbInst)) {
+      throw new Error('La institución ingresada no coincide con la registrada para este participante.');
+    }
   }
 
   const { data: enrollment } = await supabase
