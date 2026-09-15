@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Users, GraduationCap, Award, Globe, BookOpen, TrendingUp, BarChart3, Info, Clock } from 'lucide-react';
 import Seo from '../../components/Seo';
 import { SEO } from '../../config/seo';
-import { GUATEMALA_DEPARTMENTS } from '../../types/participants';
 import {
   getImpactMetrics,
   getDepartmentBreakdown,
