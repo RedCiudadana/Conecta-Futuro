@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, ChevronLeft, ChevronRight, RotateCcw  } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 
 import CourseCard from '../../components/courses/CourseCard';
 import { decapContentService } from '../../services/courseService';
@@ -13,8 +13,17 @@ import Fondo from '../../assets/slider/fondo.png';
 import Seo from '../../components/Seo';
 import { SEO } from '../../config/seo';
 
+function mapDBStatus(status: string): string {
+  switch (status) {
+    case 'open': return 'Por iniciar';
+    case 'in_progress': return 'En proceso';
+    case 'completed': return 'Finalizado';
+    case 'cancelled': return 'Cancelado';
+    default: return '';
+  }
+}
+
 export default function CourseCatalog() {
-  /* ---------- Estado ---------- */
   const [courses, setCourses] = useState<WithSlug<CourseFM>[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<Nivel | ''>('');
@@ -23,35 +32,51 @@ export default function CourseCatalog() {
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 6;
 
-  /* ---------- Cargar cursos ---------- */
   useEffect(() => {
     async function load() {
       const cmsCourses = await decapContentService.getCourses();
       let dbCourses: DBCourse[] = [];
       try { dbCourses = await getDBCourses(); } catch {}
 
+      const dbBySlug = new Map(dbCourses.map(d => [d.slug, d]));
+
+      const merged: WithSlug<CourseFM>[] = cmsCourses.map(cms => {
+        const db = dbBySlug.get(cms.slug);
+        if (!db) return cms;
+
+        return {
+          ...cms,
+          nivel: (db.level || cms.nivel) as any,
+          categoria: db.category || (cms as any).categoria || '',
+          estado: mapDBStatus(db.status) || (cms as any).estado || '',
+          duracion: db.duration || cms.duracion || '',
+          instructor: db.instructor_name || cms.instructor || '',
+          thumbnail: db.thumbnail_url || cms.thumbnail,
+          descripcion: db.description || cms.descripcion || '',
+        } as any;
+      });
+
       const cmsSlugs = new Set(cmsCourses.map(c => c.slug));
-      const dbOnly = dbCourses.filter(d => !cmsSlugs.has(d.slug) && (d.status === 'open' || d.status === 'in_progress'));
+      const dbOnly = dbCourses
+        .filter(d => !cmsSlugs.has(d.slug) && d.status !== 'draft' && d.status !== 'cancelled')
+        .map(d => ({
+          slug: d.slug,
+          title: d.title,
+          descripcion: d.description || '',
+          nivel: (d.level || '') as any,
+          duracion: d.duration || '',
+          instructor: d.instructor_name || '',
+          thumbnail: d.thumbnail_url || undefined,
+          categoria: d.category || '',
+          estado: mapDBStatus(d.status),
+          enlace_contenido: '',
+        } as any));
 
-      const mapped: WithSlug<CourseFM>[] = dbOnly.map(d => ({
-        slug: d.slug,
-        title: d.title,
-        descripcion: d.description || '',
-        nivel: (d.level || '') as any,
-        duracion: d.duration || '',
-        instructor: d.instructor_name || '',
-        thumbnail: d.thumbnail_url || undefined,
-        categoria: d.category || '',
-        estado: d.status === 'open' ? 'Por iniciar' : d.status === 'in_progress' ? 'En proceso' : '',
-        enlace_contenido: '',
-      } as any));
-
-      setCourses([...cmsCourses, ...mapped]);
+      setCourses([...merged, ...dbOnly]);
     }
     load();
   }, []);
 
-  /* ---------- Categorías dinámicas ---------- */
   const categories = useMemo(() => {
     const raw = courses
       .map(c => (c as any).categoria as string | undefined)
@@ -70,47 +95,43 @@ export default function CourseCatalog() {
     setCurrentPage(1);
   }, [searchTerm, selectedLevel, selectedCategory, selectedEstado]);
 
-  const estadoOrden = {
-    finalizado: 3,
+  const estadoOrden: Record<string, number> = {
     'en proceso': 1,
     'por iniciar': 2,
+    finalizado: 3,
+    cancelado: 4,
   };
 
   const ordenarCursos = (a: WithSlug<CourseFM>, b: WithSlug<CourseFM>) => {
     const estadoA = ((a as any).estado ?? '').trim().toLowerCase();
     const estadoB = ((b as any).estado ?? '').trim().toLowerCase();
-
-    return ((estadoOrden as Record<string, number>)[estadoA] ?? 99) -
-          ((estadoOrden as Record<string, number>)[estadoB] ?? 99);
+    return (estadoOrden[estadoA] ?? 99) - (estadoOrden[estadoB] ?? 99);
   };
-  
-  /* ---------- Filtrado ---------- */
+
   const filteredCourses = useMemo(() => {
     const term = searchTerm.toLowerCase();
     return courses
-    .filter(course => {
-      const title = (course.title ?? '').toLowerCase();
-      const rawDesc = (course as any).descripcion ?? (course as any).description ?? '';
-      const desc = rawDesc.toLowerCase();
-      const matchesSearch = title.includes(term) || desc.includes(term);
-      const matchesLevel = !selectedLevel || course.nivel === selectedLevel;
-      const courseCategory = (course as any).categoria ?? '';
-      const matchesCategory = !selectedCategory || courseCategory === selectedCategory;
-      const courseEstado = (course as any).estado ?? '';
-      const matchesEstado = !selectedEstado || courseEstado === selectedEstado;
-      
-      return matchesSearch && matchesLevel && matchesCategory && matchesEstado;
-    })
-    .sort(ordenarCursos);
+      .filter(course => {
+        const title = (course.title ?? '').toLowerCase();
+        const rawDesc = (course as any).descripcion ?? (course as any).description ?? '';
+        const desc = rawDesc.toLowerCase();
+        const matchesSearch = title.includes(term) || desc.includes(term);
+        const matchesLevel = !selectedLevel || course.nivel === selectedLevel;
+        const courseCategory = (course as any).categoria ?? '';
+        const matchesCategory = !selectedCategory || courseCategory === selectedCategory;
+        const courseEstado = (course as any).estado ?? '';
+        const matchesEstado = !selectedEstado || courseEstado === selectedEstado;
+        return matchesSearch && matchesLevel && matchesCategory && matchesEstado;
+      })
+      .sort(ordenarCursos);
   }, [courses, searchTerm, selectedLevel, selectedCategory, selectedEstado]);
-  
+
   const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
   const paginatedCourses = useMemo(() => {
     const startIndex = (currentPage - 1) * coursesPerPage;
     return filteredCourses.slice(startIndex, startIndex + coursesPerPage);
   }, [filteredCourses, currentPage]);
-    
-    /* ---------- UI ---------- */
+
   return (
     <div>
       <Seo {...SEO['/courses']} canonical="/courses" />
@@ -143,7 +164,6 @@ export default function CourseCatalog() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Filtros */}
         <div className="mb-8 flex flex-wrap md:flex-nowrap gap-y-2 gap-x-4">
-          {/* Nivel */}
           <select
             className="w-full md:w-[30%] px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             value={selectedLevel}
@@ -151,13 +171,10 @@ export default function CourseCatalog() {
           >
             <option value="">Todos los niveles</option>
             {levels.map(level => (
-              <option key={level} value={level}>
-                {level}
-              </option>
+              <option key={level} value={level}>{level}</option>
             ))}
           </select>
 
-          {/* Categoría */}
           <select
             className="w-full md:w-[30%] px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             value={selectedCategory}
@@ -165,13 +182,10 @@ export default function CourseCatalog() {
           >
             <option value="">Todas las categorías</option>
             {categories.map(categoria => (
-              <option key={categoria} value={categoria}>
-                {categoria}
-              </option>
+              <option key={categoria} value={categoria}>{categoria}</option>
             ))}
           </select>
 
-          {/* Estado */}
           <select
             className="w-full md:w-[30%] px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             value={selectedEstado}
@@ -179,13 +193,10 @@ export default function CourseCatalog() {
           >
             <option value="">Todos los estados</option>
             {estados.map(estado => (
-              <option key={estado} value={estado}>
-                {estado}
-              </option>
+              <option key={estado} value={estado}>{estado}</option>
             ))}
           </select>
 
-          {/* Botón Reset */}
           <button
             onClick={() => {
               setSelectedLevel('');
@@ -211,7 +222,6 @@ export default function CourseCatalog() {
         </div>
 
         <div className="mt-8 flex justify-center items-center space-x-2">
-          {/* Flecha izquierda */}
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
@@ -224,7 +234,6 @@ export default function CourseCatalog() {
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          {/* Números de página */}
           {Array.from({ length: totalPages }, (_, index) => index + 1).map(page => (
             <button
               key={page}
@@ -239,7 +248,6 @@ export default function CourseCatalog() {
             </button>
           ))}
 
-          {/* Flecha derecha */}
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
@@ -256,8 +264,7 @@ export default function CourseCatalog() {
         {filteredCourses.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
-              No se encontraron cursos que coincidan con los criterios de
-              búsqueda.
+              No se encontraron cursos que coincidan con los criterios de búsqueda.
             </p>
           </div>
         )}

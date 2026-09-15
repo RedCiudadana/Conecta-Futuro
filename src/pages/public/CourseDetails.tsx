@@ -79,36 +79,51 @@ const CourseDetails: React.FC = () => {
       setLoading(true);
 
       const cmsData = (await decapContentService.getCourseBySlug(slug!)) as CourseFull | null;
+      let dbCourse: Awaited<ReturnType<typeof getCourseBySlug>> = null;
+      try { dbCourse = await getCourseBySlug(slug!); } catch {}
 
       if (cmsData) {
-        setCourse(cmsData);
+        const merged = { ...cmsData } as any;
+        if (dbCourse) {
+          if (dbCourse.level) merged.nivel = dbCourse.level;
+          if (dbCourse.category) merged.categoria = dbCourse.category;
+          if (dbCourse.description) merged.descripcion = dbCourse.description;
+          if (dbCourse.duration) merged.duracion = dbCourse.duration;
+          if (dbCourse.thumbnail_url) merged.thumbnail = dbCourse.thumbnail_url;
+          if (dbCourse.instructor_name) {
+            merged.instructor = merged.instructor && typeof merged.instructor === 'object'
+              ? { ...merged.instructor, title: dbCourse.instructor_name }
+              : { title: dbCourse.instructor_name, foto: '', descripcion: '', especializacion: '' };
+          }
+          const statusMap: Record<string, string> = { open: 'Por iniciar', in_progress: 'En proceso', completed: 'Finalizado', cancelled: 'Cancelado', draft: 'Borrador' };
+          merged.estado = statusMap[dbCourse.status] || merged.estado || '';
+        }
+        setCourse(merged);
+
         const all = await decapContentService.getCourses();
         const rel = all.filter(
           c => c.slug !== cmsData.slug &&
             (c.nivel === cmsData.nivel || (c as any).category === (cmsData as any).category),
         );
         setRelated(rel.slice(0, 3));
-      } else {
-        try {
-          const dbCourse = await getCourseBySlug(slug!);
-          if (dbCourse) {
-            const mapped: CourseFull = {
-              slug: dbCourse.slug,
-              title: dbCourse.title,
-              descripcion: dbCourse.description || '',
-              nivel: (dbCourse.level || '') as any,
-              duracion: dbCourse.duration || '',
-              instructor: dbCourse.instructor_name
-                ? { title: dbCourse.instructor_name, foto: '', descripcion: '', especializacion: '' } as any
-                : null,
-              thumbnail: dbCourse.thumbnail_url || undefined,
-              enlace_contenido: '',
-              estado: dbCourse.status === 'open' ? 'Por iniciar' : dbCourse.status === 'in_progress' ? 'En proceso' : 'Finalizado',
-              sesiones: [],
-            } as any;
-            setCourse(mapped);
-          }
-        } catch {}
+      } else if (dbCourse) {
+        const statusMap: Record<string, string> = { open: 'Por iniciar', in_progress: 'En proceso', completed: 'Finalizado', cancelled: 'Cancelado', draft: 'Borrador' };
+        const mapped: CourseFull = {
+          slug: dbCourse.slug,
+          title: dbCourse.title,
+          descripcion: dbCourse.description || '',
+          nivel: (dbCourse.level || '') as any,
+          duracion: dbCourse.duration || '',
+          instructor: dbCourse.instructor_name
+            ? { title: dbCourse.instructor_name, foto: '', descripcion: '', especializacion: '' } as any
+            : null,
+          thumbnail: dbCourse.thumbnail_url || undefined,
+          enlace_contenido: '',
+          estado: statusMap[dbCourse.status] || '',
+          categoria: dbCourse.category || '',
+          sesiones: [],
+        } as any;
+        setCourse(mapped);
       }
 
       setLoading(false);
