@@ -371,6 +371,15 @@ export async function updateCourse(
   return data;
 }
 
+export async function deleteCourse(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('courses')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
 export async function getCourseSessions(courseId: string): Promise<CourseSession[]> {
   const { data, error } = await supabase
     .from('course_sessions')

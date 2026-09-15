@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   BookOpen, Plus, Save, RefreshCw, CheckCircle, AlertCircle,
-  X, Pencil, Eye, EyeOff, ChevronDown, ChevronUp,
+  X, Pencil, Trash2, ChevronDown, ChevronUp,
 } from 'lucide-react';
-import { getCourses, createCourse, updateCourse, syncCMSCoursesToDB } from '../../services/participantService';
+import { getCourses, createCourse, updateCourse, deleteCourse, syncCMSCoursesToDB } from '../../services/participantService';
 import type { SyncResult } from '../../services/participantService';
 import { decapContentService } from '../../services/courseService';
 import type { Course, CourseProgram, CourseModality, CourseStatus } from '../../types/participants';
@@ -69,6 +69,8 @@ const CourseManagementPage: React.FC = () => {
   const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<CourseStatus | ''>('');
+  const [deleteConfirm, setDeleteConfirm] = useState<Course | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     loadCourses();
@@ -170,6 +172,17 @@ const CourseManagementPage: React.FC = () => {
       await updateCourse(course.id, { status: nextStatus[course.status] });
       await loadCourses();
     } catch {}
+  }
+
+  async function handleDelete() {
+    if (!deleteConfirm) return;
+    setDeleting(true);
+    try {
+      await deleteCourse(deleteConfirm.id);
+      await loadCourses();
+      setDeleteConfirm(null);
+    } catch {}
+    setDeleting(false);
   }
 
   const filteredCourses = statusFilter
@@ -452,6 +465,10 @@ const CourseManagementPage: React.FC = () => {
                       className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700">
                       <Pencil className="h-4 w-4" />
                     </button>
+                    <button onClick={() => setDeleteConfirm(c)} title="Eliminar"
+                      className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                     <button onClick={() => setExpandedId(expandedId === c.id ? null : c.id)} title="Detalles"
                       className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700">
                       {expandedId === c.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -482,6 +499,39 @@ const CourseManagementPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-red-100 rounded-full">
+                <Trash2 className="h-5 w-5 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Eliminar curso</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">
+              Estas a punto de eliminar el curso:
+            </p>
+            <p className="text-sm font-semibold text-gray-900 mb-4 bg-gray-50 rounded-lg px-3 py-2">
+              {deleteConfirm.title}
+            </p>
+            <p className="text-sm text-red-600 mb-6">
+              Esta accion tambien eliminara las inscripciones, asistencias y certificados asociados. No se puede deshacer.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button onClick={() => setDeleteConfirm(null)} disabled={deleting}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                Cancelar
+              </button>
+              <button onClick={handleDelete} disabled={deleting}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50">
+                {deleting ? 'Eliminando...' : 'Eliminar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
