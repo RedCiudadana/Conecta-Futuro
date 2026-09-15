@@ -392,6 +392,39 @@ export async function getCourseSessions(courseId: string): Promise<CourseSession
   return data ?? [];
 }
 
+export async function createCourseSession(
+  session: { course_id: string; title: string; session_date?: string | null; start_time?: string | null; end_time?: string | null; location?: string | null; session_number?: number | null }
+): Promise<CourseSession> {
+  const { data, error } = await supabase
+    .from('course_sessions')
+    .insert(session)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function updateCourseSession(
+  id: string,
+  updates: Partial<{ title: string; session_date: string | null; start_time: string | null; end_time: string | null; location: string | null; session_number: number | null }>
+): Promise<CourseSession> {
+  const { data, error } = await supabase
+    .from('course_sessions')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteCourseSession(id: string): Promise<void> {
+  const { error } = await supabase.from('course_sessions').delete().eq('id', id);
+  if (error) throw error;
+}
+
 // --- Enrollments ---
 
 export async function getParticipantEnrollments(participantId: string): Promise<Enrollment[]> {

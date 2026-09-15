@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ClipboardCheck, Upload, Check, X as XIcon, Clock, AlertTriangle, Link2, Copy, CheckCheck, ExternalLink, ToggleLeft, ToggleRight } from 'lucide-react';
+import {
+  ClipboardCheck, Upload, Check, X as XIcon, Clock, AlertTriangle,
+  Link2, Copy, CheckCheck, ExternalLink, ToggleLeft, ToggleRight,
+  Plus, Calendar, MapPin, Trash2, Pencil, Save,
+} from 'lucide-react';
 import {
   getCourses,
   getCourseSessions,
@@ -8,9 +12,25 @@ import {
   recordAttendance,
   getOrCreateAttendanceLink,
   toggleAttendanceLinkActive,
+  createCourseSession,
+  updateCourseSession,
+  deleteCourseSession,
 } from '../../services/participantService';
 import type { Course, CourseSession, Attendance, Enrollment, AttendanceStatus, AttendanceFormLink } from '../../types/participants';
 import AttendanceImportModal from '../../components/ui/admin/AttendanceImportModal';
+
+interface SessionForm {
+  title: string;
+  session_date: string;
+  start_time: string;
+  end_time: string;
+  location: string;
+  session_number: string;
+}
+
+const emptySessionForm: SessionForm = {
+  title: '', session_date: '', start_time: '', end_time: '', location: '', session_number: '',
+};
 
 const AttendancePage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -26,6 +46,14 @@ const AttendancePage: React.FC = () => {
   const [linkLoading, setLinkLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  // Session management
+  const [showSessionForm, setShowSessionForm] = useState(false);
+  const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
+  const [sessionForm, setSessionForm] = useState<SessionForm>({ ...emptySessionForm });
+  const [savingSession, setSavingSession] = useState(false);
+  const [deleteSessionConfirm, setDeleteSessionConfirm] = useState<CourseSession | null>(null);
+  const [deletingSession, setDeletingSession] = useState(false);
+
   useEffect(() => {
     getCourses().then(c => { setCourses(c); setLoading(false); }).catch(() => setLoading(false));
   }, []);
@@ -35,10 +63,10 @@ const AttendancePage: React.FC = () => {
     setSelectedSession('');
     setAttendanceRecords([]);
     setFormLink(null);
-    if (!courseId) { setSessions([]); return; }
-    const s = await getCourseSessions(courseId);
+    setShowSessionForm(false);
+    if (!courseId) { setSessions([]); setEnrolledParticipants([]); return; }
+    const [s, e] = await Promise.all([getCourseSessions(courseId), getCourseEnrollments(courseId)]);
     setSessions(s);
-    const e = await getCourseEnrollments(courseId);
     setEnrolledParticipants(e);
   };
 
@@ -50,6 +78,12 @@ const AttendancePage: React.FC = () => {
     const a = await getSessionAttendance(sessionId);
     setAttendanceRecords(a);
     setLoading(false);
+  };
+
+  const refreshSessions = async () => {
+    if (!selectedCourse) return;
+    const s = await getCourseSessions(selectedCourse);
+    setSessions(s);
   };
 
   const refreshAttendance = async () => {
@@ -68,6 +102,71 @@ const AttendancePage: React.FC = () => {
     return attendanceRecords.find(a => a.participant_id === participantId);
   };
 
+  // Session CRUD
+  const openCreateSession = () => {
+    setEditingSessionId(null);
+    setSessionForm({
+      ...emptySessionForm,
+      session_number: String(sessions.length + 1),
+    });
+    setShowSessionForm(true);
+  };
+
+  const openEditSession = (s: CourseSession) => {
+    setEditingSessionId(s.id);
+    setSessionForm({
+      title: s.title,
+      session_date: s.session_date || '',
+      start_time: s.start_time || '',
+      end_time: s.end_time || '',
+      location: s.location || '',
+      session_number: s.session_number?.toString() || '',
+    });
+    setShowSessionForm(true);
+  };
+
+  const handleSaveSession = async () => {
+    if (!sessionForm.title.trim() || !selectedCourse) return;
+    setSavingSession(true);
+    try {
+      const payload = {
+        title: sessionForm.title.trim(),
+        session_date: sessionForm.session_date || null,
+        start_time: sessionForm.start_time || null,
+        end_time: sessionForm.end_time || null,
+        location: sessionForm.location || null,
+        session_number: sessionForm.session_number ? parseInt(sessionForm.session_number) : null,
+      };
+
+      if (editingSessionId) {
+        await updateCourseSession(editingSessionId, payload);
+      } else {
+        await createCourseSession({ ...payload, course_id: selectedCourse });
+      }
+      await refreshSessions();
+      setShowSessionForm(false);
+      setEditingSessionId(null);
+      setSessionForm({ ...emptySessionForm });
+    } catch {}
+    setSavingSession(false);
+  };
+
+  const handleDeleteSession = async () => {
+    if (!deleteSessionConfirm) return;
+    setDeletingSession(true);
+    try {
+      await deleteCourseSession(deleteSessionConfirm.id);
+      if (selectedSession === deleteSessionConfirm.id) {
+        setSelectedSession('');
+        setAttendanceRecords([]);
+      }
+      await refreshSessions();
+      setDeleteSessionConfirm(null);
+    } catch {}
+    setDeletingSession(false);
+  };
+
+  // Attendance link
   const handleGenerateLink = async () => {
     if (!selectedSession) return;
     setLinkLoading(true);
@@ -82,16 +181,13 @@ const AttendancePage: React.FC = () => {
 
   const getPublicUrl = () => {
     if (!formLink) return '';
-    const base = window.location.origin;
-    return `${base}/asistencia/${formLink.token}`;
+    return `${window.location.origin}/asistencia/${formLink.token}`;
   };
 
   const handleCopyLink = async () => {
     const url = getPublicUrl();
     try {
       await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
       const input = document.createElement('input');
       input.value = url;
@@ -99,9 +195,9 @@ const AttendancePage: React.FC = () => {
       input.select();
       document.execCommand('copy');
       document.body.removeChild(input);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleToggleLink = async () => {
@@ -109,9 +205,7 @@ const AttendancePage: React.FC = () => {
     try {
       await toggleAttendanceLinkActive(formLink.id, !formLink.is_active);
       setFormLink({ ...formLink, is_active: !formLink.is_active });
-    } catch (err) {
-      console.error('Error toggling link:', err);
-    }
+    } catch {}
   };
 
   const statusButtons: { status: AttendanceStatus; label: string; icon: React.ReactNode; activeColor: string }[] = [
@@ -147,21 +241,105 @@ const AttendancePage: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Sesion</label>
-              <select
-                value={selectedSession}
-                onChange={e => handleSessionChange(e.target.value)}
-                disabled={!selectedCourse}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:bg-gray-50"
-              >
-                <option value="">Seleccionar sesion...</option>
-                {sessions.map(s => (
-                  <option key={s.id} value={s.id}>
-                    {s.title}{s.session_date ? ` (${new Date(s.session_date).toLocaleDateString('es-GT')})` : ''}
-                  </option>
-                ))}
-              </select>
+              <div className="flex gap-2">
+                <select
+                  value={selectedSession}
+                  onChange={e => handleSessionChange(e.target.value)}
+                  disabled={!selectedCourse}
+                  className="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:bg-gray-50"
+                >
+                  <option value="">Seleccionar sesion...</option>
+                  {sessions.map(s => (
+                    <option key={s.id} value={s.id}>
+                      {s.title}{s.session_date ? ` (${new Date(s.session_date).toLocaleDateString('es-GT')})` : ''}
+                    </option>
+                  ))}
+                </select>
+                {selectedCourse && (
+                  <button
+                    onClick={openCreateSession}
+                    title="Crear sesion"
+                    className="inline-flex items-center justify-center px-3 py-2.5 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors flex-shrink-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
+
+          {/* Session list when course selected */}
+          {selectedCourse && sessions.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-medium text-gray-700">Sesiones del curso ({sessions.length})</h3>
+              </div>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {sessions.map(s => (
+                  <div
+                    key={s.id}
+                    className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm cursor-pointer transition-colors ${
+                      selectedSession === s.id ? 'bg-sky-50 border border-sky-200' : 'bg-gray-50 hover:bg-gray-100 border border-transparent'
+                    }`}
+                    onClick={() => handleSessionChange(s.id)}
+                  >
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-200 text-gray-600 text-xs font-medium flex-shrink-0">
+                        {s.session_number || '?'}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="font-medium text-gray-900 truncate">{s.title}</p>
+                        <div className="flex items-center gap-3 text-xs text-gray-500">
+                          {s.session_date && (
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {new Date(s.session_date).toLocaleDateString('es-GT')}
+                            </span>
+                          )}
+                          {s.location && (
+                            <span className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              {s.location}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 flex-shrink-0 ml-2">
+                      <button
+                        onClick={e => { e.stopPropagation(); openEditSession(s); }}
+                        className="p-1.5 rounded-md hover:bg-gray-200 text-gray-400 hover:text-gray-700 transition-colors"
+                        title="Editar sesion"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={e => { e.stopPropagation(); setDeleteSessionConfirm(s); }}
+                        className="p-1.5 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors"
+                        title="Eliminar sesion"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {selectedCourse && sessions.length === 0 && !loading && (
+            <div className="mt-4 pt-4 border-t border-gray-100 text-center py-6">
+              <Calendar className="h-8 w-8 text-gray-300 mx-auto mb-2" />
+              <p className="text-sm text-gray-500 mb-3">Este curso no tiene sesiones</p>
+              <button
+                onClick={openCreateSession}
+                className="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 transition-colors"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Crear primera sesion
+              </button>
+            </div>
+          )}
 
           {selectedSession && (
             <div className="mt-4 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
@@ -302,6 +480,143 @@ const AttendancePage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Session Form Modal */}
+      {showSessionForm && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <h2 className="text-lg font-semibold text-gray-900">
+                {editingSessionId ? 'Editar Sesion' : 'Nueva Sesion'}
+              </h2>
+              <button onClick={() => { setShowSessionForm(false); setEditingSessionId(null); }}
+                className="p-1 rounded-lg hover:bg-gray-100">
+                <XIcon className="h-5 w-5 text-gray-400" />
+              </button>
+            </div>
+
+            <div className="px-6 py-5 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Titulo de la sesion *</label>
+                <input
+                  value={sessionForm.title}
+                  onChange={e => setSessionForm(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Ej: Sesion 1 - Introduccion"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  autoFocus
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+                  <input
+                    type="date"
+                    value={sessionForm.session_date}
+                    onChange={e => setSessionForm(prev => ({ ...prev, session_date: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Numero</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={sessionForm.session_number}
+                    onChange={e => setSessionForm(prev => ({ ...prev, session_number: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Hora inicio</label>
+                  <input
+                    type="time"
+                    value={sessionForm.start_time}
+                    onChange={e => setSessionForm(prev => ({ ...prev, start_time: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Hora fin</label>
+                  <input
+                    type="time"
+                    value={sessionForm.end_time}
+                    onChange={e => setSessionForm(prev => ({ ...prev, end_time: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Ubicacion</label>
+                <input
+                  value={sessionForm.location}
+                  onChange={e => setSessionForm(prev => ({ ...prev, location: e.target.value }))}
+                  placeholder="Ej: Salon Principal, Zoom, etc."
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-100">
+              <button
+                onClick={() => { setShowSessionForm(false); setEditingSessionId(null); }}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSaveSession}
+                disabled={!sessionForm.title.trim() || savingSession}
+                className="inline-flex items-center px-5 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 disabled:opacity-50"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {savingSession ? 'Guardando...' : 'Guardar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Session Confirm */}
+      {deleteSessionConfirm && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-red-100 rounded-full">
+                <Trash2 className="h-5 w-5 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Eliminar sesion</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Estas a punto de eliminar:</p>
+            <p className="text-sm font-semibold text-gray-900 mb-4 bg-gray-50 rounded-lg px-3 py-2">
+              {deleteSessionConfirm.title}
+            </p>
+            <p className="text-sm text-red-600 mb-6">
+              Esto eliminara tambien los registros de asistencia asociados a esta sesion.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteSessionConfirm(null)}
+                disabled={deletingSession}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleDeleteSession}
+                disabled={deletingSession}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+              >
+                {deletingSession ? 'Eliminando...' : 'Eliminar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showImportModal && selectedSession && (
         <AttendanceImportModal
