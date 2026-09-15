@@ -851,5 +851,36 @@ export async function publicRegisterForCourse(
     created_by: 'public',
   });
 
+  sendRegistrationEmail({
+    to: email,
+    firstName: registration.first_name.trim(),
+    courseTitle: cmsTitle || courseSlug,
+    courseSlug,
+  });
+
   return { success: true, alreadyEnrolled: false, participantId, enrollmentId: enrollment.id };
+}
+
+async function sendRegistrationEmail(payload: {
+  to: string;
+  firstName: string;
+  courseTitle: string;
+  courseSlug: string;
+}) {
+  try {
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-registration-email`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      console.error('Email send failed:', res.status);
+    }
+  } catch (err) {
+    console.error('Email send error:', err);
+  }
 }
