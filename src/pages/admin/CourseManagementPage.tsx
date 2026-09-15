@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   BookOpen, Plus, Save, RefreshCw, CheckCircle, AlertCircle,
-  X, Pencil, Trash2, ChevronDown, ChevronUp,
+  X, Pencil, Trash2, ChevronDown, ChevronUp, Layers,
 } from 'lucide-react';
 import { getCourses, createCourse, updateCourse, deleteCourse, syncCMSCoursesToDB } from '../../services/participantService';
 import type { SyncResult } from '../../services/participantService';
@@ -71,6 +71,13 @@ const CourseManagementPage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<CourseStatus | ''>('');
   const [deleteConfirm, setDeleteConfirm] = useState<Course | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkField, setBulkField] = useState<'status' | 'category' | 'level' | ''>('');
+  const [bulkValue, setBulkValue] = useState('');
+  const [bulkApplying, setBulkApplying] = useState(false);
+  const [bulkResult, setBulkResult] = useState<{ success: number; errors: number } | null>(null);
 
   useEffect(() => {
     loadCourses();
@@ -181,13 +188,98 @@ const CourseManagementPage: React.FC = () => {
       await deleteCourse(deleteConfirm.id);
       await loadCourses();
       setDeleteConfirm(null);
+      setSelectedIds(prev => {
+        const next = new Set(prev);
+        next.delete(deleteConfirm.id);
+        return next;
+      });
     } catch {}
     setDeleting(false);
   }
 
+  // Bulk selection helpers
   const filteredCourses = statusFilter
     ? courses.filter(c => c.status === statusFilter)
     : courses;
+
+  const allFilteredSelected = filteredCourses.length > 0 && filteredCourses.every(c => selectedIds.has(c.id));
+
+  function toggleSelectAll() {
+    if (allFilteredSelected) {
+      setSelectedIds(prev => {
+        const next = new Set(prev);
+        filteredCourses.forEach(c => next.delete(c.id));
+        return next;
+      });
+    } else {
+      setSelectedIds(prev => {
+        const next = new Set(prev);
+        filteredCourses.forEach(c => next.add(c.id));
+        return next;
+      });
+    }
+  }
+
+  function toggleSelect(id: string) {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function clearSelection() {
+    setSelectedIds(new Set());
+    setBulkField('');
+    setBulkValue('');
+    setBulkResult(null);
+  }
+
+  async function applyBulkChange() {
+    if (!bulkField || !bulkValue || selectedIds.size === 0) return;
+    setBulkApplying(true);
+    setBulkResult(null);
+
+    let success = 0;
+    let errors = 0;
+
+    const updates: Record<string, unknown> = { [bulkField]: bulkValue };
+
+    const promises = Array.from(selectedIds).map(async (id) => {
+      try {
+        await updateCourse(id, updates as any);
+        success++;
+      } catch {
+        errors++;
+      }
+    });
+
+    await Promise.all(promises);
+    setBulkResult({ success, errors });
+    setBulkApplying(false);
+    await loadCourses();
+    setTimeout(() => setBulkResult(null), 4000);
+  }
+
+  const bulkFieldOptions = [
+    { value: 'status', label: 'Estado' },
+    { value: 'category', label: 'Categoria' },
+    { value: 'level', label: 'Nivel' },
+  ] as const;
+
+  function getBulkValueOptions(): { value: string; label: string }[] {
+    switch (bulkField) {
+      case 'status':
+        return Object.entries(statusLabels).map(([v, l]) => ({ value: v, label: l }));
+      case 'category':
+        return CATEGORY_OPTIONS.map(c => ({ value: c, label: c }));
+      case 'level':
+        return LEVEL_OPTIONS.map(l => ({ value: l, label: l }));
+      default:
+        return [];
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -256,7 +348,6 @@ const CourseManagementPage: React.FC = () => {
             </div>
 
             <div className="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
-              {/* Title & Slug */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Titulo *</label>
@@ -271,7 +362,6 @@ const CourseManagementPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
                 <textarea value={form.description} rows={3}
@@ -279,7 +369,6 @@ const CourseManagementPage: React.FC = () => {
                   className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
               </div>
 
-              {/* Level, Duration, Category, Instructor */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nivel</label>
@@ -311,7 +400,6 @@ const CourseManagementPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Thumbnail URL */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Imagen (URL o ruta)</label>
                 <input value={form.thumbnail_url}
@@ -320,7 +408,6 @@ const CourseManagementPage: React.FC = () => {
                   className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
               </div>
 
-              {/* Program, Modality, Status */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Programa</label>
@@ -350,7 +437,6 @@ const CourseManagementPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Dates & Capacity */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Fecha Inicio</label>
@@ -372,7 +458,6 @@ const CourseManagementPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Featured toggle */}
               <label className="flex items-center gap-3 cursor-pointer">
                 <input type="checkbox" checked={form.is_featured}
                   onChange={e => setForm(prev => ({ ...prev, is_featured: e.target.checked }))}
@@ -390,6 +475,77 @@ const CourseManagementPage: React.FC = () => {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* Bulk Action Bar */}
+      {selectedIds.size > 0 && (
+        <div className="bg-sky-50 border border-sky-200 rounded-xl p-4 flex flex-wrap items-center gap-3 animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <Layers className="h-5 w-5 text-sky-600" />
+            <span className="text-sm font-semibold text-sky-900">
+              {selectedIds.size} curso{selectedIds.size > 1 ? 's' : ''} seleccionado{selectedIds.size > 1 ? 's' : ''}
+            </span>
+          </div>
+
+          <div className="h-5 w-px bg-sky-200 hidden sm:block" />
+
+          <div className="flex items-center gap-2 flex-wrap flex-1">
+            <select
+              value={bulkField}
+              onChange={e => { setBulkField(e.target.value as any); setBulkValue(''); }}
+              className="border border-sky-200 bg-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+            >
+              <option value="">Cambiar campo...</option>
+              {bulkFieldOptions.map(o => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+
+            {bulkField && (
+              <select
+                value={bulkValue}
+                onChange={e => setBulkValue(e.target.value)}
+                className="border border-sky-200 bg-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+              >
+                <option value="">Nuevo valor...</option>
+                {getBulkValueOptions().map(o => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            )}
+
+            {bulkField && bulkValue && (
+              <button
+                onClick={applyBulkChange}
+                disabled={bulkApplying}
+                className="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 disabled:opacity-50 transition-colors"
+              >
+                {bulkApplying ? (
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                )}
+                {bulkApplying ? 'Aplicando...' : 'Aplicar'}
+              </button>
+            )}
+
+            {bulkResult && (
+              <span className={`text-xs font-medium px-3 py-1.5 rounded-full ${
+                bulkResult.errors > 0
+                  ? 'bg-amber-100 text-amber-700'
+                  : 'bg-emerald-100 text-emerald-700'
+              }`}>
+                {bulkResult.success} actualizado{bulkResult.success !== 1 ? 's' : ''}
+                {bulkResult.errors > 0 && `, ${bulkResult.errors} error${bulkResult.errors !== 1 ? 'es' : ''}`}
+              </span>
+            )}
+          </div>
+
+          <button onClick={clearSelection}
+            className="p-1.5 rounded-lg hover:bg-sky-100 text-sky-600 transition-colors" title="Deseleccionar todo">
+            <X className="h-4 w-4" />
+          </button>
         </div>
       )}
 
@@ -421,82 +577,104 @@ const CourseManagementPage: React.FC = () => {
             <p className="text-gray-500">No hay cursos registrados</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-50">
-            {filteredCourses.map(c => (
-              <div key={c.id} className="hover:bg-gray-50/50 transition-colors">
-                {/* Row */}
-                <div className="flex items-center gap-4 px-6 py-4">
-                  {/* Thumbnail */}
-                  <div className="hidden sm:block w-16 h-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
-                    {c.thumbnail_url ? (
-                      <img src={c.thumbnail_url} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <BookOpen className="h-5 w-5 text-gray-300" />
-                      </div>
-                    )}
-                  </div>
+          <>
+            {/* Select all header */}
+            <div className="flex items-center gap-3 px-6 py-3 bg-gray-50 border-b border-gray-100">
+              <input
+                type="checkbox"
+                checked={allFilteredSelected}
+                onChange={toggleSelectAll}
+                className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+              />
+              <span className="text-xs font-medium text-gray-500">
+                {allFilteredSelected ? 'Deseleccionar todos' : 'Seleccionar todos'}
+              </span>
+            </div>
 
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{c.title}</p>
-                    <p className="text-xs text-gray-400 font-mono truncate">{c.slug}</p>
-                  </div>
+            <div className="divide-y divide-gray-50">
+              {filteredCourses.map(c => (
+                <div key={c.id} className={`transition-colors ${selectedIds.has(c.id) ? 'bg-sky-50/50' : 'hover:bg-gray-50/50'}`}>
+                  <div className="flex items-center gap-4 px-6 py-4">
+                    {/* Checkbox */}
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.has(c.id)}
+                      onChange={() => toggleSelect(c.id)}
+                      className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500 flex-shrink-0"
+                    />
 
-                  {/* Category */}
-                  <div className="hidden lg:block text-sm text-gray-500 w-36 truncate">
-                    {c.category || '—'}
-                  </div>
+                    {/* Thumbnail */}
+                    <div className="hidden sm:block w-16 h-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
+                      {c.thumbnail_url ? (
+                        <img src={c.thumbnail_url} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <BookOpen className="h-5 w-5 text-gray-300" />
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Level */}
-                  <div className="hidden md:block text-sm text-gray-500 w-24">
-                    {c.level || '—'}
-                  </div>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">{c.title}</p>
+                      <p className="text-xs text-gray-400 font-mono truncate">{c.slug}</p>
+                    </div>
 
-                  {/* Status */}
-                  <button onClick={() => toggleStatus(c)} title="Cambiar estado"
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer hover:opacity-70 transition-opacity ${statusColors[c.status]}`}>
-                    {statusLabels[c.status]}
-                  </button>
+                    {/* Category */}
+                    <div className="hidden lg:block text-sm text-gray-500 w-36 truncate">
+                      {c.category || '—'}
+                    </div>
 
-                  {/* Actions */}
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => openEdit(c)} title="Editar"
-                      className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700">
-                      <Pencil className="h-4 w-4" />
+                    {/* Level */}
+                    <div className="hidden md:block text-sm text-gray-500 w-24">
+                      {c.level || '—'}
+                    </div>
+
+                    {/* Status */}
+                    <button onClick={() => toggleStatus(c)} title="Cambiar estado"
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer hover:opacity-70 transition-opacity ${statusColors[c.status]}`}>
+                      {statusLabels[c.status]}
                     </button>
-                    <button onClick={() => setDeleteConfirm(c)} title="Eliminar"
-                      className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600">
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                    <button onClick={() => setExpandedId(expandedId === c.id ? null : c.id)} title="Detalles"
-                      className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700">
-                      {expandedId === c.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                    </button>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => openEdit(c)} title="Editar"
+                        className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700">
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button onClick={() => setDeleteConfirm(c)} title="Eliminar"
+                        className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      <button onClick={() => setExpandedId(expandedId === c.id ? null : c.id)} title="Detalles"
+                        className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700">
+                        {expandedId === c.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
+
+                  {/* Expanded Details */}
+                  {expandedId === c.id && (
+                    <div className="px-6 pb-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-gray-500 bg-gray-50/50 ml-10">
+                      <div><span className="font-medium text-gray-700">Programa:</span> {c.program ? PROGRAM_LABELS[c.program] : '—'}</div>
+                      <div><span className="font-medium text-gray-700">Modalidad:</span> {c.modality || '—'}</div>
+                      <div><span className="font-medium text-gray-700">Duracion:</span> {c.duration || '—'}</div>
+                      <div><span className="font-medium text-gray-700">Cupos:</span> {c.max_capacity ?? 'Sin limite'}</div>
+                      <div><span className="font-medium text-gray-700">Instructor:</span> {c.instructor_name || '—'}</div>
+                      <div><span className="font-medium text-gray-700">Inicio:</span> {c.start_date ? new Date(c.start_date).toLocaleDateString('es-GT') : '—'}</div>
+                      <div><span className="font-medium text-gray-700">Fin:</span> {c.end_date ? new Date(c.end_date).toLocaleDateString('es-GT') : '—'}</div>
+                      <div><span className="font-medium text-gray-700">Destacado:</span> {c.is_featured ? 'Si' : 'No'}</div>
+                      {c.description && (
+                        <div className="col-span-2 sm:col-span-4">
+                          <span className="font-medium text-gray-700">Descripcion:</span> {c.description}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-
-                {/* Expanded Details */}
-                {expandedId === c.id && (
-                  <div className="px-6 pb-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-gray-500 bg-gray-50/50">
-                    <div><span className="font-medium text-gray-700">Programa:</span> {c.program ? PROGRAM_LABELS[c.program] : '—'}</div>
-                    <div><span className="font-medium text-gray-700">Modalidad:</span> {c.modality || '—'}</div>
-                    <div><span className="font-medium text-gray-700">Duracion:</span> {c.duration || '—'}</div>
-                    <div><span className="font-medium text-gray-700">Cupos:</span> {c.max_capacity ?? 'Sin limite'}</div>
-                    <div><span className="font-medium text-gray-700">Instructor:</span> {c.instructor_name || '—'}</div>
-                    <div><span className="font-medium text-gray-700">Inicio:</span> {c.start_date ? new Date(c.start_date).toLocaleDateString('es-GT') : '—'}</div>
-                    <div><span className="font-medium text-gray-700">Fin:</span> {c.end_date ? new Date(c.end_date).toLocaleDateString('es-GT') : '—'}</div>
-                    <div><span className="font-medium text-gray-700">Destacado:</span> {c.is_featured ? 'Si' : 'No'}</div>
-                    {c.description && (
-                      <div className="col-span-2 sm:col-span-4">
-                        <span className="font-medium text-gray-700">Descripcion:</span> {c.description}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 
