@@ -8,7 +8,7 @@ import {
 
 export interface SeoProps {
   title: string;
-  description: string;
+  description?: string;
   image?: string;
   canonical?: string;
   type?: 'website' | 'article';
@@ -26,7 +26,7 @@ const Seo: React.FC<SeoProps> = ({
   const ogImage = image
     ? (image.startsWith('http') ? image : `${SITE_URL}${image.startsWith('/') ? '' : '/'}${image}`)
     : DEFAULT_OG_IMAGE;
-  const cleanDescription = description.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  const cleanDescription = (description ?? '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
   const canonicalUrl = canonical
     ? `${SITE_URL}${canonical.startsWith('/') ? canonical : `/${canonical}`}`
     : SITE_URL;
