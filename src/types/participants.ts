@@ -54,6 +54,8 @@ export interface Participant {
   last_activity_at: string | null;
   status: ParticipantStatus;
   notes: string | null;
+  public_profile_enabled: boolean;
+  profile_slug: string | null;
   created_at: string;
   updated_at: string;
   organization?: Organization | null;

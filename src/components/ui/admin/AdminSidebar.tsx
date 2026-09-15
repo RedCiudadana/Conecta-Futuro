@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { X, LayoutDashboard, Users, GraduationCap, ClipboardCheck, BookOpen, Database, ArrowLeft, Star, Award } from 'lucide-react';
+import { X, LayoutDashboard, Users, GraduationCap, ClipboardCheck, BookOpen, Database, ArrowLeft, Star, Award, BarChart3 } from 'lucide-react';
 
 interface AdminSidebarProps {
   onClose: () => void;
@@ -15,6 +15,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
     { name: 'Cursos', href: '/dashboard/cursos', icon: BookOpen },
     { name: 'Habilidades', href: '/dashboard/habilidades', icon: Star },
     { name: 'Insignias', href: '/dashboard/insignias', icon: Award },
+    { name: 'Analíticas', href: '/dashboard/analiticas', icon: BarChart3 },
     { name: 'Base de Datos', href: '/dashboard/base-de-datos', icon: Database },
   ];
 

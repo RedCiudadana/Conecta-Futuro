@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Award, BookOpen, Clock, Star, GraduationCap, ChevronRight,
-  Shield, Route, Lock, LogIn, Sparkles, TrendingUp,
+  Shield, Route, Lock, LogIn, Sparkles, TrendingUp, Share2, Check, Link as LinkIcon,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../config/supabase';
@@ -21,9 +21,10 @@ import {
   BADGE_COLORS,
 } from '../../services/badgeService';
 import type { ParticipantBadge, PathProgress, CourseRecommendation } from '../../services/badgeService';
+import { togglePublicProfile } from '../../services/publicProfileService';
 
 interface PassportData {
-  participant: { id: string; first_name: string; last_name: string; primary_email: string; created_at: string } | null;
+  participant: { id: string; first_name: string; last_name: string; primary_email: string; created_at: string; public_profile_enabled?: boolean; profile_slug?: string | null } | null;
   enrollments: Enrollment[];
   certificates: Certificate[];
   skills: { skill: { id: string; name: string; category: string }; level: SkillLevel; sources: any[] }[];
@@ -37,6 +38,10 @@ const DigitalPassport: React.FC = () => {
   const { user } = useAuth();
   const [data, setData] = useState<PassportData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileEnabled, setProfileEnabled] = useState(false);
+  const [profileSlug, setProfileSlug] = useState<string | null>(null);
+  const [shareToggeling, setShareToggeling] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!user?.email) { setLoading(false); return; }
@@ -48,7 +53,7 @@ const DigitalPassport: React.FC = () => {
     try {
       const { data: participant } = await supabase
         .from('participants')
-        .select('id, first_name, last_name, primary_email, created_at')
+        .select('id, first_name, last_name, primary_email, created_at, public_profile_enabled, profile_slug')
         .eq('primary_email', email.toLowerCase().trim())
         .maybeSingle();
 
@@ -67,6 +72,8 @@ const DigitalPassport: React.FC = () => {
       checkAndAwardSkillBadges(participant.id).catch(() => {});
       checkMilestoneBadges(participant.id).catch(() => {});
 
+      setProfileEnabled(participant.public_profile_enabled ?? false);
+      setProfileSlug(participant.profile_slug ?? null);
       setData({
         participant,
         enrollments: enrollRes.data ?? [],
@@ -150,6 +157,42 @@ const DigitalPassport: React.FC = () => {
             <StatCard icon={<Star className="h-5 w-5" />} value={skills.length} label="Habilidades" />
             <StatCard icon={<Sparkles className="h-5 w-5" />} value={badges.length} label="Insignias" />
           </div>
+        </div>
+      </div>
+
+      {/* Public Profile Toggle */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-sky-50 rounded-xl border border-sky-100">
+        <div>
+          <p className="text-sm font-semibold text-sky-900">Perfil público</p>
+          <p className="text-xs text-sky-600 mt-0.5">Comparte tus logros en LinkedIn o tu currículum</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {profileEnabled && profileSlug && (
+            <button
+              onClick={() => {
+                const url = `${window.location.origin}/perfil/${profileSlug}`;
+                navigator.clipboard.writeText(url).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+              }}
+              className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-white border border-sky-200 text-sky-700 hover:bg-sky-100 transition-colors"
+            >
+              {copied ? <><Check className="h-3.5 w-3.5 mr-1" />Copiado</> : <><LinkIcon className="h-3.5 w-3.5 mr-1" />Copiar enlace</>}
+            </button>
+          )}
+          <button
+            disabled={shareToggeling}
+            onClick={async () => {
+              if (!participant) return;
+              setShareToggeling(true);
+              const newVal = !profileEnabled;
+              const slug = await togglePublicProfile(participant.id, newVal);
+              setProfileEnabled(newVal);
+              if (slug) setProfileSlug(slug);
+              setShareToggeling(false);
+            }}
+            className={`relative w-11 h-6 rounded-full transition-colors ${profileEnabled ? 'bg-sky-500' : 'bg-gray-300'} ${shareToggeling ? 'opacity-60' : ''}`}
+          >
+            <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${profileEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+          </button>
         </div>
       </div>
 

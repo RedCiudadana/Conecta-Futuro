@@ -3,7 +3,9 @@ import {
   Database, Download, Upload, Trash2, AlertTriangle, CheckCircle,
   Loader2, Users, FileText, ShieldAlert, RefreshCw,
 } from 'lucide-react';
+import { GraduationCap, Award, ClipboardCheck } from 'lucide-react';
 import CSVImportModal from '../../components/ui/admin/CSVImportModal';
+import DataImportModal from '../../components/ui/admin/DataImportModal';
 import {
   getAllParticipantsForExport,
   deleteAllParticipants,
@@ -11,12 +13,15 @@ import {
 } from '../../services/participantService';
 import { STATUS_LABELS } from '../../types/participants';
 import type { Participant } from '../../types/participants';
+import { enrollmentImportConfig, certificateImportConfig, attendanceImportConfig } from '../../utils/csvImportConfigs';
+import type { ImportConfig } from '../../utils/csvImportConfigs';
 
 const DatabaseManagementPage: React.FC = () => {
   const [totalCount, setTotalCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   const [showImportModal, setShowImportModal] = useState(false);
+  const [dataImportConfig, setDataImportConfig] = useState<ImportConfig | null>(null);
 
   const [exporting, setExporting] = useState(false);
   const [exportDone, setExportDone] = useState(false);
@@ -138,28 +143,67 @@ const DatabaseManagementPage: React.FC = () => {
           </div>
         )}
 
-        {/* Actions Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          {/* Import */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-xl bg-sky-100 flex items-center justify-center">
-                <Upload className="h-5 w-5 text-sky-600" />
-              </div>
-              <h2 className="text-lg font-semibold text-gray-900">Importar</h2>
-            </div>
-            <p className="text-sm text-gray-500 mb-6 flex-1">
-              Carga participantes desde un archivo CSV. Compatible con exportaciones de Google Forms, Google Sheets y Excel. Los duplicados se detectan automaticamente.
-            </p>
+        {/* Import Section */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">Importar datos</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Participants Import */}
             <button
               onClick={() => { setShowImportModal(true); setFeedback(null); }}
-              className="w-full inline-flex items-center justify-center px-4 py-3 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors font-medium text-sm shadow-sm"
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col items-start gap-3 hover:border-sky-200 hover:shadow-md transition-all text-left group"
             >
-              <Upload className="h-4 w-4 mr-2" />
-              Importar CSV
+              <div className="h-10 w-10 rounded-xl bg-sky-100 flex items-center justify-center group-hover:bg-sky-200 transition-colors">
+                <Users className="h-5 w-5 text-sky-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Participantes</p>
+                <p className="text-xs text-gray-500 mt-0.5">Nombre, email, DPI, departamento</p>
+              </div>
+            </button>
+            {/* Enrollments Import */}
+            <button
+              onClick={() => { setDataImportConfig(enrollmentImportConfig); setFeedback(null); }}
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col items-start gap-3 hover:border-teal-200 hover:shadow-md transition-all text-left group"
+            >
+              <div className="h-10 w-10 rounded-xl bg-teal-100 flex items-center justify-center group-hover:bg-teal-200 transition-colors">
+                <GraduationCap className="h-5 w-5 text-teal-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Inscripciones</p>
+                <p className="text-xs text-gray-500 mt-0.5">Email, curso, fecha, estado</p>
+              </div>
+            </button>
+            {/* Certificates Import */}
+            <button
+              onClick={() => { setDataImportConfig(certificateImportConfig); setFeedback(null); }}
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col items-start gap-3 hover:border-amber-200 hover:shadow-md transition-all text-left group"
+            >
+              <div className="h-10 w-10 rounded-xl bg-amber-100 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+                <Award className="h-5 w-5 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Certificados</p>
+                <p className="text-xs text-gray-500 mt-0.5">Email, curso, código, fecha</p>
+              </div>
+            </button>
+            {/* Attendance Import */}
+            <button
+              onClick={() => { setDataImportConfig(attendanceImportConfig); setFeedback(null); }}
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col items-start gap-3 hover:border-blue-200 hover:shadow-md transition-all text-left group"
+            >
+              <div className="h-10 w-10 rounded-xl bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                <ClipboardCheck className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Asistencia</p>
+                <p className="text-xs text-gray-500 mt-0.5">Email, sesión, fecha, estado</p>
+              </div>
             </button>
           </div>
+        </div>
 
+        {/* Actions Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Export */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col">
             <div className="flex items-center gap-3 mb-3">
@@ -224,10 +268,17 @@ const DatabaseManagementPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Import Modal */}
+      {/* Import Modals */}
       {showImportModal && (
         <CSVImportModal
           onClose={() => setShowImportModal(false)}
+          onComplete={handleImportComplete}
+        />
+      )}
+      {dataImportConfig && (
+        <DataImportModal
+          config={dataImportConfig}
+          onClose={() => setDataImportConfig(null)}
           onComplete={handleImportComplete}
         />
       )}
