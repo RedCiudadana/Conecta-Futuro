@@ -26,7 +26,6 @@ import CourseCatalog from './pages/public/CourseCatalog';
 import CourseDetails from './pages/public/CourseDetails';
 import CourseSession from './pages/public/CourseSession';
 import CourseSessions from './pages/public/CourseSessions';
-import LearningPaths from './pages/public/LearningPaths';
 import AboutUs from './pages/public/AboutUs';
 import Contact from './pages/public/Contact';
 import Documentation from './pages/public/Documentation';
@@ -41,6 +40,8 @@ import VerifyCertificate from './pages/public/VerifyCertificate';
 import Tutoriales from './pages/public/Tutoriales';
 import DirectorioIA from './pages/public/DirectorioIA';
 import BancoPrompts from './pages/public/BancoPrompts';
+import RutasAprendizaje from './pages/public/RutasAprendizaje';
+import RutaDetalle from './pages/public/RutaDetalle';
 import CourseRegistration from './pages/public/CourseRegistration';
 import AttendanceForm from './pages/public/AttendanceForm';
 
@@ -61,7 +62,9 @@ export const routes = [
       { path: 'courses', element: <CourseCatalog /> },
       { path: 'course-sessions', element: <CourseSessions /> },
       { path: 'asistencia/:token', element: <AttendanceForm /> },
-      { path: 'learning-paths', element: <LearningPaths /> },
+      { path: 'learning-paths', element: <RutasAprendizaje /> },
+      { path: 'rutas', element: <RutasAprendizaje /> },
+      { path: 'rutas/:slug', element: <RutaDetalle /> },
       { path: 'primeros-pasos-digitales', element: <PrimerosPasosDigitales /> },
       { path: 'digitaliza-tu-pyme', element: <DigitalizaTuPyme /> },
       { path: 'diagnostico-digital', element: <DiagnosticoDigital /> },

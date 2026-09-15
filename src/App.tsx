@@ -6,7 +6,8 @@ import CourseCatalog from './pages/public/CourseCatalog';
 import CourseDetails from './pages/public/CourseDetails';
 import CourseSession from './pages/public/CourseSession';
 import CourseSessions from './pages/public/CourseSessions';
-import LearningPaths from './pages/public/LearningPaths';
+import RutasAprendizaje from './pages/public/RutasAprendizaje';
+import RutaDetalle from './pages/public/RutaDetalle';
 import MobileApi from './pages/public/MobileApi';
 import AboutUs from './pages/public/AboutUs';
 import Contact from './pages/public/Contact';
@@ -40,7 +41,9 @@ function App() {
           <Route index element={<LandingPage />} />
           <Route path="courses" element={<CourseCatalog />} />
           <Route path="course-sessions" element={<CourseSessions />} />
-          <Route path="learning-paths" element={<LearningPaths />} />
+          <Route path="learning-paths" element={<RutasAprendizaje />} />
+          <Route path="rutas" element={<RutasAprendizaje />} />
+          <Route path="rutas/:slug" element={<RutaDetalle />} />
           <Route path="mobile-api" element={<MobileApi />} />
           <Route path="primeros-pasos-digitales" element={<PrimerosPasosDigitales />} />
           <Route path="digitaliza-tu-pyme" element={<DigitalizaTuPyme />} />
