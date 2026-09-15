@@ -22,6 +22,7 @@ import DatabaseManagementPage from './pages/admin/DatabaseManagementPage';
 import SkillsManagementPage from './pages/admin/SkillsManagementPage';
 import BadgesManagementPage from './pages/admin/BadgesManagementPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
+import CertificateEligibilityPage from './pages/admin/CertificateEligibilityPage';
 
 // Public pages
 import LandingPage from './pages/public/LandingPage';
@@ -164,6 +165,7 @@ export const routes = [
       { path: 'cursos', element: <CourseManagementPage /> },
       { path: 'habilidades', element: <SkillsManagementPage /> },
       { path: 'insignias', element: <BadgesManagementPage /> },
+      { path: 'certificados', element: <CertificateEligibilityPage /> },
       { path: 'analiticas', element: <AnalyticsPage /> },
       { path: 'base-de-datos', element: <DatabaseManagementPage /> },
     ],

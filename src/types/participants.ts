@@ -98,6 +98,7 @@ export interface Course {
   end_date: string | null;
   max_capacity: number | null;
   status: CourseStatus;
+  drive_folder_url: string | null;
   created_at: string;
   updated_at: string;
 }
