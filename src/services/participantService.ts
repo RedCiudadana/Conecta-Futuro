@@ -650,13 +650,14 @@ export interface PublicRegistrationData {
   last_name: string;
   primary_email: string;
   phone?: string;
-  dpi?: string;
   gender?: string;
   department?: string;
   municipality?: string;
-  organization_name?: string;
+  sector?: string;
+  institution?: string;
   digital_skill_level?: string;
   how_found_us?: string;
+  consent?: boolean;
 }
 
 export interface PublicRegistrationResult {
@@ -783,10 +784,11 @@ export async function publicRegisterForCourse(
         last_name: registration.last_name.trim(),
         primary_email: email,
         phone: registration.phone || null,
-        dpi: registration.dpi || null,
         gender: registration.gender || null,
         department: registration.department || null,
         municipality: registration.municipality || null,
+        sector: registration.sector || null,
+        institution: registration.institution || null,
         digital_skill_level: registration.digital_skill_level || null,
         how_found_us: registration.how_found_us || null,
         status: 'registered' as const,

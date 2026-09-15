@@ -23,13 +23,14 @@ const CourseRegistration: React.FC = () => {
     last_name: '',
     primary_email: '',
     phone: '',
-    dpi: '',
     gender: '',
     department: '',
     municipality: '',
-    organization_name: '',
+    sector: '',
+    institution: '',
     digital_skill_level: '',
     how_found_us: '',
+    consent: false,
   });
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const CourseRegistration: React.FC = () => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const isValid = form.first_name.trim() && form.last_name.trim() && form.primary_email.trim() && form.primary_email.includes('@');
+  const isValid = form.first_name.trim() && form.last_name.trim() && form.primary_email.trim() && form.primary_email.includes('@') && form.consent;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -227,16 +228,6 @@ const CourseRegistration: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">DPI</label>
-              <input
-                type="text"
-                value={form.dpi}
-                onChange={e => updateField('dpi', e.target.value)}
-                placeholder="Número de DPI"
-                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Género</label>
               <select
                 value={form.gender}
@@ -286,12 +277,26 @@ const CourseRegistration: React.FC = () => {
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Información adicional</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Organización o empresa</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Sector</label>
+              <select
+                value={form.sector}
+                onChange={e => updateField('sector', e.target.value)}
+                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="">Seleccionar...</option>
+                <option value="publico">Público</option>
+                <option value="privado">Privado</option>
+                <option value="sociedad_civil">Sociedad Civil</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Institución, Organización o Empresa</label>
               <input
                 type="text"
-                value={form.organization_name}
-                onChange={e => updateField('organization_name', e.target.value)}
-                placeholder="Nombre de tu organización"
+                value={form.institution}
+                onChange={e => updateField('institution', e.target.value)}
+                placeholder="Nombre de tu institución u organización"
                 className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
@@ -354,9 +359,19 @@ const CourseRegistration: React.FC = () => {
           </Link>
         </div>
 
-        <p className="text-xs text-gray-400 text-center">
-          Al registrarte aceptas que tus datos sean utilizados para la gestión del curso por Red Ciudadana.
-        </p>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.consent || false}
+              onChange={e => setForm(prev => ({ ...prev, consent: e.target.checked }))}
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 flex-shrink-0"
+            />
+            <span className="text-sm text-gray-600 leading-relaxed">
+              Acepto los términos y condiciones. Autorizo que Red Ciudadana me pueda contactar para compartirme material o información relacionada a transformación digital y relacionada a los cursos.
+            </span>
+          </label>
+        </div>
       </form>
     </div>
   );
