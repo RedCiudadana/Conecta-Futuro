@@ -64,6 +64,11 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/conecta-futuro" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  Conecta Futuro 2025
+                </Link>
+              </li>
+              <li>
                 <Link to="/community" className="text-gray-400 hover:text-white transition-colors duration-200">
                   Comunidad
                 </Link>
