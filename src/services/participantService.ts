@@ -1117,6 +1117,11 @@ export async function issueCertificate(
     code,
   });
 
+  try {
+    const { awardCourseSkillsToParticipant } = await import('./skillService');
+    await awardCourseSkillsToParticipant(participantId, courseId);
+  } catch {}
+
   return data;
 }
 

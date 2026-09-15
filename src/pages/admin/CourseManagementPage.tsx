@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
   BookOpen, Plus, Save, RefreshCw, CheckCircle, AlertCircle,
-  X, Pencil, Trash2, ChevronDown, ChevronUp, Layers,
+  X, Pencil, Trash2, ChevronDown, ChevronUp, Layers, Star,
 } from 'lucide-react';
 import { getCourses, createCourse, updateCourse, deleteCourse, syncCMSCoursesToDB } from '../../services/participantService';
 import type { SyncResult } from '../../services/participantService';
 import { decapContentService } from '../../services/courseService';
-import type { Course, CourseProgram, CourseModality, CourseStatus } from '../../types/participants';
+import {
+  getSkills, getCourseSkills, addSkillToCourse, removeSkillFromCourse,
+  SKILL_LEVEL_LABELS, SKILL_LEVEL_COLORS,
+} from '../../services/skillService';
+import type { Course, CourseProgram, CourseModality, CourseStatus, Skill, CourseSkill, SkillLevel } from '../../types/participants';
 import { PROGRAM_LABELS } from '../../types/participants';
 
 const statusLabels: Record<CourseStatus, string> = {
@@ -655,20 +659,23 @@ const CourseManagementPage: React.FC = () => {
 
                   {/* Expanded Details */}
                   {expandedId === c.id && (
-                    <div className="px-6 pb-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-gray-500 bg-gray-50/50 ml-10">
-                      <div><span className="font-medium text-gray-700">Programa:</span> {c.program ? PROGRAM_LABELS[c.program] : '—'}</div>
-                      <div><span className="font-medium text-gray-700">Modalidad:</span> {c.modality || '—'}</div>
-                      <div><span className="font-medium text-gray-700">Duracion:</span> {c.duration || '—'}</div>
-                      <div><span className="font-medium text-gray-700">Cupos:</span> {c.max_capacity ?? 'Sin limite'}</div>
-                      <div><span className="font-medium text-gray-700">Instructor:</span> {c.instructor_name || '—'}</div>
-                      <div><span className="font-medium text-gray-700">Inicio:</span> {c.start_date ? new Date(c.start_date).toLocaleDateString('es-GT') : '—'}</div>
-                      <div><span className="font-medium text-gray-700">Fin:</span> {c.end_date ? new Date(c.end_date).toLocaleDateString('es-GT') : '—'}</div>
-                      <div><span className="font-medium text-gray-700">Destacado:</span> {c.is_featured ? 'Si' : 'No'}</div>
-                      {c.description && (
-                        <div className="col-span-2 sm:col-span-4">
-                          <span className="font-medium text-gray-700">Descripcion:</span> {c.description}
-                        </div>
-                      )}
+                    <div className="px-6 pb-4 bg-gray-50/50 ml-10 space-y-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-gray-500">
+                        <div><span className="font-medium text-gray-700">Programa:</span> {c.program ? PROGRAM_LABELS[c.program] : '—'}</div>
+                        <div><span className="font-medium text-gray-700">Modalidad:</span> {c.modality || '—'}</div>
+                        <div><span className="font-medium text-gray-700">Duracion:</span> {c.duration || '—'}</div>
+                        <div><span className="font-medium text-gray-700">Cupos:</span> {c.max_capacity ?? 'Sin limite'}</div>
+                        <div><span className="font-medium text-gray-700">Instructor:</span> {c.instructor_name || '—'}</div>
+                        <div><span className="font-medium text-gray-700">Inicio:</span> {c.start_date ? new Date(c.start_date).toLocaleDateString('es-GT') : '—'}</div>
+                        <div><span className="font-medium text-gray-700">Fin:</span> {c.end_date ? new Date(c.end_date).toLocaleDateString('es-GT') : '—'}</div>
+                        <div><span className="font-medium text-gray-700">Destacado:</span> {c.is_featured ? 'Si' : 'No'}</div>
+                        {c.description && (
+                          <div className="col-span-2 sm:col-span-4">
+                            <span className="font-medium text-gray-700">Descripcion:</span> {c.description}
+                          </div>
+                        )}
+                      </div>
+                      <CourseSkillsPanel courseId={c.id} />
                     </div>
                   )}
                 </div>
@@ -710,6 +717,102 @@ const CourseManagementPage: React.FC = () => {
           </div>
         </div>
       )}
+    </div>
+  );
+};
+
+const CourseSkillsPanel: React.FC<{ courseId: string }> = ({ courseId }) => {
+  const [courseSkills, setCourseSkills] = useState<CourseSkill[]>([]);
+  const [allSkills, setAllSkills] = useState<Skill[]>([]);
+  const [loadingSkills, setLoadingSkills] = useState(true);
+  const [addingSkill, setAddingSkill] = useState(false);
+  const [selectedSkillId, setSelectedSkillId] = useState('');
+  const [selectedLevel, setSelectedLevel] = useState<SkillLevel>('basico');
+
+  useEffect(() => {
+    Promise.all([getCourseSkills(courseId), getSkills()])
+      .then(([cs, all]) => { setCourseSkills(cs); setAllSkills(all); })
+      .catch(() => {})
+      .finally(() => setLoadingSkills(false));
+  }, [courseId]);
+
+  const availableSkills = allSkills.filter(s => !courseSkills.some(cs => cs.skill_id === s.id));
+
+  async function handleAdd() {
+    if (!selectedSkillId) return;
+    setAddingSkill(true);
+    try {
+      await addSkillToCourse(courseId, selectedSkillId, selectedLevel);
+      const updated = await getCourseSkills(courseId);
+      setCourseSkills(updated);
+      setSelectedSkillId('');
+      setSelectedLevel('basico');
+    } catch {}
+    setAddingSkill(false);
+  }
+
+  async function handleRemove(skillId: string) {
+    try {
+      await removeSkillFromCourse(courseId, skillId);
+      setCourseSkills(prev => prev.filter(cs => cs.skill_id !== skillId));
+    } catch {}
+  }
+
+  if (loadingSkills) {
+    return <div className="py-2"><div className="animate-spin rounded-full h-4 w-4 border-t-2 border-sky-600" /></div>;
+  }
+
+  return (
+    <div className="border-t border-gray-200 pt-3">
+      <div className="flex items-center gap-2 mb-2">
+        <Star className="h-4 w-4 text-amber-500" />
+        <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Habilidades del curso</span>
+      </div>
+
+      {courseSkills.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {courseSkills.map(cs => (
+            <span key={cs.id} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white border border-gray-200 text-xs">
+              <span className="font-medium text-gray-900">{(cs.skill as any)?.name || 'Skill'}</span>
+              <span className={`px-1 py-0.5 rounded text-[10px] font-medium ${SKILL_LEVEL_COLORS[cs.level as SkillLevel]}`}>
+                {SKILL_LEVEL_LABELS[cs.level as SkillLevel]}
+              </span>
+              <button onClick={() => handleRemove(cs.skill_id)}
+                className="ml-0.5 text-gray-400 hover:text-red-500 transition-colors">
+                <X className="h-3 w-3" />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center gap-2 flex-wrap">
+        <select value={selectedSkillId} onChange={e => setSelectedSkillId(e.target.value)}
+          className="border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 max-w-[200px]">
+          <option value="">Agregar habilidad...</option>
+          {availableSkills.map(s => (
+            <option key={s.id} value={s.id}>{s.name} ({s.category})</option>
+          ))}
+        </select>
+        {selectedSkillId && (
+          <>
+            <select value={selectedLevel} onChange={e => setSelectedLevel(e.target.value as SkillLevel)}
+              className="border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500">
+              {Object.entries(SKILL_LEVEL_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+            </select>
+            <button onClick={handleAdd} disabled={addingSkill}
+              className="inline-flex items-center px-2.5 py-1.5 bg-sky-600 text-white rounded-lg text-xs font-medium hover:bg-sky-700 disabled:opacity-50">
+              <Plus className="h-3 w-3 mr-1" />{addingSkill ? '...' : 'Agregar'}
+            </button>
+          </>
+        )}
+        {availableSkills.length === 0 && courseSkills.length > 0 && (
+          <span className="text-xs text-gray-400">Todas las habilidades asignadas</span>
+        )}
+        {allSkills.length === 0 && (
+          <span className="text-xs text-gray-400">No hay habilidades creadas aún</span>
+        )}
+      </div>
     </div>
   );
 };

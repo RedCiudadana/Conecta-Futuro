@@ -19,6 +19,7 @@ import EnrollmentPage from './pages/admin/EnrollmentPage';
 import AttendancePage from './pages/admin/AttendancePage';
 import CourseManagementPage from './pages/admin/CourseManagementPage';
 import DatabaseManagementPage from './pages/admin/DatabaseManagementPage';
+import SkillsManagementPage from './pages/admin/SkillsManagementPage';
 
 // Public pages
 import LandingPage from './pages/public/LandingPage';
@@ -44,6 +45,7 @@ import RutasAprendizaje from './pages/public/RutasAprendizaje';
 import RutaDetalle from './pages/public/RutaDetalle';
 import CourseRegistration from './pages/public/CourseRegistration';
 import AttendanceForm from './pages/public/AttendanceForm';
+import DigitalPassport from './pages/public/DigitalPassport';
 
 const RootLayout: React.FC = () => (
   <AuthProvider>
@@ -117,6 +119,7 @@ export const routes = [
           return { course: data };
         },
       },
+      { path: 'mi-pasaporte', element: <DigitalPassport /> },
       { path: 'about', element: <AboutUs /> },
       { path: 'contact', element: <Contact /> },
       { path: 'documentation', element: <Documentation /> },
@@ -155,6 +158,7 @@ export const routes = [
       { path: 'inscripciones', element: <EnrollmentPage /> },
       { path: 'asistencia', element: <AttendancePage /> },
       { path: 'cursos', element: <CourseManagementPage /> },
+      { path: 'habilidades', element: <SkillsManagementPage /> },
       { path: 'base-de-datos', element: <DatabaseManagementPage /> },
     ],
   },
