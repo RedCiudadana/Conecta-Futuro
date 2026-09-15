@@ -6,16 +6,19 @@ import Redes4 from '../../assets/contacto/REDES-46.png';
 import Slider from '../../assets/slider/contact.png';
 import Seo from '../../components/Seo';
 import { SEO } from '../../config/seo';
+import { supabase } from '../../config/supabase';
+import { Mail, User, Tag, MessageSquare, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    affair: '',
+    subject: '',
     message: '',
   });
-
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -25,35 +28,54 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const formUrl =
-      'https://docs.google.com/forms/d/e/1FAIpQLSe2DNIWZVQugZ_G-rQCzO9EKpWr66ZXe8rbBBHtKYduKIeXyQ/formResponse';
-
-    const formBody = new URLSearchParams();
-    formBody.append('entry.1064235632', formData.name);
-    formBody.append('entry.1330832081', formData.email);
-    formBody.append('entry.1233483376', formData.affair);
-    formBody.append('entry.608682247', formData.message);
+    setSubmitting(true);
+    setError(null);
 
     try {
-      await fetch(formUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formBody.toString(),
-      });
+      const { error: insertError } = await supabase
+        .from('contact_messages')
+        .insert({
+          name: formData.name.trim(),
+          email: formData.email.trim().toLowerCase(),
+          subject: formData.subject.trim(),
+          message: formData.message.trim(),
+        });
+
+      if (insertError) throw insertError;
+
       setSubmitted(true);
-    } catch (error) {
-      console.error('Error al enviar:', error);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      setError('Ocurrió un error al enviar tu mensaje. Por favor, inténtalo de nuevo.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   if (submitted) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-20">
-        <h2 className="text-2xl font-semibold text-green-600">✅ Su mensaje ha sido enviado</h2>
+      <div>
+        <Seo {...SEO['/contact']} canonical="/contact" />
+        <div className="from-primary-900 to-primary-800 text-white" style={{ backgroundImage: `url(${Slider})` }}>
+          <div className="container mx-auto px-4 py-16">
+            <div className="max-w-3xl mx-auto text-center py-16">
+              <h1 className="text-4xl font-bold mb-4">Contáctanos</h1>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 py-20 text-center">
+          <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="h-8 w-8 text-emerald-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">¡Mensaje enviado!</h2>
+          <p className="text-gray-500 mb-8">Gracias por escribirnos. Nuestro equipo se pondrá en contacto contigo pronto.</p>
+          <button
+            onClick={() => setSubmitted(false)}
+            className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-xl font-medium hover:bg-primary-700 transition-colors"
+          >
+            Enviar otro mensaje
+          </button>
+        </div>
       </div>
     );
   }
@@ -69,9 +91,8 @@ const Contact: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Columna izquierda */}
           <div>
@@ -99,70 +120,101 @@ const Contact: React.FC = () => {
 
           {/* Columna derecha - Formulario */}
           <div>
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-5" onSubmit={handleSubmit}>
               <div>
-                <input
-                  placeholder='Nombre completo'
-                  type="text"
-                  name="name"
-                  id="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm p-4"
-                  style={{ border: '1px solid #000' }}
-                />
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Nombre completo
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    required
+                    placeholder="Tu nombre"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                  />
+                </div>
               </div>
 
               <div>
-                <input
-                  placeholder='Correo electrónico'
-                  type="email"
-                  name="email"
-                  id="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm p-4"
-                  style={{ border: '1px solid #000' }}
-                />
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Correo electrónico
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    placeholder="tu.correo@ejemplo.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                  />
+                </div>
               </div>
 
               <div>
-                <input
-                  placeholder='Asunto / Motivo de Contacto'
-                  type="text"
-                  name="affair"
-                  id="affair"
-                  value={formData.affair}
-                  onChange={handleChange}
-                  className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm p-4"
-                  style={{ border: '1px solid #000' }}
-                />
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Asunto
+                </label>
+                <div className="relative">
+                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="text"
+                    name="subject"
+                    id="subject"
+                    required
+                    placeholder="Motivo de contacto"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                  />
+                </div>
               </div>
 
               <div>
-                <textarea
-                  placeholder='Escribe tu mensaje aquí...'
-                  id="message"
-                  name="message"
-                  rows={4}
-                  required
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm p-4"
-                  style={{ border: '1px solid #000' }}
-                />
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Mensaje
+                </label>
+                <div className="relative">
+                  <MessageSquare className="absolute left-3 top-4 h-5 w-5 text-gray-400" />
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    required
+                    placeholder="Escribe tu mensaje aquí..."
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none"
+                  />
+                </div>
               </div>
 
-              <div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                >
-                  Envíanos un mensaje
-                </button>
-              </div>
+              {error && (
+                <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                  <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full flex justify-center items-center gap-2 py-3 px-4 bg-primary-600 text-white rounded-xl font-medium hover:bg-primary-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {submitting ? (
+                  <><Loader2 className="h-5 w-5 animate-spin" /> Enviando...</>
+                ) : (
+                  <><Send className="h-5 w-5" /> Enviar mensaje</>
+                )}
+              </button>
             </form>
           </div>
         </div>
