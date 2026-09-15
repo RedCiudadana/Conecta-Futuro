@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Upload, X, FileText, AlertCircle, CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { Upload, X, FileText, AlertCircle, CheckCircle, ArrowRight, Loader2, Info, Check, AlertTriangle } from 'lucide-react';
 import { parseCSV } from '../../../utils/csvParser';
 import type { ImportConfig } from '../../../utils/csvImportConfigs';
 import { autoMapFields } from '../../../utils/csvImportConfigs';
@@ -129,17 +129,41 @@ const DataImportModal: React.FC<Props> = ({ config, onClose, onComplete }) => {
           )}
 
           {step === 'upload' && (
-            <div
-              onDragOver={e => { e.preventDefault(); setDragOver(true); }}
-              onDragLeave={() => setDragOver(false)}
-              onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-              className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-colors ${dragOver ? 'border-sky-400 bg-sky-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}
-            >
-              <Upload className="h-10 w-10 text-gray-300 mx-auto mb-4" />
-              <p className="text-sm font-medium text-gray-700">Arrastra tu archivo CSV aquí</p>
-              <p className="text-xs text-gray-400 mt-1">o haz clic para seleccionar</p>
-              <input ref={fileInputRef} type="file" accept=".csv,.txt,.tsv" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) processFile(f); }} />
+            <div className="space-y-4">
+              <div
+                onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors ${dragOver ? 'border-sky-400 bg-sky-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}
+              >
+                <Upload className="h-10 w-10 text-gray-300 mx-auto mb-4" />
+                <p className="text-sm font-medium text-gray-700">Arrastra tu archivo CSV aquí</p>
+                <p className="text-xs text-gray-400 mt-1">o haz clic para seleccionar</p>
+                <input ref={fileInputRef} type="file" accept=".csv,.txt,.tsv" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) processFile(f); }} />
+              </div>
+
+              {/* Format guide */}
+              <div className="bg-sky-50 border border-sky-100 rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sky-700">
+                  <Info className="h-4 w-4" />
+                  <p className="text-sm font-semibold">Formato esperado del CSV</p>
+                </div>
+                <p className="text-xs text-sky-600">El archivo debe tener una fila de encabezados con los nombres de las columnas. Estos son los campos que se importarán:</p>
+                <div className="space-y-2">
+                  {config.fields.map(field => (
+                    <div key={field.key} className="flex items-start gap-2 text-xs">
+                      <span className={`font-mono px-1.5 py-0.5 rounded shrink-0 ${field.required ? 'bg-sky-100 text-sky-700' : 'bg-gray-100 text-gray-500'}`}>{field.key}</span>
+                      {field.required && <span className="text-red-400 font-bold shrink-0">*</span>}
+                      <span className="text-gray-600">{field.description}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="border-t border-sky-100 pt-3">
+                  <p className="text-xs font-semibold text-sky-700 mb-1">Encabezado sugerido:</p>
+                  <code className="text-xs text-sky-800 bg-white px-2 py-1 rounded block break-all">{config.sampleHeader}</code>
+                </div>
+              </div>
             </div>
           )}
 
@@ -150,25 +174,55 @@ const DataImportModal: React.FC<Props> = ({ config, onClose, onComplete }) => {
                 <span className="font-medium">{fileName}</span>
                 <span className="text-gray-400">({rows.length} filas)</span>
               </div>
-              <div className="space-y-3">
-                {config.fields.map(field => (
-                  <div key={field.key} className="flex items-center gap-3">
-                    <label className="w-48 text-sm font-medium text-gray-700 shrink-0">
-                      {field.label} {field.required && <span className="text-red-400">*</span>}
-                    </label>
-                    <select
-                      value={mapping[field.key] ?? ''}
-                      onChange={e => setMapping(prev => ({ ...prev, [field.key]: e.target.value || '' }))}
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                    >
-                      <option value="">-- No mapear --</option>
-                      {headers.map(h => (
-                        <option key={h} value={h}>{h}</option>
-                      ))}
-                    </select>
-                  </div>
-                ))}
+              <div className="space-y-4">
+                {config.fields.map(field => {
+                  const isMapped = !!mapping[field.key];
+                  return (
+                    <div key={field.key} className={`rounded-lg border p-3 transition-colors ${isMapped ? 'border-sky-200 bg-sky-50/30' : field.required ? 'border-amber-200 bg-amber-50/30' : 'border-gray-100'}`}>
+                      <div className="flex items-center gap-3 mb-2">
+                        <label className="text-sm font-medium text-gray-700 shrink-0 w-44">
+                          {field.label} {field.required && <span className="text-red-400">*</span>}
+                        </label>
+                        <select
+                          value={mapping[field.key] ?? ''}
+                          onChange={e => setMapping(prev => ({ ...prev, [field.key]: e.target.value || '' }))}
+                          className={`flex-1 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${isMapped ? 'border-sky-300' : 'border-gray-200'}`}
+                        >
+                          <option value="">-- No mapear --</option>
+                          {headers.map(h => (
+                            <option key={h} value={h}>{h}</option>
+                          ))}
+                        </select>
+                        {isMapped ? (
+                          <Check className="h-4 w-4 text-sky-500 shrink-0" />
+                        ) : field.required ? (
+                          <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0" />
+                        ) : null}
+                      </div>
+                      <div className="ml-1 space-y-1.5">
+                        <p className="text-xs text-gray-500 leading-relaxed">{field.description}</p>
+                        {field.validValues && (
+                          <div className="flex flex-wrap gap-1">
+                            {field.validValues.map(v => (
+                              <span key={v} className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono">{v}</span>
+                            ))}
+                          </div>
+                        )}
+                        <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                          <span>Ejemplo:</span>
+                          <code className="text-gray-600 bg-gray-50 px-1.5 py-0.5 rounded">{field.example}</code>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
+              {!requiredFieldsMapped && (
+                <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                  <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                  Los campos obligatorios (*) deben estar mapeados para continuar.
+                </div>
+              )}
               <div className="flex justify-end pt-2">
                 <button
                   disabled={!requiredFieldsMapped}
