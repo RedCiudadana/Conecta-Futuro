@@ -40,7 +40,7 @@ const CourseRegistration: React.FC = () => {
         if (cmsCourse) setCourseTitle(cmsCourse.title);
 
         const dbCourse = await getCourseBySlug(slug!);
-        setCourseExists(!!dbCourse);
+        setCourseExists(!!(cmsCourse || dbCourse));
         if (!cmsCourse && dbCourse) setCourseTitle(dbCourse.title);
       } catch {
         setCourseExists(false);
@@ -64,7 +64,7 @@ const CourseRegistration: React.FC = () => {
     setErrorMsg('');
 
     try {
-      const result = await publicRegisterForCourse(slug, form);
+      const result = await publicRegisterForCourse(slug, form, courseTitle || undefined);
       setStep(result.alreadyEnrolled ? 'already' : 'success');
     } catch (err: any) {
       setErrorMsg(err.message || 'Ocurrió un error al registrarte');

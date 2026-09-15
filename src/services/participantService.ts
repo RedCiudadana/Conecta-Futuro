@@ -677,20 +677,89 @@ export async function getCourseBySlug(slug: string): Promise<Course | null> {
   return data;
 }
 
+export async function ensureCourseFromCMS(
+  slug: string,
+  cmsTitle?: string
+): Promise<Course> {
+  const { data: existing } = await supabase
+    .from('courses')
+    .select('*')
+    .eq('slug', slug)
+    .maybeSingle();
+
+  if (existing) return existing;
+
+  const title = cmsTitle || slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const { data: created, error } = await supabase
+    .from('courses')
+    .insert({ slug, title, status: 'open' })
+    .select('*')
+    .single();
+
+  if (error) throw error;
+  return created;
+}
+
+export interface SyncResult {
+  created: number;
+  existing: number;
+  errors: string[];
+}
+
+export async function syncCMSCoursesToDB(
+  cmsCourses: { slug: string; title: string }[]
+): Promise<SyncResult> {
+  const result: SyncResult = { created: 0, existing: 0, errors: [] };
+
+  const { data: dbCourses } = await supabase
+    .from('courses')
+    .select('slug');
+
+  const existingSlugs = new Set((dbCourses || []).map(c => c.slug));
+
+  for (const cms of cmsCourses) {
+    if (existingSlugs.has(cms.slug)) {
+      result.existing++;
+      continue;
+    }
+    try {
+      await supabase.from('courses').insert({
+        slug: cms.slug,
+        title: cms.title,
+        status: 'open',
+      });
+      result.created++;
+    } catch (err: any) {
+      result.errors.push(`${cms.slug}: ${err.message}`);
+    }
+  }
+
+  return result;
+}
+
 export async function publicRegisterForCourse(
   courseSlug: string,
-  registration: PublicRegistrationData
+  registration: PublicRegistrationData,
+  cmsTitle?: string
 ): Promise<PublicRegistrationResult> {
   const email = normalizeEmail(registration.primary_email);
 
-  const { data: course, error: courseErr } = await supabase
+  let course: { id: string; status: string; max_capacity: number | null } | null;
+
+  const { data: found, error: courseErr } = await supabase
     .from('courses')
     .select('id, status, max_capacity')
     .eq('slug', courseSlug)
     .maybeSingle();
 
   if (courseErr) throw courseErr;
-  if (!course) throw new Error('Curso no encontrado');
+
+  if (!found) {
+    const created = await ensureCourseFromCMS(courseSlug, cmsTitle);
+    course = { id: created.id, status: created.status, max_capacity: created.max_capacity };
+  } else {
+    course = found;
+  }
 
   const { data: existing } = await supabase
     .from('participants')

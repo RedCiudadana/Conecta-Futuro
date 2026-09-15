@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Plus, Save } from 'lucide-react';
-import { getCourses, createCourse } from '../../services/participantService';
+import { BookOpen, Plus, Save, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react';
+import { getCourses, createCourse, syncCMSCoursesToDB } from '../../services/participantService';
+import type { SyncResult } from '../../services/participantService';
+import { decapContentService } from '../../services/courseService';
 import type { Course, CourseProgram, CourseModality, CourseStatus } from '../../types/participants';
 import { PROGRAM_LABELS } from '../../types/participants';
 
@@ -30,6 +32,8 @@ const CourseManagementPage: React.FC = () => {
     modality: '' as CourseModality | '', start_date: '', end_date: '',
     max_capacity: '', status: 'draft' as CourseStatus,
   });
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
 
   useEffect(() => {
     getCourses().then(setCourses).catch(() => {}).finally(() => setLoading(false));
@@ -70,11 +74,51 @@ const CourseManagementPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Cursos</h1>
           <p className="text-gray-500 mt-1">Administra los cursos y programas del ecosistema</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)}
-          className="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 text-sm font-medium">
-          <Plus className="h-4 w-4 mr-2" /> Nuevo Curso
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={async () => {
+              setSyncing(true);
+              setSyncResult(null);
+              try {
+                const cmsCourses = await decapContentService.getCourses();
+                const mapped = cmsCourses.map(c => ({ slug: c.slug, title: c.title }));
+                const result = await syncCMSCoursesToDB(mapped);
+                setSyncResult(result);
+                const updated = await getCourses();
+                setCourses(updated);
+              } catch { }
+              setSyncing(false);
+              setTimeout(() => setSyncResult(null), 6000);
+            }}
+            disabled={syncing}
+            className="inline-flex items-center px-4 py-2 border border-sky-600 text-sky-600 rounded-lg hover:bg-sky-50 text-sm font-medium disabled:opacity-50"
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
+            {syncing ? 'Sincronizando...' : 'Sincronizar del sitio web'}
+          </button>
+          <button onClick={() => setShowForm(!showForm)}
+            className="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 text-sm font-medium">
+            <Plus className="h-4 w-4 mr-2" /> Nuevo Curso
+          </button>
+        </div>
       </div>
+
+      {syncResult && (
+        <div className={`flex items-center gap-3 p-4 rounded-xl border ${
+          syncResult.errors.length > 0 ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'
+        }`}>
+          {syncResult.errors.length > 0
+            ? <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0" />
+            : <CheckCircle className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+          }
+          <p className="text-sm text-gray-700">
+            {syncResult.created > 0
+              ? `Se importaron ${syncResult.created} cursos nuevos del sitio web.`
+              : 'Todos los cursos del sitio web ya estaban registrados.'}
+            {syncResult.existing > 0 && ` (${syncResult.existing} ya existían)`}
+          </p>
+        </div>
+      )}
 
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
