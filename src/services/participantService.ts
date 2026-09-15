@@ -260,6 +260,34 @@ export async function getAllParticipantsForMatching(): Promise<{ id: string; fir
   return data ?? [];
 }
 
+export async function getAllParticipantsForExport(): Promise<Participant[]> {
+  const all: Participant[] = [];
+  let from = 0;
+  const batchSize = 1000;
+  while (true) {
+    const { data, error } = await supabase
+      .from('participants')
+      .select('*, organization:organizations(name)')
+      .order('created_at', { ascending: false })
+      .range(from, from + batchSize - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < batchSize) break;
+    from += batchSize;
+  }
+  return all;
+}
+
+export async function deleteAllParticipants(): Promise<number> {
+  const { count, error } = await supabase
+    .from('participants')
+    .delete({ count: 'exact' })
+    .neq('id', '00000000-0000-0000-0000-000000000000');
+  if (error) throw error;
+  return count ?? 0;
+}
+
 // --- Organizations ---
 
 export async function getOrganizations(): Promise<Organization[]> {

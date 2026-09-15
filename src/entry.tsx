@@ -18,6 +18,7 @@ import ParticipantProfilePage from './pages/admin/ParticipantProfilePage';
 import EnrollmentPage from './pages/admin/EnrollmentPage';
 import AttendancePage from './pages/admin/AttendancePage';
 import CourseManagementPage from './pages/admin/CourseManagementPage';
+import DatabaseManagementPage from './pages/admin/DatabaseManagementPage';
 
 // Public pages
 import LandingPage from './pages/public/LandingPage';
@@ -151,6 +152,7 @@ export const routes = [
       { path: 'inscripciones', element: <EnrollmentPage /> },
       { path: 'asistencia', element: <AttendancePage /> },
       { path: 'cursos', element: <CourseManagementPage /> },
+      { path: 'base-de-datos', element: <DatabaseManagementPage /> },
     ],
   },
   { path: '/*', element: <NotFound /> },
