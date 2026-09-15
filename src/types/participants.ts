@@ -148,6 +148,15 @@ export interface Certificate {
   participant?: Participant;
 }
 
+export interface AttendanceFormLink {
+  id: string;
+  session_id: string;
+  token: string;
+  is_active: boolean;
+  expires_at: string | null;
+  created_at: string;
+}
+
 export interface AuditLogEntry {
   id: string;
   entity_type: string;

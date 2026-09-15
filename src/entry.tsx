@@ -41,6 +41,7 @@ import Tutoriales from './pages/public/Tutoriales';
 import DirectorioIA from './pages/public/DirectorioIA';
 import BancoPrompts from './pages/public/BancoPrompts';
 import CourseRegistration from './pages/public/CourseRegistration';
+import AttendanceForm from './pages/public/AttendanceForm';
 
 const RootLayout: React.FC = () => (
   <AuthProvider>
@@ -58,6 +59,7 @@ export const routes = [
       { index: true, element: <LandingPage /> },
       { path: 'courses', element: <CourseCatalog /> },
       { path: 'course-sessions', element: <CourseSessions /> },
+      { path: 'asistencia/:token', element: <AttendanceForm /> },
       { path: 'learning-paths', element: <LearningPaths /> },
       { path: 'primeros-pasos-digitales', element: <PrimerosPasosDigitales /> },
       { path: 'digitaliza-tu-pyme', element: <DigitalizaTuPyme /> },

@@ -14,6 +14,7 @@ import type {
   DashboardKPIs,
   ParticipantStatus,
   AuditLogEntry,
+  AttendanceFormLink,
 } from '../types/participants';
 
 const PAGE_SIZE = 25;
@@ -883,6 +884,125 @@ export async function publicRegisterForCourse(
   });
 
   return { success: true, alreadyEnrolled: false, participantId, enrollmentId: enrollment.id };
+}
+
+// --- Attendance Form Links ---
+
+export async function getOrCreateAttendanceLink(sessionId: string): Promise<AttendanceFormLink> {
+  const { data: existing } = await supabase
+    .from('attendance_form_links')
+    .select('*')
+    .eq('session_id', sessionId)
+    .maybeSingle();
+
+  if (existing) return existing;
+
+  const token = crypto.randomUUID().replace(/-/g, '').slice(0, 12);
+
+  const { data, error } = await supabase
+    .from('attendance_form_links')
+    .insert({ session_id: sessionId, token })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getAttendanceLinkByToken(token: string): Promise<{
+  link: AttendanceFormLink;
+  session: CourseSession;
+  course: Course;
+} | null> {
+  const { data, error } = await supabase
+    .from('attendance_form_links')
+    .select('*, session:course_sessions(*, course:courses(*))')
+    .eq('token', token)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  const session = (data as any).session;
+  const course = session?.course;
+  if (!session || !course) return null;
+
+  return {
+    link: { id: data.id, session_id: data.session_id, token: data.token, is_active: data.is_active, expires_at: data.expires_at, created_at: data.created_at },
+    session,
+    course,
+  };
+}
+
+export async function toggleAttendanceLinkActive(linkId: string, isActive: boolean): Promise<void> {
+  const { error } = await supabase
+    .from('attendance_form_links')
+    .update({ is_active: isActive })
+    .eq('id', linkId);
+
+  if (error) throw error;
+}
+
+export async function publicRecordAttendance(
+  token: string,
+  email: string
+): Promise<{ success: boolean; alreadyRecorded: boolean; participantName?: string }> {
+  const linkData = await getAttendanceLinkByToken(token);
+  if (!linkData) throw new Error('Enlace no válido');
+
+  const { link, session } = linkData;
+
+  if (!link.is_active) throw new Error('Este formulario de asistencia ya no está activo');
+
+  if (link.expires_at && new Date(link.expires_at) < new Date()) {
+    throw new Error('Este enlace ha expirado');
+  }
+
+  const normalizedEmail = email.toLowerCase().trim();
+
+  const { data: participant } = await supabase
+    .from('participants')
+    .select('id, first_name, last_name')
+    .eq('primary_email', normalizedEmail)
+    .maybeSingle();
+
+  if (!participant) {
+    throw new Error('No se encontró un participante registrado con este correo electrónico. Asegúrate de usar el mismo correo con el que te inscribiste al curso.');
+  }
+
+  const { data: enrollment } = await supabase
+    .from('enrollments')
+    .select('id')
+    .eq('participant_id', participant.id)
+    .eq('course_id', session.course_id)
+    .maybeSingle();
+
+  if (!enrollment) {
+    throw new Error('No estás inscrito en este curso. Debes inscribirte antes de registrar tu asistencia.');
+  }
+
+  const { data: existingAttendance } = await supabase
+    .from('attendance')
+    .select('id')
+    .eq('participant_id', participant.id)
+    .eq('session_id', session.id)
+    .maybeSingle();
+
+  if (existingAttendance) {
+    return { success: true, alreadyRecorded: true, participantName: `${participant.first_name} ${participant.last_name}` };
+  }
+
+  const { error } = await supabase
+    .from('attendance')
+    .insert({
+      participant_id: participant.id,
+      session_id: session.id,
+      status: 'present',
+      check_in_time: new Date().toISOString(),
+    });
+
+  if (error) throw error;
+
+  return { success: true, alreadyRecorded: false, participantName: `${participant.first_name} ${participant.last_name}` };
 }
 
 async function sendRegistrationEmail(payload: {
