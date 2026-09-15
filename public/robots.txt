@@ -8,4 +8,4 @@ Disallow: /perfil/
 Disallow: /asistencia/
 Disallow: /admin
 
-Sitemap: https://escuelaredciudadana.org.gt/sitemap.xml
+Sitemap: https://escuela.redciudadana.org.gt/sitemap.xml

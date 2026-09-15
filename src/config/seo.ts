@@ -5,7 +5,7 @@ export interface SeoMeta {
 }
 
 export const SITE_NAME = 'Escuela Red Ciudadana';
-export const SITE_URL = 'https://escuelaredciudadana.org.gt';
+export const SITE_URL = 'https://escuela.redciudadana.org.gt';
 export const DEFAULT_IMAGE = `${SITE_URL}/logo/redciudadana.png`;
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og/escuela-default.png`;
 

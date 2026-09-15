@@ -1,6 +1,6 @@
 import { Plugin } from 'vite';
 
-const SITE_URL = 'https://escuelaredciudadana.org.gt';
+const SITE_URL = 'https://escuela.redciudadana.org.gt';
 
 const STATIC_ROUTES = [
   '/',
