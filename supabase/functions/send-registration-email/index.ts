@@ -107,7 +107,7 @@ Deno.serve(async (req: Request) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Conecta Futuro <onboarding@resend.dev>",
+        from: "Conecta Futuro <info@redciudadana.org.gt>",
         to: [to],
         subject: `Registro confirmado: ${courseTitle}`,
         html: htmlContent,
