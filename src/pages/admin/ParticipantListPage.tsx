@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, UserPlus, ChevronLeft, ChevronRight, Filter, X, Download } from 'lucide-react';
+import { Search, UserPlus, ChevronLeft, ChevronRight, Filter, X, Download, Upload, Users } from 'lucide-react';
+import CSVImportModal from '../../components/ui/admin/CSVImportModal';
 import { getParticipants } from '../../services/participantService';
 import type { Participant, ParticipantFilters, ParticipantStatus } from '../../types/participants';
 import { STATUS_LABELS, STATUS_COLORS, GUATEMALA_DEPARTMENTS } from '../../types/participants';
@@ -15,6 +16,7 @@ const ParticipantListPage: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<ParticipantFilters>({});
   const [searchInput, setSearchInput] = useState('');
+  const [showImportModal, setShowImportModal] = useState(false);
 
   const pageSize = 25;
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -70,6 +72,7 @@ const ParticipantListPage: React.FC = () => {
   };
 
   return (
+    <>
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -78,6 +81,13 @@ const ParticipantListPage: React.FC = () => {
           <p className="text-gray-500 mt-1">{totalCount} participantes registrados</p>
         </div>
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            Importar CSV
+          </button>
           <button
             onClick={handleExportCSV}
             className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
@@ -282,6 +292,13 @@ const ParticipantListPage: React.FC = () => {
         )}
       </div>
     </div>
+      {showImportModal && (
+        <CSVImportModal
+          onClose={() => setShowImportModal(false)}
+          onComplete={() => { setPage(1); fetchData(); }}
+        />
+      )}
+    </>
   );
 };
 

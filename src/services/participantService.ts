@@ -141,6 +141,124 @@ export async function checkDuplicateDPI(dpi: string, excludeId?: string): Promis
   return data;
 }
 
+export interface BulkImportResult {
+  created: number;
+  skippedDuplicates: number;
+  errors: { row: number; email: string; reason: string }[];
+}
+
+export async function bulkImportParticipants(
+  rows: Array<{
+    first_name: string;
+    last_name: string;
+    primary_email: string;
+    phone?: string | null;
+    dpi?: string | null;
+    gender?: string | null;
+    department?: string | null;
+    municipality?: string | null;
+    digital_skill_level?: string | null;
+    how_found_us?: string | null;
+    organization_name?: string | null;
+  }>
+): Promise<BulkImportResult> {
+  const result: BulkImportResult = { created: 0, skippedDuplicates: 0, errors: [] };
+
+  const { data: existingEmails } = await supabase
+    .from('participants')
+    .select('primary_email');
+  const emailSet = new Set((existingEmails ?? []).map(e => e.primary_email.toLowerCase()));
+
+  const { data: existingDpis } = await supabase
+    .from('participants')
+    .select('dpi')
+    .not('dpi', 'is', null);
+  const dpiSet = new Set((existingDpis ?? []).map(e => e.dpi));
+
+  const batchToInsert: any[] = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const email = normalizeEmail(row.primary_email);
+
+    if (!email || !row.first_name?.trim() || !row.last_name?.trim()) {
+      result.errors.push({ row: i + 2, email: email || '', reason: 'Nombre, apellido o email vacío' });
+      continue;
+    }
+
+    if (emailSet.has(email)) {
+      result.skippedDuplicates++;
+      continue;
+    }
+
+    if (row.dpi && dpiSet.has(row.dpi)) {
+      result.skippedDuplicates++;
+      continue;
+    }
+
+    emailSet.add(email);
+    if (row.dpi) dpiSet.add(row.dpi);
+
+    batchToInsert.push({
+      first_name: row.first_name.trim(),
+      last_name: row.last_name.trim(),
+      primary_email: email,
+      phone: row.phone || null,
+      dpi: row.dpi || null,
+      gender: row.gender || null,
+      department: row.department || null,
+      municipality: row.municipality || null,
+      digital_skill_level: row.digital_skill_level || null,
+      how_found_us: row.how_found_us || null,
+      status: 'registered' as const,
+    });
+  }
+
+  if (batchToInsert.length > 0) {
+    const BATCH_SIZE = 50;
+    for (let i = 0; i < batchToInsert.length; i += BATCH_SIZE) {
+      const batch = batchToInsert.slice(i, i + BATCH_SIZE);
+      const { data, error } = await supabase
+        .from('participants')
+        .insert(batch)
+        .select('id, primary_email');
+
+      if (error) {
+        for (const item of batch) {
+          result.errors.push({ row: 0, email: item.primary_email, reason: error.message });
+        }
+      } else {
+        result.created += data.length;
+        const emailInserts = data.map(d => ({
+          participant_id: d.id,
+          email: d.primary_email,
+          is_primary: true,
+        }));
+        await supabase.from('participant_emails').insert(emailInserts);
+
+        const eventInserts = data.map(d => ({
+          participant_id: d.id,
+          event_type: 'registration' as const,
+          event_data: { source: 'csv_import' },
+          created_by: 'admin',
+        }));
+        await supabase.from('participation_events').insert(eventInserts);
+      }
+    }
+  }
+
+  return result;
+}
+
+export async function getAllParticipantsForMatching(): Promise<{ id: string; first_name: string; last_name: string; primary_email: string }[]> {
+  const { data, error } = await supabase
+    .from('participants')
+    .select('id, first_name, last_name, primary_email');
+
+  if (error) throw error;
+  return data ?? [];
+}
+
 // --- Organizations ---
 
 export async function getOrganizations(): Promise<Organization[]> {
