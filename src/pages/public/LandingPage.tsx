@@ -25,7 +25,9 @@ import {
   Repeat,
   Server,
   Handshake,
+  Clock,
 } from 'lucide-react';
+import { getImpactMetrics, type ImpactMetrics } from '../../services/impactService';
 import SliderImage1 from '../../assets/slider/whatsapp_image_2025-12-18_at_12.17.25_pm.jpeg';
 import SliderImage2 from '../../assets/slider/whatsapp_image_2025-11-12_at_6.29.32_am.jpeg';
 import SliderImage3 from '../../assets/slider/whatsapp_image_2025-09-26_at_12.02.22_pm.jpeg';
@@ -87,10 +89,16 @@ const LandingPage: React.FC = () => {
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   const goToSlide = (index: number) => setCurrentSlide(index);
 
+  const [impactMetrics, setImpactMetrics] = useState<ImpactMetrics | null>(null);
+
+  useEffect(() => {
+    getImpactMetrics().then(setImpactMetrics).catch(err => console.error('[LandingPage] Failed to load impact metrics:', err));
+  }, []);
+
   const indicators = [
-    { label: 'Personas formadas', value: '10,000+', icon: <Users className="w-6 h-6" /> },
-    { label: 'Cursos y recursos', value: '50+', icon: <BookOpen className="w-6 h-6" /> },
-    { label: 'Territorios alcanzados', value: '15+', icon: <Globe className="w-6 h-6" /> },
+    { label: 'Personas formadas', value: impactMetrics ? impactMetrics.total_trained.toLocaleString('es-GT') : '—', icon: <Users className="w-6 h-6" /> },
+    { label: 'Cursos y recursos', value: impactMetrics ? impactMetrics.active_courses.toLocaleString('es-GT') : '—', icon: <BookOpen className="w-6 h-6" /> },
+    { label: 'Territorios alcanzados', value: impactMetrics ? impactMetrics.territories_reached.toLocaleString('es-GT') : '—', icon: <Globe className="w-6 h-6" /> },
   ];
 
   const problems = [
@@ -318,7 +326,7 @@ const LandingPage: React.FC = () => {
       {/* Indicators */}
       <div className="py-8 sm:py-10 bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-3 gap-6 max-w-5xl mx-auto">
             {indicators.map((ind, i) => (
               <div key={i} className="text-center">
                 <div className="w-12 h-12 mx-auto mb-2 bg-primary-50 text-primary-600 rounded-lg flex items-center justify-center">
@@ -328,6 +336,17 @@ const LandingPage: React.FC = () => {
                 <p className="text-sm sm:text-base text-gray-500">{ind.label}</p>
               </div>
             ))}
+          </div>
+          <div className="text-center mt-4 space-y-1">
+            {impactMetrics && (
+              <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
+                <Clock className="w-3 h-3" />
+                Datos actualizados al {new Date(impactMetrics.last_updated).toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            )}
+            <Link to="/impacto#metodologia" className="text-xs text-primary-600 hover:text-primary-700 underline">
+              ¿Cómo medimos?
+            </Link>
           </div>
         </div>
       </div>

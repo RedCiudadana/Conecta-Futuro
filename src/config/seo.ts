@@ -106,4 +106,10 @@ export const SEO: Record<string, SeoMeta> = {
       'Manuales, guías y documentación técnica de la plataforma. Aprende a navegar los cursos, inscribirte, descargar certificados y aprovechar al máximo las herramientas de aprendizaje.',
     image: '/og/escuela-default.png',
   },
+  '/impacto': {
+    title: 'Impacto | Escuela Red Ciudadana',
+    description:
+      'Resultados medibles de nuestra plataforma: personas formadas, tasa de finalización, certificados emitidos y territorios alcanzados. Conoce nuestra metodología y cómo medimos el impacto.',
+    image: '/og/escuela-default.png',
+  },
 };

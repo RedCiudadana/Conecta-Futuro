@@ -23,6 +23,8 @@ import VerifyCertificate from './pages/public/VerifyCertificate';
 import Tutoriales from './pages/public/Tutoriales';
 import DirectorioIA from './pages/public/DirectorioIA';
 import BancoPrompts from './pages/public/BancoPrompts';
+import ImpactoPage from './pages/public/ImpactoPage';
+import ImpactoAdminPage from './pages/admin/ImpactoAdminPage';
 import ScrollToTop from './components/scrolltotop';
 import ScrollTopButton from './components/scrolltotopButton';
 
@@ -33,6 +35,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 
 // Auth + Dashboard pages
 import Login from './pages/public/Login';
+import Register from './pages/public/Register';
 import Dashboard from './pages/dashboard/Dashboard';
 import CourseView from './pages/dashboard/CourseView';
 import Profile from './pages/dashboard/Profile';
@@ -50,6 +53,7 @@ function App() {
           {/* Nested routes */}
           <Route index element={<LandingPage />} />
           <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
           <Route path="courses" element={<CourseCatalog />} />
           <Route path="course-sessions" element={<CourseSessions />} />
           <Route path="learning-paths" element={<RutasAprendizaje />} />
@@ -64,6 +68,7 @@ function App() {
           <Route path="tutoriales" element={<Tutoriales />} />
           <Route path="directorio-ia" element={<DirectorioIA />} />
           <Route path="banco-prompts" element={<BancoPrompts />} />
+          <Route path="impacto" element={<ImpactoPage />} />
           <Route path="course/:slug" element={<CourseDetails />} />
           <Route path="course/:slug/session" element={<CourseSession />} />
           <Route path="about" element={<AboutUs />} />
@@ -80,6 +85,7 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="certificates" element={<Certificates />} />
           <Route path="community" element={<CommunityDashboard />} />
+          <Route path="impacto" element={<ImpactoAdminPage />} />
         </Route>
 
         {/* 404 route */}
