@@ -10,6 +10,9 @@ export type CourseProgram = 'primeros_pasos' | 'digitaliza_pyme' | 'directorio_i
 export type CourseModality = 'presencial' | 'virtual' | 'hibrido' | 'autoestudio';
 export type CertificateType = 'completion' | 'participation' | 'excellence';
 export type EventType = 'registration' | 'verification' | 'enrollment' | 'attendance' | 'completion' | 'certification' | 'communication' | 'note' | 'status_change';
+export type CertificateStatus = 'emitted' | 'revoked' | 'pending';
+export type SkillLevel = 'basico' | 'intermedio' | 'avanzado' | 'especializado';
+export type SkillSourceType = 'course' | 'manual' | 'import';
 
 export interface Organization {
   id: string;
@@ -40,6 +43,15 @@ export interface Participant {
   role_in_org: string | null;
   digital_skill_level: DigitalSkillLevel | null;
   how_found_us: string | null;
+  sector: string | null;
+  institution: string | null;
+  job_title: string | null;
+  country: string | null;
+  education_level: string | null;
+  business_owner: boolean;
+  public_official: boolean;
+  age_range: string | null;
+  last_activity_at: string | null;
   status: ParticipantStatus;
   notes: string | null;
   created_at: string;
@@ -144,6 +156,11 @@ export interface Certificate {
   certificate_type: CertificateType;
   pdf_url: string | null;
   metadata: Record<string, unknown>;
+  hours: number | null;
+  status: CertificateStatus;
+  revoked_at: string | null;
+  revoked_by: string | null;
+  verification_url: string | null;
   course?: Course;
   participant?: Participant;
 }
@@ -168,6 +185,39 @@ export interface AuditLogEntry {
   created_at: string;
 }
 
+export interface Skill {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  category: string;
+  level: SkillLevel;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CourseSkill {
+  id: string;
+  course_id: string;
+  skill_id: string;
+  level: SkillLevel;
+  weight: number;
+  skill?: Skill;
+}
+
+export interface ParticipantSkill {
+  id: string;
+  participant_id: string;
+  skill_id: string;
+  level: SkillLevel;
+  source_type: SkillSourceType;
+  source_id: string | null;
+  date_acquired: string;
+  status: string;
+  skill?: Skill;
+}
+
 export interface ParticipantFilters {
   search?: string;
   status?: ParticipantStatus | '';
@@ -177,6 +227,11 @@ export interface ParticipantFilters {
   digital_skill_level?: DigitalSkillLevel | '';
   tag_id?: string;
   organization_id?: string;
+  institution?: string;
+  course_id?: string;
+  has_certificate?: boolean;
+  date_from?: string;
+  date_to?: string;
 }
 
 export interface DashboardKPIs {

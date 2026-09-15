@@ -15,6 +15,7 @@ import type {
   ParticipantStatus,
   AuditLogEntry,
   AttendanceFormLink,
+  CertificateStatus,
 } from '../types/participants';
 
 const PAGE_SIZE = 25;
@@ -36,7 +37,7 @@ export async function getParticipants(
   if (filters.search) {
     const term = `%${filters.search}%`;
     query = query.or(
-      `first_name.ilike.${term},last_name.ilike.${term},primary_email.ilike.${term},dpi.ilike.${term}`
+      `first_name.ilike.${term},last_name.ilike.${term},primary_email.ilike.${term},dpi.ilike.${term},institution.ilike.${term},phone.ilike.${term}`
     );
   }
   if (filters.status) query = query.eq('status', filters.status);
@@ -44,6 +45,9 @@ export async function getParticipants(
   if (filters.gender) query = query.eq('gender', filters.gender);
   if (filters.digital_skill_level) query = query.eq('digital_skill_level', filters.digital_skill_level);
   if (filters.organization_id) query = query.eq('organization_id', filters.organization_id);
+  if (filters.institution) query = query.ilike('institution', `%${filters.institution}%`);
+  if (filters.date_from) query = query.gte('created_at', filters.date_from);
+  if (filters.date_to) query = query.lte('created_at', filters.date_to);
 
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
@@ -1082,6 +1086,182 @@ export async function publicRecordAttendance(
   if (error) throw error;
 
   return { success: true, alreadyRecorded: false, participantName: `${participant.first_name} ${participant.last_name}` };
+}
+
+// --- Certificate Management ---
+
+export async function issueCertificate(
+  participantId: string,
+  courseId: string,
+  opts: { hours?: number; certificateType?: 'completion' | 'participation' | 'excellence' } = {}
+): Promise<Certificate> {
+  const code = `RC-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  const { data, error } = await supabase
+    .from('certificates')
+    .insert({
+      participant_id: participantId,
+      course_id: courseId,
+      certificate_code: code,
+      certificate_type: opts.certificateType ?? 'completion',
+      hours: opts.hours ?? null,
+      status: 'emitted',
+      verification_url: `/verify-certificate?code=${code}`,
+    })
+    .select('*, course:courses(*)')
+    .single();
+  if (error) throw error;
+
+  await logParticipationEvent(participantId, 'certification', {
+    certificate_id: data.id,
+    course_id: courseId,
+    code,
+  });
+
+  return data;
+}
+
+export async function revokeCertificate(certificateId: string, revokedBy = 'admin'): Promise<void> {
+  const { error } = await supabase
+    .from('certificates')
+    .update({ status: 'revoked', revoked_at: new Date().toISOString(), revoked_by: revokedBy })
+    .eq('id', certificateId);
+  if (error) throw error;
+}
+
+export async function getCourseEligibleParticipants(
+  courseId: string,
+  minAttendance = 80
+): Promise<{ eligible: (Participant & { attendance_pct: number })[]; ineligible: (Participant & { attendance_pct: number; reason: string })[] }> {
+  const enrollments = await getCourseEnrollments(courseId);
+  const sessions = await getCourseSessions(courseId);
+  const totalSessions = sessions.length;
+
+  const eligible: (Participant & { attendance_pct: number })[] = [];
+  const ineligible: (Participant & { attendance_pct: number; reason: string })[] = [];
+
+  for (const enrollment of enrollments) {
+    if (!enrollment.participant) continue;
+    const att = await getParticipantAttendance(enrollment.participant_id);
+    const courseAtt = att.filter(a =>
+      sessions.some(s => s.id === a.session_id) && (a.status === 'present' || a.status === 'late')
+    );
+    const pct = totalSessions > 0 ? Math.round((courseAtt.length / totalSessions) * 100) : 0;
+
+    const existing = await getParticipantCertificates(enrollment.participant_id);
+    const alreadyHas = existing.some(c => c.course_id === courseId && c.status !== 'revoked');
+
+    if (alreadyHas) {
+      ineligible.push({ ...enrollment.participant, attendance_pct: pct, reason: 'Ya tiene certificado' });
+    } else if (pct < minAttendance) {
+      ineligible.push({ ...enrollment.participant, attendance_pct: pct, reason: `Asistencia ${pct}% (mínimo ${minAttendance}%)` });
+    } else {
+      eligible.push({ ...enrollment.participant, attendance_pct: pct });
+    }
+  }
+
+  return { eligible, ineligible };
+}
+
+export async function bulkIssueCertificates(
+  courseId: string,
+  participantIds: string[],
+  opts: { hours?: number; certificateType?: 'completion' | 'participation' | 'excellence' } = {}
+): Promise<{ issued: number; errors: string[] }> {
+  let issued = 0;
+  const errors: string[] = [];
+  for (const pid of participantIds) {
+    try {
+      await issueCertificate(pid, courseId, opts);
+      issued++;
+    } catch (e: any) {
+      errors.push(`${pid}: ${e.message}`);
+    }
+  }
+  return { issued, errors };
+}
+
+// --- Duplicate Detection ---
+
+export async function findPossibleDuplicates(): Promise<{ a: Participant; b: Participant; reason: string }[]> {
+  const { data, error } = await supabase
+    .from('participants')
+    .select('id, first_name, last_name, primary_email, phone, institution')
+    .order('last_name');
+  if (error) throw error;
+  if (!data) return [];
+
+  const duplicates: { a: Participant; b: Participant; reason: string }[] = [];
+  const seen = new Set<string>();
+
+  for (let i = 0; i < data.length; i++) {
+    for (let j = i + 1; j < data.length; j++) {
+      const a = data[i];
+      const b = data[j];
+      const key = [a.id, b.id].sort().join(':');
+      if (seen.has(key)) continue;
+
+      const nameA = `${a.first_name} ${a.last_name}`.toLowerCase().trim();
+      const nameB = `${b.first_name} ${b.last_name}`.toLowerCase().trim();
+
+      if (nameA === nameB && a.primary_email !== b.primary_email) {
+        seen.add(key);
+        duplicates.push({ a: a as any, b: b as any, reason: 'Mismo nombre, diferente email' });
+      } else if (a.phone && b.phone && a.phone === b.phone && a.id !== b.id) {
+        seen.add(key);
+        duplicates.push({ a: a as any, b: b as any, reason: 'Mismo teléfono' });
+      }
+    }
+  }
+
+  return duplicates;
+}
+
+export async function mergeParticipants(keepId: string, mergeId: string, performedBy = 'admin'): Promise<void> {
+  const tables = [
+    { table: 'enrollments', column: 'participant_id' },
+    { table: 'attendance', column: 'participant_id' },
+    { table: 'certificates', column: 'participant_id' },
+    { table: 'participant_skills', column: 'participant_id' },
+    { table: 'participation_events', column: 'participant_id' },
+    { table: 'email_recipients', column: 'participant_id' },
+    { table: 'participant_tags', column: 'participant_id' },
+  ];
+
+  for (const { table, column } of tables) {
+    const { error } = await supabase
+      .from(table)
+      .update({ [column]: keepId })
+      .eq(column, mergeId);
+    if (error && !error.message.includes('duplicate')) {
+      throw error;
+    }
+  }
+
+  const mergedEmails = await supabase
+    .from('participant_emails')
+    .select('email')
+    .eq('participant_id', mergeId);
+  if (mergedEmails.data) {
+    for (const row of mergedEmails.data) {
+      await supabase
+        .from('participant_emails')
+        .upsert({ participant_id: keepId, email: row.email, is_primary: false }, { onConflict: 'email' });
+    }
+  }
+
+  await logAuditEntry('participant', keepId, 'merge', { merged_from: mergeId }, performedBy);
+
+  await supabase.from('participant_emails').delete().eq('participant_id', mergeId);
+  await supabase.from('participants').delete().eq('id', mergeId);
+}
+
+// --- Update Last Activity ---
+
+export async function touchParticipantActivity(participantId: string): Promise<void> {
+  await supabase
+    .from('participants')
+    .update({ last_activity_at: new Date().toISOString() })
+    .eq('id', participantId);
 }
 
 async function sendRegistrationEmail(payload: {

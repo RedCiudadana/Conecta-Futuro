@@ -28,12 +28,21 @@ interface FormData {
   how_found_us: string;
   status: ParticipantStatus;
   notes: string;
+  institution: string;
+  job_title: string;
+  country: string;
+  education_level: string;
+  age_range: string;
+  business_owner: boolean;
+  public_official: boolean;
 }
 
 const emptyForm: FormData = {
   first_name: '', last_name: '', primary_email: '', phone: '', dpi: '',
   gender: '', birth_date: '', municipality: '', department: '', organization_id: '',
   role_in_org: '', digital_skill_level: '', how_found_us: '', status: 'registered', notes: '',
+  institution: '', job_title: '', country: 'Guatemala', education_level: '', age_range: '',
+  business_owner: false, public_official: false,
 };
 
 const ParticipantFormPage: React.FC = () => {
@@ -71,6 +80,13 @@ const ParticipantFormPage: React.FC = () => {
               how_found_us: p.how_found_us || '',
               status: p.status,
               notes: p.notes || '',
+              institution: p.institution || '',
+              job_title: p.job_title || '',
+              country: p.country || 'Guatemala',
+              education_level: p.education_level || '',
+              age_range: p.age_range || '',
+              business_owner: p.business_owner ?? false,
+              public_official: p.public_official ?? false,
             });
           }
         })
@@ -258,10 +274,21 @@ const ParticipantFormPage: React.FC = () => {
 
         {/* Organization */}
         <div className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900">Organización</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Organización / Institución</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Organización</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Institución</label>
+              <input name="institution" value={form.institution} onChange={handleChange}
+                placeholder="Nombre de la institución u organización"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Cargo / Puesto</label>
+              <input name="job_title" value={form.job_title} onChange={handleChange}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Organización (catálogo)</label>
               <select name="organization_id" value={form.organization_id} onChange={handleChange}
                 className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
                 <option value="">Sin organización</option>
@@ -274,12 +301,50 @@ const ParticipantFormPage: React.FC = () => {
                 className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
             </div>
           </div>
+          <div className="flex flex-wrap gap-6 pt-2">
+            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <input type="checkbox" name="business_owner" checked={form.business_owner}
+                onChange={e => setForm(prev => ({ ...prev, business_owner: e.target.checked }))}
+                className="rounded border-gray-300 text-sky-600 focus:ring-sky-500" />
+              Dueño de negocio / Emprendedor
+            </label>
+            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <input type="checkbox" name="public_official" checked={form.public_official}
+                onChange={e => setForm(prev => ({ ...prev, public_official: e.target.checked }))}
+                className="rounded border-gray-300 text-sky-600 focus:ring-sky-500" />
+              Servidor público
+            </label>
+          </div>
         </div>
 
         {/* Digital Profile */}
         <div className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900">Perfil Digital</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Perfil</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nivel educativo</label>
+              <select name="education_level" value={form.education_level} onChange={handleChange}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <option value="">Seleccionar...</option>
+                <option value="primaria">Primaria</option>
+                <option value="basicos">Básicos</option>
+                <option value="diversificado">Diversificado</option>
+                <option value="universitario">Universitario</option>
+                <option value="postgrado">Postgrado</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Rango de edad</label>
+              <select name="age_range" value={form.age_range} onChange={handleChange}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <option value="">Seleccionar...</option>
+                <option value="18-24">18-24</option>
+                <option value="25-34">25-34</option>
+                <option value="35-44">35-44</option>
+                <option value="45-54">45-54</option>
+                <option value="55+">55+</option>
+              </select>
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Nivel de habilidad digital</label>
               <select name="digital_skill_level" value={form.digital_skill_level} onChange={handleChange}
@@ -293,6 +358,11 @@ const ParticipantFormPage: React.FC = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">¿Cómo nos encontró?</label>
               <input name="how_found_us" value={form.how_found_us} onChange={handleChange}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">País</label>
+              <input name="country" value={form.country} onChange={handleChange}
                 className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
             </div>
           </div>

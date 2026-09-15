@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, UserPlus, ChevronLeft, ChevronRight, Filter, X, Download, Upload, Users } from 'lucide-react';
+import {
+  Search, UserPlus, ChevronLeft, ChevronRight, Filter, X,
+  Download, Upload, Users, Building2, Award, BookOpen,
+} from 'lucide-react';
 import CSVImportModal from '../../components/ui/admin/CSVImportModal';
 import { getParticipants } from '../../services/participantService';
 import type { Participant, ParticipantFilters, ParticipantStatus } from '../../types/participants';
@@ -56,13 +59,16 @@ const ParticipantListPage: React.FC = () => {
 
   const handleExportCSV = () => {
     if (participants.length === 0) return;
-    const headers = ['Nombre', 'Apellido', 'Email', 'Teléfono', 'DPI', 'Departamento', 'Estado', 'Fecha Registro'];
+    const headers = ['Nombre', 'Apellido', 'Email', 'Teléfono', 'DPI', 'Institución', 'Departamento', 'Estado', 'Emprendedor', 'Servidor Público', 'Fecha Registro'];
     const rows = participants.map(p => [
       p.first_name, p.last_name, p.primary_email, p.phone || '', p.dpi || '',
-      p.department || '', STATUS_LABELS[p.status], new Date(p.created_at).toLocaleDateString('es-GT'),
+      p.institution || '', p.department || '', STATUS_LABELS[p.status],
+      p.business_owner ? 'Sí' : 'No', p.public_official ? 'Sí' : 'No',
+      new Date(p.created_at).toLocaleDateString('es-GT'),
     ]);
-    const csv = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const bom = '\uFEFF';
+    const csv = bom + [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -81,55 +87,36 @@ const ParticipantListPage: React.FC = () => {
           <p className="text-gray-500 mt-1">{totalCount} participantes registrados</p>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => setShowImportModal(true)}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-          >
-            <Upload className="h-4 w-4 mr-2" />
-            Importar CSV
+          <button onClick={() => setShowImportModal(true)}
+            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+            <Upload className="h-4 w-4 mr-2" />Importar
           </button>
-          <button
-            onClick={handleExportCSV}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Exportar CSV
+          <button onClick={handleExportCSV}
+            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+            <Download className="h-4 w-4 mr-2" />Exportar
           </button>
-          <Link
-            to="/dashboard/participantes/nuevo"
-            className="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors text-sm font-medium shadow-sm"
-          >
-            <UserPlus className="h-4 w-4 mr-2" />
-            Nuevo
+          <Link to="/dashboard/participantes/nuevo"
+            className="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors text-sm font-medium shadow-sm">
+            <UserPlus className="h-4 w-4 mr-2" />Nuevo
           </Link>
         </div>
       </div>
 
-      {/* Search + Filter Bar */}
+      {/* Search + Filter */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              value={searchInput}
-              onChange={e => setSearchInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Buscar por nombre, email o DPI..."
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
-            />
+            <input type="text" value={searchInput} onChange={e => setSearchInput(e.target.value)} onKeyDown={handleKeyDown}
+              placeholder="Buscar por nombre, email, DPI, teléfono o institución..."
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" />
           </div>
-          <button onClick={handleSearch} className="px-4 py-2.5 bg-sky-600 text-white rounded-lg hover:bg-sky-700 text-sm font-medium">
-            Buscar
-          </button>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
+          <button onClick={handleSearch} className="px-4 py-2.5 bg-sky-600 text-white rounded-lg hover:bg-sky-700 text-sm font-medium">Buscar</button>
+          <button onClick={() => setShowFilters(!showFilters)}
             className={`inline-flex items-center px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors ${
               hasActiveFilters ? 'border-sky-300 bg-sky-50 text-sky-700' : 'border-gray-200 text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Filter className="h-4 w-4 mr-2" />
-            Filtros
+            }`}>
+            <Filter className="h-4 w-4 mr-2" />Filtros
             {hasActiveFilters && (
               <span className="ml-2 bg-sky-600 text-white text-xs rounded-full px-1.5 py-0.5">
                 {Object.values(filters).filter(v => v).length}
@@ -145,56 +132,36 @@ const ParticipantListPage: React.FC = () => {
 
         {showFilters && (
           <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <FilterSelect label="Estado" value={filters.status || ''}
+              onChange={v => { setFilters(prev => ({ ...prev, status: v as ParticipantStatus | '' })); setPage(1); }}
+              options={Object.entries(STATUS_LABELS).map(([val, label]) => ({ value: val, label }))} />
+            <FilterSelect label="Departamento" value={filters.department || ''}
+              onChange={v => { setFilters(prev => ({ ...prev, department: v })); setPage(1); }}
+              options={GUATEMALA_DEPARTMENTS.map(d => ({ value: d, label: d }))} />
+            <FilterSelect label="Género" value={filters.gender || ''}
+              onChange={v => { setFilters(prev => ({ ...prev, gender: v as any })); setPage(1); }}
+              options={[{ value: 'masculino', label: 'Masculino' }, { value: 'femenino', label: 'Femenino' }, { value: 'otro', label: 'Otro' }]} />
+            <FilterSelect label="Nivel Digital" value={filters.digital_skill_level || ''}
+              onChange={v => { setFilters(prev => ({ ...prev, digital_skill_level: v as any })); setPage(1); }}
+              options={[{ value: 'basico', label: 'Básico' }, { value: 'intermedio', label: 'Intermedio' }, { value: 'avanzado', label: 'Avanzado' }]} />
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Estado</label>
-              <select
-                value={filters.status || ''}
-                onChange={e => { setFilters(prev => ({ ...prev, status: e.target.value as ParticipantStatus | '' })); setPage(1); }}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              >
-                <option value="">Todos</option>
-                {Object.entries(STATUS_LABELS).map(([val, label]) => (
-                  <option key={val} value={val}>{label}</option>
-                ))}
-              </select>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Institución</label>
+              <input type="text" value={filters.institution || ''}
+                onChange={e => { setFilters(prev => ({ ...prev, institution: e.target.value })); setPage(1); }}
+                placeholder="Filtrar por institución..."
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Departamento</label>
-              <select
-                value={filters.department || ''}
-                onChange={e => { setFilters(prev => ({ ...prev, department: e.target.value })); setPage(1); }}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              >
-                <option value="">Todos</option>
-                {GUATEMALA_DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
-              </select>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Desde</label>
+              <input type="date" value={filters.date_from || ''}
+                onChange={e => { setFilters(prev => ({ ...prev, date_from: e.target.value })); setPage(1); }}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Género</label>
-              <select
-                value={filters.gender || ''}
-                onChange={e => { setFilters(prev => ({ ...prev, gender: e.target.value as any })); setPage(1); }}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              >
-                <option value="">Todos</option>
-                <option value="masculino">Masculino</option>
-                <option value="femenino">Femenino</option>
-                <option value="otro">Otro</option>
-                <option value="prefiero_no_decir">Prefiero no decir</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Nivel Digital</label>
-              <select
-                value={filters.digital_skill_level || ''}
-                onChange={e => { setFilters(prev => ({ ...prev, digital_skill_level: e.target.value as any })); setPage(1); }}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              >
-                <option value="">Todos</option>
-                <option value="basico">Básico</option>
-                <option value="intermedio">Intermedio</option>
-                <option value="avanzado">Avanzado</option>
-              </select>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Hasta</label>
+              <input type="date" value={filters.date_to || ''}
+                onChange={e => { setFilters(prev => ({ ...prev, date_to: e.target.value })); setPage(1); }}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
             </div>
           </div>
         )}
@@ -220,40 +187,39 @@ const ParticipantListPage: React.FC = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Participante</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">Institución</th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Departamento</th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Estado</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">Registro</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">Registro</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {participants.map(p => (
-                  <tr
-                    key={p.id}
-                    onClick={() => navigate(`/dashboard/participantes/${p.id}`)}
-                    className="hover:bg-sky-50/50 cursor-pointer transition-colors"
-                  >
+                  <tr key={p.id} onClick={() => navigate(`/dashboard/participantes/${p.id}`)}
+                    className="hover:bg-sky-50/50 cursor-pointer transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center">
-                        <div className="h-9 w-9 rounded-full bg-sky-100 flex items-center justify-center text-sky-700 font-semibold text-sm flex-shrink-0">
+                        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-sky-400 to-teal-500 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
                           {p.first_name[0]}{p.last_name[0]}
                         </div>
-                        <div className="ml-3">
-                          <p className="text-sm font-medium text-gray-900">{p.first_name} {p.last_name}</p>
-                          {p.organization && (
-                            <p className="text-xs text-gray-400">{(p.organization as any).name}</p>
-                          )}
+                        <div className="ml-3 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">{p.first_name} {p.last_name}</p>
+                          <p className="text-xs text-gray-400 truncate">{p.primary_email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{p.primary_email}</td>
+                    <td className="px-6 py-4 hidden md:table-cell">
+                      <span className="text-sm text-gray-600 truncate block max-w-[200px]">
+                        {p.institution || (p.organization as any)?.name || '—'}
+                      </span>
+                    </td>
                     <td className="px-6 py-4 text-sm text-gray-600 hidden lg:table-cell">{p.department || '—'}</td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[p.status]}`}>
                         {STATUS_LABELS[p.status]}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
+                    <td className="px-6 py-4 text-sm text-gray-500 hidden sm:table-cell">
                       {new Date(p.created_at).toLocaleDateString('es-GT')}
                     </td>
                   </tr>
@@ -263,28 +229,19 @@ const ParticipantListPage: React.FC = () => {
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
             <p className="text-sm text-gray-500">
               Mostrando {(page - 1) * pageSize + 1} - {Math.min(page * pageSize, totalCount)} de {totalCount}
             </p>
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <span className="text-sm text-gray-600 px-2">
-                {page} / {totalPages}
-              </span>
-              <button
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+              <span className="text-sm text-gray-600 px-2">{page} / {totalPages}</span>
+              <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
@@ -301,5 +258,21 @@ const ParticipantListPage: React.FC = () => {
     </>
   );
 };
+
+const FilterSelect: React.FC<{
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}> = ({ label, value, onChange, options }) => (
+  <div>
+    <label className="block text-xs font-medium text-gray-500 mb-1">{label}</label>
+    <select value={value} onChange={e => onChange(e.target.value)}
+      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+      <option value="">Todos</option>
+      {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+    </select>
+  </div>
+);
 
 export default ParticipantListPage;
