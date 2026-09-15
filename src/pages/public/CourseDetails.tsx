@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 
 import { decapContentService } from '../../services/courseService';
+import { getCourseBySlug } from '../../services/participantService';
 import type {
   CourseFM,
   SessionFM,
@@ -67,6 +68,7 @@ const CourseDetails: React.FC = () => {
   const [related, setRelated] = useState<WithSlug<CourseFM>[]>(loaderData?.related ?? []);
   const [loading, setLoading] = useState(!loaderData);
   const [showNoSessionsModal, setShowNoSessionsModal] = useState(false);
+  const [registrationOpen, setRegistrationOpen] = useState(false);
 
   /* -------------------- Carga del curso --------------------------- */
   useEffect(() => {
@@ -98,6 +100,13 @@ const CourseDetails: React.FC = () => {
 
     loadData();
   }, [slug, loaderData]);
+
+  useEffect(() => {
+    if (!slug) return;
+    getCourseBySlug(slug).then(db => {
+      setRegistrationOpen(db?.status === 'open');
+    }).catch(() => {});
+  }, [slug]);
 
   /* -------------------- Estados base ----------------------------- */
   if (loading) {
@@ -197,12 +206,14 @@ const CourseDetails: React.FC = () => {
                 </button>
               )}
 
-              <Link
-                to={`/course/${slug}/registro`}
-                className="inline-flex items-center px-6 py-3 bg-white text-primary-600 border-2 border-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
-              >
-                Registrarse
-              </Link>
+              {registrationOpen && (
+                <Link
+                  to={`/course/${slug}/registro`}
+                  className="inline-flex items-center px-6 py-3 bg-white text-primary-600 border-2 border-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
+                >
+                  Registrarse
+                </Link>
+              )}
             </div>
           </div>
 

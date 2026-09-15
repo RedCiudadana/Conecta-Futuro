@@ -13,6 +13,7 @@ const CourseRegistration: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [courseTitle, setCourseTitle] = useState<string>('');
   const [courseExists, setCourseExists] = useState<boolean | null>(null);
+  const [courseOpen, setCourseOpen] = useState<boolean>(true);
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState<RegistrationStep>('form');
   const [errorMsg, setErrorMsg] = useState('');
@@ -41,7 +42,12 @@ const CourseRegistration: React.FC = () => {
 
         const dbCourse = await getCourseBySlug(slug!);
         setCourseExists(!!(cmsCourse || dbCourse));
-        if (!cmsCourse && dbCourse) setCourseTitle(dbCourse.title);
+        if (dbCourse) {
+          if (!cmsCourse) setCourseTitle(dbCourse.title);
+          setCourseOpen(dbCourse.status === 'open');
+        } else {
+          setCourseOpen(true);
+        }
       } catch {
         setCourseExists(false);
       }
@@ -80,13 +86,15 @@ const CourseRegistration: React.FC = () => {
     );
   }
 
-  if (!courseExists) {
+  if (!courseExists || !courseOpen) {
     return (
       <div className="max-w-lg mx-auto px-4 py-16 text-center">
         <AlertCircle className="h-16 w-16 text-gray-300 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Registro no disponible</h1>
         <p className="text-gray-600 mb-6">
-          Este curso no tiene registro abierto en este momento. Puede que aún no se haya habilitado o que el curso ya haya iniciado.
+          {!courseOpen
+            ? 'Las inscripciones para este curso están cerradas. Solo es posible registrarse cuando el curso tiene inscripciones abiertas.'
+            : 'Este curso no tiene registro abierto en este momento. Puede que aún no se haya habilitado o que el curso ya haya iniciado.'}
         </p>
         <Link
           to={slug ? `/course/${slug}` : '/courses'}

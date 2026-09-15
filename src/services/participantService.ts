@@ -761,6 +761,10 @@ export async function publicRegisterForCourse(
     course = found;
   }
 
+  if (course.status !== 'open') {
+    throw new Error('Este curso no tiene inscripciones abiertas en este momento');
+  }
+
   const { data: existing } = await supabase
     .from('participants')
     .select('id')
