@@ -197,16 +197,12 @@ const CourseDetails: React.FC = () => {
                 </button>
               )}
 
-              {course.enlace_registro && (
-                <a
-                  href={course.enlace_registro}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 bg-white text-primary-600 border-2 border-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
-                >
-                  Registrarse
-                </a>
-              )}
+              <Link
+                to={`/course/${slug}/registro`}
+                className="inline-flex items-center px-6 py-3 bg-white text-primary-600 border-2 border-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
+              >
+                Registrarse
+              </Link>
             </div>
           </div>
 

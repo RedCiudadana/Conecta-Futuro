@@ -40,6 +40,7 @@ import VerifyCertificate from './pages/public/VerifyCertificate';
 import Tutoriales from './pages/public/Tutoriales';
 import DirectorioIA from './pages/public/DirectorioIA';
 import BancoPrompts from './pages/public/BancoPrompts';
+import CourseRegistration from './pages/public/CourseRegistration';
 
 const RootLayout: React.FC = () => (
   <AuthProvider>
@@ -86,6 +87,14 @@ export const routes = [
               ).slice(0, 3)
             : [];
           return { course: data, related };
+        },
+      },
+      {
+        path: 'course/:slug/registro',
+        element: <CourseRegistration />,
+        getStaticPaths: async () => {
+          const courses = await decapContentService.getCourses();
+          return courses.map(c => `/course/${c.slug}/registro`);
         },
       },
       {

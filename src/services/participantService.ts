@@ -642,3 +642,139 @@ export async function logAuditEntry(
     performed_by: performedBy,
   });
 }
+
+// --- Public Registration ---
+
+export interface PublicRegistrationData {
+  first_name: string;
+  last_name: string;
+  primary_email: string;
+  phone?: string;
+  dpi?: string;
+  gender?: string;
+  department?: string;
+  municipality?: string;
+  organization_name?: string;
+  digital_skill_level?: string;
+  how_found_us?: string;
+}
+
+export interface PublicRegistrationResult {
+  success: boolean;
+  alreadyEnrolled: boolean;
+  participantId: string;
+  enrollmentId?: string;
+}
+
+export async function getCourseBySlug(slug: string): Promise<Course | null> {
+  const { data, error } = await supabase
+    .from('courses')
+    .select('*')
+    .eq('slug', slug)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function publicRegisterForCourse(
+  courseSlug: string,
+  registration: PublicRegistrationData
+): Promise<PublicRegistrationResult> {
+  const email = normalizeEmail(registration.primary_email);
+
+  const { data: course, error: courseErr } = await supabase
+    .from('courses')
+    .select('id, status, max_capacity')
+    .eq('slug', courseSlug)
+    .maybeSingle();
+
+  if (courseErr) throw courseErr;
+  if (!course) throw new Error('Curso no encontrado');
+
+  const { data: existing } = await supabase
+    .from('participants')
+    .select('id')
+    .eq('primary_email', email)
+    .maybeSingle();
+
+  let participantId: string;
+
+  if (existing) {
+    participantId = existing.id;
+  } else {
+    const { data: created, error: createErr } = await supabase
+      .from('participants')
+      .insert({
+        first_name: registration.first_name.trim(),
+        last_name: registration.last_name.trim(),
+        primary_email: email,
+        phone: registration.phone || null,
+        dpi: registration.dpi || null,
+        gender: registration.gender || null,
+        department: registration.department || null,
+        municipality: registration.municipality || null,
+        digital_skill_level: registration.digital_skill_level || null,
+        how_found_us: registration.how_found_us || null,
+        status: 'registered' as const,
+      })
+      .select('id')
+      .single();
+
+    if (createErr) throw createErr;
+    participantId = created.id;
+
+    await supabase.from('participant_emails').insert({
+      participant_id: participantId,
+      email,
+      is_primary: true,
+    });
+
+    await supabase.from('participation_events').insert({
+      participant_id: participantId,
+      event_type: 'registration',
+      event_data: { source: 'public_form', course_slug: courseSlug },
+      created_by: 'public',
+    });
+  }
+
+  const { data: existingEnrollment } = await supabase
+    .from('enrollments')
+    .select('id')
+    .eq('participant_id', participantId)
+    .eq('course_id', course.id)
+    .maybeSingle();
+
+  if (existingEnrollment) {
+    return { success: true, alreadyEnrolled: true, participantId };
+  }
+
+  if (course.max_capacity) {
+    const { count } = await supabase
+      .from('enrollments')
+      .select('*', { count: 'exact', head: true })
+      .eq('course_id', course.id)
+      .in('status', ['enrolled', 'in_progress', 'completed']);
+
+    if (count && count >= course.max_capacity) {
+      throw new Error('Este curso ha alcanzado su capacidad máxima');
+    }
+  }
+
+  const { data: enrollment, error: enrollErr } = await supabase
+    .from('enrollments')
+    .insert({ participant_id: participantId, course_id: course.id })
+    .select('id')
+    .single();
+
+  if (enrollErr) throw enrollErr;
+
+  await supabase.from('participation_events').insert({
+    participant_id: participantId,
+    event_type: 'enrollment',
+    event_data: { course_id: course.id, course_slug: courseSlug, source: 'public_form' },
+    created_by: 'public',
+  });
+
+  return { success: true, alreadyEnrolled: false, participantId, enrollmentId: enrollment.id };
+}
