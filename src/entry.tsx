@@ -20,6 +20,7 @@ import AttendancePage from './pages/admin/AttendancePage';
 import CourseManagementPage from './pages/admin/CourseManagementPage';
 import DatabaseManagementPage from './pages/admin/DatabaseManagementPage';
 import SkillsManagementPage from './pages/admin/SkillsManagementPage';
+import BadgesManagementPage from './pages/admin/BadgesManagementPage';
 
 // Public pages
 import LandingPage from './pages/public/LandingPage';
@@ -159,6 +160,7 @@ export const routes = [
       { path: 'asistencia', element: <AttendancePage /> },
       { path: 'cursos', element: <CourseManagementPage /> },
       { path: 'habilidades', element: <SkillsManagementPage /> },
+      { path: 'insignias', element: <BadgesManagementPage /> },
       { path: 'base-de-datos', element: <DatabaseManagementPage /> },
     ],
   },

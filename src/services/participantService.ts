@@ -1120,6 +1120,9 @@ export async function issueCertificate(
   try {
     const { awardCourseSkillsToParticipant } = await import('./skillService');
     await awardCourseSkillsToParticipant(participantId, courseId);
+    const { checkAndAwardSkillBadges, checkMilestoneBadges } = await import('./badgeService');
+    await checkAndAwardSkillBadges(participantId);
+    await checkMilestoneBadges(participantId);
   } catch {}
 
   return data;

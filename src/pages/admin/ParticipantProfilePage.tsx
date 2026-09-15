@@ -20,13 +20,15 @@ import {
   SKILL_LEVEL_LABELS,
   SKILL_LEVEL_COLORS,
 } from '../../services/skillService';
+import { getParticipantBadges, BADGE_COLORS, BADGE_TYPE_LABELS } from '../../services/badgeService';
+import type { ParticipantBadge } from '../../services/badgeService';
 import type {
   Participant, Enrollment, Attendance, Certificate,
   ParticipationEvent, Tag as TagType, SkillLevel,
 } from '../../types/participants';
 import { STATUS_LABELS, STATUS_COLORS, ENROLLMENT_STATUS_LABELS } from '../../types/participants';
 
-type TabId = 'overview' | 'courses' | 'attendance' | 'certificates' | 'skills' | 'history';
+type TabId = 'overview' | 'courses' | 'attendance' | 'certificates' | 'skills' | 'badges' | 'history';
 
 interface EffectiveSkill {
   skill: { id: string; name: string; slug: string; category: string; description: string | null };
@@ -44,6 +46,7 @@ const ParticipantProfilePage: React.FC = () => {
   const [timeline, setTimeline] = useState<ParticipationEvent[]>([]);
   const [tags, setTags] = useState<TagType[]>([]);
   const [skills, setSkills] = useState<EffectiveSkill[]>([]);
+  const [badges, setBadges] = useState<ParticipantBadge[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -60,8 +63,9 @@ const ParticipantProfilePage: React.FC = () => {
       getParticipantTimeline(id),
       getParticipantTags(id),
       getParticipantEffectiveSkills(id),
+      getParticipantBadges(id),
     ])
-      .then(([p, e, a, c, t, tg, sk]) => {
+      .then(([p, e, a, c, t, tg, sk, bg]) => {
         setParticipant(p);
         setEnrollments(e);
         setAttendance(a);
@@ -69,6 +73,7 @@ const ParticipantProfilePage: React.FC = () => {
         setTimeline(t);
         setTags(tg);
         setSkills(sk);
+        setBadges(bg);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -125,6 +130,7 @@ const ParticipantProfilePage: React.FC = () => {
     { id: 'attendance', label: 'Asistencia', count: attendance.length },
     { id: 'certificates', label: 'Certificados', count: activeCerts.length },
     { id: 'skills', label: 'Habilidades', count: skills.length },
+    { id: 'badges', label: 'Insignias', count: badges.length },
     { id: 'history', label: 'Historial', count: timeline.length },
   ];
 
@@ -193,13 +199,14 @@ const ParticipantProfilePage: React.FC = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
         <KPICard label="Inscripciones" value={enrollments.length} icon={<BookOpen className="h-5 w-5 text-sky-500" />} />
         <KPICard label="Completados" value={completedCourses} icon={<GraduationCap className="h-5 w-5 text-emerald-500" />} />
         <KPICard label="Certificados" value={activeCerts.length} icon={<Award className="h-5 w-5 text-amber-500" />} />
         <KPICard label="Asistencia" value={`${attendanceRate}%`} icon={<UserCheck className="h-5 w-5 text-teal-500" />} />
         <KPICard label="Horas" value={totalHours} icon={<Clock className="h-5 w-5 text-blue-500" />} />
         <KPICard label="Habilidades" value={skills.length} icon={<Star className="h-5 w-5 text-rose-500" />} />
+        <KPICard label="Insignias" value={badges.length} icon={<Shield className="h-5 w-5 text-orange-500" />} />
       </div>
 
       {/* Tabs */}
@@ -242,6 +249,9 @@ const ParticipantProfilePage: React.FC = () => {
           )}
           {activeTab === 'skills' && (
             <SkillsTab skillsByCategory={skillsByCategory} />
+          )}
+          {activeTab === 'badges' && (
+            <BadgesTab badges={badges} />
           )}
           {activeTab === 'history' && (
             <HistoryTab timeline={timeline} />
@@ -576,6 +586,56 @@ const SkillsTab: React.FC<{ skillsByCategory: Record<string, EffectiveSkill[]> }
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const BadgesTab: React.FC<{ badges: ParticipantBadge[] }> = ({ badges }) => {
+  if (badges.length === 0) {
+    return <EmptyState text="Sin insignias obtenidas" />;
+  }
+
+  const grouped = badges.reduce<Record<string, ParticipantBadge[]>>((acc, pb) => {
+    const type = pb.badge?.badge_type ?? 'manual';
+    (acc[type] ??= []).push(pb);
+    return acc;
+  }, {});
+
+  return (
+    <div className="space-y-6">
+      {Object.entries(grouped).map(([type, items]) => (
+        <div key={type}>
+          <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
+            {BADGE_TYPE_LABELS[type] || type}
+          </h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {items.map(pb => {
+              const b = pb.badge;
+              if (!b) return null;
+              const colors = BADGE_COLORS[b.color] ?? BADGE_COLORS.sky;
+              return (
+                <div
+                  key={pb.id}
+                  className={`p-4 rounded-xl border ${colors.border} ${colors.bg} hover:shadow-sm transition-shadow`}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl" role="img" aria-label={b.name}>{b.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-semibold ${colors.text}`}>{b.name}</p>
+                      {b.description && (
+                        <p className="text-xs text-gray-600 mt-0.5 line-clamp-2">{b.description}</p>
+                      )}
+                      <p className="text-xs text-gray-400 mt-1.5">
+                        Otorgada {new Date(pb.awarded_at).toLocaleDateString('es-GT', { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       ))}
