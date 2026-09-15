@@ -28,6 +28,16 @@ import ScrollTopButton from './components/scrolltotopButton';
 
 // Layout components
 import PublicLayout from './components/layouts/PublicLayout';
+import DashboardLayout from './components/layouts/DashboardLayout';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+
+// Auth + Dashboard pages
+import Login from './pages/public/Login';
+import Dashboard from './pages/dashboard/Dashboard';
+import CourseView from './pages/dashboard/CourseView';
+import Profile from './pages/dashboard/Profile';
+import Certificates from './pages/dashboard/Certificates';
+import CommunityDashboard from './pages/dashboard/Community';
 
 function App() {
   return (
@@ -39,6 +49,7 @@ function App() {
         <Route path="/" element={<PublicLayout />}>
           {/* Nested routes */}
           <Route index element={<LandingPage />} />
+          <Route path="login" element={<Login />} />
           <Route path="courses" element={<CourseCatalog />} />
           <Route path="course-sessions" element={<CourseSessions />} />
           <Route path="learning-paths" element={<RutasAprendizaje />} />
@@ -61,7 +72,16 @@ function App() {
           <Route path="community" element={<Community />} />
           <Route path="community/:slug" element={<CommunityDetails />} />
         </Route>
-        
+
+        {/* Protected dashboard routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+          <Route index element={<Dashboard />} />
+          <Route path="courses" element={<CourseView />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="certificates" element={<Certificates />} />
+          <Route path="community" element={<CommunityDashboard />} />
+        </Route>
+
         {/* 404 route */}
         <Route path="/*" element={<NotFound />} />
       </Routes>
