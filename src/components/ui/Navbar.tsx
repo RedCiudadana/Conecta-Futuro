@@ -99,9 +99,6 @@ const Navbar: React.FC = () => {
               <Link to="/conecta-futuro" className="text-gray-700 hover:text-primary-600 font-medium">
                 Conecta Futuro 2025
               </Link>
-              <Link to="/verify-certificate" className="text-gray-700 hover:text-primary-600 font-medium">
-                Certificados
-              </Link>
               <Link to="/contact" className="text-gray-700 hover:text-primary-600 font-medium">
                 Contacto
               </Link>
@@ -129,9 +126,6 @@ const Navbar: React.FC = () => {
               </Link>
               <Link to="/conecta-futuro" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Conecta Futuro 2025
-              </Link>
-              <Link to="/verify-certificate" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
-                Certificados
               </Link>
               <Link to="/contact" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Contacto
