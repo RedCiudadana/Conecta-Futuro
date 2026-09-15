@@ -9,7 +9,6 @@ import {
   ChevronRight,
   BookOpen,
   Users,
-  Award,
   Target,
   Globe,
   BarChart3,
@@ -92,7 +91,6 @@ const LandingPage: React.FC = () => {
     { label: 'Personas formadas', value: '10,000+', icon: <Users className="w-6 h-6" /> },
     { label: 'Cursos y recursos', value: '50+', icon: <BookOpen className="w-6 h-6" /> },
     { label: 'Territorios alcanzados', value: '15+', icon: <Globe className="w-6 h-6" /> },
-    { label: 'Certificados emitidos', value: '1,000+', icon: <Award className="w-6 h-6" /> },
   ];
 
   const problems = [
