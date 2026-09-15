@@ -4,6 +4,8 @@ import { Search, ChevronLeft, ChevronRight, RotateCcw  } from 'lucide-react';
 
 import CourseCard from '../../components/courses/CourseCard';
 import { decapContentService } from '../../services/courseService';
+import { getCourses as getDBCourses } from '../../services/participantService';
+import type { Course as DBCourse } from '../../types/participants';
 import type { CourseFM, Nivel, WithSlug } from '../../types/course';
 
 const levels: Nivel[] = ['Básico', 'Intermedio', 'Avanzado'];
@@ -23,7 +25,30 @@ export default function CourseCatalog() {
 
   /* ---------- Cargar cursos ---------- */
   useEffect(() => {
-    decapContentService.getCourses().then(setCourses);
+    async function load() {
+      const cmsCourses = await decapContentService.getCourses();
+      let dbCourses: DBCourse[] = [];
+      try { dbCourses = await getDBCourses(); } catch {}
+
+      const cmsSlugs = new Set(cmsCourses.map(c => c.slug));
+      const dbOnly = dbCourses.filter(d => !cmsSlugs.has(d.slug) && (d.status === 'open' || d.status === 'in_progress'));
+
+      const mapped: WithSlug<CourseFM>[] = dbOnly.map(d => ({
+        slug: d.slug,
+        title: d.title,
+        descripcion: d.description || '',
+        nivel: (d.level || '') as any,
+        duracion: d.duration || '',
+        instructor: d.instructor_name || '',
+        thumbnail: d.thumbnail_url || undefined,
+        categoria: d.category || '',
+        estado: d.status === 'open' ? 'Por iniciar' : d.status === 'in_progress' ? 'En proceso' : '',
+        enlace_contenido: '',
+      } as any));
+
+      setCourses([...cmsCourses, ...mapped]);
+    }
+    load();
   }, []);
 
   /* ---------- Categorías dinámicas ---------- */

@@ -71,6 +71,13 @@ export interface Course {
   id: string;
   slug: string;
   title: string;
+  description: string | null;
+  thumbnail_url: string | null;
+  level: string | null;
+  duration: string | null;
+  category: string | null;
+  instructor_name: string | null;
+  is_featured: boolean;
   program: CourseProgram | null;
   modality: CourseModality | null;
   start_date: string | null;

@@ -356,6 +356,21 @@ export async function createCourse(
   return data;
 }
 
+export async function updateCourse(
+  id: string,
+  updates: Partial<Omit<Course, 'id' | 'created_at' | 'updated_at'>>
+): Promise<Course> {
+  const { data, error } = await supabase
+    .from('courses')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
 export async function getCourseSessions(courseId: string): Promise<CourseSession[]> {
   const { data, error } = await supabase
     .from('course_sessions')

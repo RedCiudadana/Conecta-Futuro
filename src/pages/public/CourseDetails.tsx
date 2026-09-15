@@ -78,21 +78,37 @@ const CourseDetails: React.FC = () => {
     async function loadData() {
       setLoading(true);
 
-      // 1) Curso + instructor + sesiones
-      const data = (await decapContentService.getCourseBySlug(slug!)) as
-        | CourseFull
-        | null;
-      setCourse(data);
+      const cmsData = (await decapContentService.getCourseBySlug(slug!)) as CourseFull | null;
 
-      // 2) Obtener todos los cursos para sugerir relacionados
-      const all = await decapContentService.getCourses();
-      if (data) {
+      if (cmsData) {
+        setCourse(cmsData);
+        const all = await decapContentService.getCourses();
         const rel = all.filter(
-          c =>
-            c.slug !== data.slug &&
-            (c.nivel === data.nivel || (c as any).category === (data as any).category),
+          c => c.slug !== cmsData.slug &&
+            (c.nivel === cmsData.nivel || (c as any).category === (cmsData as any).category),
         );
         setRelated(rel.slice(0, 3));
+      } else {
+        try {
+          const dbCourse = await getCourseBySlug(slug!);
+          if (dbCourse) {
+            const mapped: CourseFull = {
+              slug: dbCourse.slug,
+              title: dbCourse.title,
+              descripcion: dbCourse.description || '',
+              nivel: (dbCourse.level || '') as any,
+              duracion: dbCourse.duration || '',
+              instructor: dbCourse.instructor_name
+                ? { title: dbCourse.instructor_name, foto: '', descripcion: '', especializacion: '' } as any
+                : null,
+              thumbnail: dbCourse.thumbnail_url || undefined,
+              enlace_contenido: '',
+              estado: dbCourse.status === 'open' ? 'Por iniciar' : dbCourse.status === 'in_progress' ? 'En proceso' : 'Finalizado',
+              sesiones: [],
+            } as any;
+            setCourse(mapped);
+          }
+        } catch {}
       }
 
       setLoading(false);
