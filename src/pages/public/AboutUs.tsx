@@ -19,7 +19,7 @@ const AboutUs = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
                 <Users className="w-8 h-8 mx-auto mb-2 text-primary-200" />
-                <div className="text-2xl font-bold">5,000+</div>
+                <div className="text-2xl font-bold">10,000+</div>
                 <div className="text-sm text-primary-200">Estudiantes</div>
               </div>
               <div className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
@@ -68,7 +68,7 @@ const AboutUs = () => {
 
             <h2>Nuestro impacto</h2>
             <p>
-              Desde nuestra fundición, hemos capacitado a más de 5,000 personas en 15 países, con
+              Desde nuestra fundición, hemos capacitado a más de 10,000 personas en 15 países, con
               más de 50 cursos disponibles y 1,000 certificaciones emitidas. Trabajamos en alianza
               con gobiernos locales, organismos internacionales y organizaciones de la sociedad
               civil para impulsar un Estado más transparente, colaborativo y eficiente.

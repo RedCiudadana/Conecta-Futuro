@@ -89,7 +89,7 @@ const LandingPage: React.FC = () => {
   const goToSlide = (index: number) => setCurrentSlide(index);
 
   const indicators = [
-    { label: 'Personas formadas', value: '5,000+', icon: <Users className="w-6 h-6" /> },
+    { label: 'Personas formadas', value: '10,000+', icon: <Users className="w-6 h-6" /> },
     { label: 'Cursos y recursos', value: '50+', icon: <BookOpen className="w-6 h-6" /> },
     { label: 'Territorios alcanzados', value: '15+', icon: <Globe className="w-6 h-6" /> },
     { label: 'Certificados emitidos', value: '1,000+', icon: <Award className="w-6 h-6" /> },
