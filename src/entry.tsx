@@ -23,6 +23,7 @@ import SkillsManagementPage from './pages/admin/SkillsManagementPage';
 import BadgesManagementPage from './pages/admin/BadgesManagementPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
 import CertificateEligibilityPage from './pages/admin/CertificateEligibilityPage';
+import ImpactoAdminPage from './pages/admin/ImpactoAdminPage';
 
 // Public pages
 import LandingPage from './pages/public/LandingPage';
@@ -44,6 +45,7 @@ import VerifyCertificate from './pages/public/VerifyCertificate';
 import Tutoriales from './pages/public/Tutoriales';
 import DirectorioIA from './pages/public/DirectorioIA';
 import BancoPrompts from './pages/public/BancoPrompts';
+import ImpactoPage from './pages/public/ImpactoPage';
 import RutasAprendizaje from './pages/public/RutasAprendizaje';
 import RutaDetalle from './pages/public/RutaDetalle';
 import CourseRegistration from './pages/public/CourseRegistration';
@@ -79,6 +81,7 @@ export const routes = [
       { path: 'tutoriales', element: <Tutoriales /> },
       { path: 'directorio-ia', element: <DirectorioIA /> },
       { path: 'banco-prompts', element: <BancoPrompts /> },
+      { path: 'impacto', element: <ImpactoPage /> },
       {
         path: 'course/:slug',
         element: <CourseDetails />,
@@ -167,6 +170,7 @@ export const routes = [
       { path: 'insignias', element: <BadgesManagementPage /> },
       { path: 'certificados', element: <CertificateEligibilityPage /> },
       { path: 'analiticas', element: <AnalyticsPage /> },
+      { path: 'impacto', element: <ImpactoAdminPage /> },
       { path: 'base-de-datos', element: <DatabaseManagementPage /> },
     ],
   },
