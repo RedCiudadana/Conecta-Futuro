@@ -68,6 +68,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               createdAt: userData.createdAt?.toDate() || new Date(),
               lastLogin: userData.lastLogin?.toDate(),
             });
+            // NOTE (security, deferred): this administrator flag is read from the
+            // user's own profile document. Whether a user can edit that flag
+            // depends on the Firestore security rules, which are not part of
+            // this repository, so it could not be confirmed here. Supabase
+            // administrative access does NOT rely on this flag: it is enforced
+            // in the database against a staff allowlist.
             setIsAdmin(userData.isAdmin || false);
           } else {
             // If user doesn't exist in Firestore yet (e.g., first Google sign-in)

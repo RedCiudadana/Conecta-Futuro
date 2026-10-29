@@ -9,16 +9,10 @@ import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../config/supabase';
 import type { Enrollment, Certificate, SkillLevel } from '../../types/participants';
 import {
-  getParticipantEffectiveSkills,
   SKILL_LEVEL_LABELS,
   SKILL_LEVEL_COLORS,
 } from '../../services/skillService';
 import {
-  getParticipantBadges,
-  getParticipantPathProgress,
-  getRecommendations,
-  checkAndAwardSkillBadges,
-  checkMilestoneBadges,
   BADGE_COLORS,
 } from '../../services/badgeService';
 import type { ParticipantBadge, PathProgress, CourseRecommendation } from '../../services/badgeService';
@@ -51,62 +45,45 @@ const DigitalPassport: React.FC = () => {
   const [sendingCode, setSendingCode] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [accessError, setAccessError] = useState<string | null>(null);
-  const [verifiedParticipantId, setVerifiedParticipantId] = useState<string | null>(null);
+  const [passportSession, setPassportSession] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user?.email) { loadPassport(user.email); }
-    else if (verifiedParticipantId) { loadPassportById(verifiedParticipantId); }
+    if (passportSession) { loadPassport(passportSession); }
     else { setLoading(false); }
-  }, [user?.email, verifiedParticipantId]);
+  }, [passportSession]);
 
-  async function loadPassport(email: string) {
+  // The passport is served by the database in a single call, keyed on the
+  // short-lived session issued when the emailed code was redeemed. Participant
+  // records are no longer readable from the browser.
+  async function loadPassport(sessionToken: string) {
     setLoading(true);
     try {
-      const { data: p } = await supabase.rpc('lookup_participant_for_passport', { p_email: email });
-      if (p && p.length > 0) { await loadPassportData(p[0]); }
-      else { setData(null); }
-    } catch { setData(null); }
-    setLoading(false);
-  }
+      const { data: payload } = await supabase.rpc('get_passport_data', {
+        p_session_token: sessionToken,
+      });
 
-  async function loadPassportById(participantId: string) {
-    setLoading(true);
-    try {
-      const { data: p } = await supabase
-        .from('participants')
-        .select('id, first_name, last_name, primary_email, created_at, public_profile_enabled, profile_slug')
-        .eq('id', participantId)
-        .maybeSingle();
-      if (p) { await loadPassportData(p); }
-      else { setData(null); }
-    } catch { setData(null); }
-    setLoading(false);
-  }
+      if (!payload || !payload.participant) {
+        setData(null);
+        setLoading(false);
+        return;
+      }
 
-  async function loadPassportData(participant: any) {
-    const [enrollRes, certRes, skills, badges, pathProgress, recommendations, pathsRes] = await Promise.all([
-      supabase.from('enrollments').select('*, course:courses(*)').eq('participant_id', participant.id).order('enrolled_at', { ascending: false }),
-      supabase.from('certificates').select('*, course:courses(*)').eq('participant_id', participant.id).neq('status', 'revoked').order('issued_at', { ascending: false }),
-      getParticipantEffectiveSkills(participant.id),
-      getParticipantBadges(participant.id),
-      getParticipantPathProgress(participant.id),
-      getRecommendations(participant.id, 4),
-      supabase.from('learning_paths').select('id, name, slug').eq('status', 'active').eq('is_visible', true),
-    ]);
-    checkAndAwardSkillBadges(participant.id).catch(() => {});
-    checkMilestoneBadges(participant.id).catch(() => {});
-    setProfileEnabled(participant.public_profile_enabled ?? false);
-    setProfileSlug(participant.profile_slug ?? null);
-    setData({
-      participant,
-      enrollments: enrollRes.data ?? [],
-      certificates: certRes.data ?? [],
-      skills,
-      badges,
-      pathProgress,
-      recommendations,
-      paths: pathsRes.data ?? [],
-    });
+      setProfileEnabled(payload.participant.public_profile_enabled ?? false);
+      setProfileSlug(payload.participant.profile_slug ?? null);
+      setData({
+        participant: payload.participant,
+        enrollments: payload.enrollments ?? [],
+        certificates: payload.certificates ?? [],
+        skills: payload.skills ?? [],
+        badges: payload.badges ?? [],
+        pathProgress: payload.path_progress ?? [],
+        recommendations: [],
+        paths: payload.paths ?? [],
+      });
+    } catch {
+      setData(null);
+    }
+    setLoading(false);
   }
 
   async function sendAccessCode() {
@@ -132,27 +109,25 @@ const DigitalPassport: React.FC = () => {
     setVerifying(true);
     setAccessError(null);
     try {
-      const { data: codeRow } = await supabase
-        .from('passport_access_codes')
-        .select('id, participant_id, expires_at, used_at')
-        .eq('email', accessEmail.toLowerCase().trim())
-        .eq('code', accessCode.trim())
-        .is('used_at', null)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+      // Redeemed server-side: the code is claimed atomically and its expiry and
+      // single-use state are enforced by the database, not by this screen.
+      const { data: sessionToken, error } = await supabase.rpc('verify_passport_code', {
+        p_email: accessEmail.toLowerCase().trim(),
+        p_code: accessCode.trim(),
+      });
 
-      if (!codeRow) { setAccessError('Codigo invalido'); setVerifying(false); return; }
-      if (new Date(codeRow.expires_at) < new Date()) { setAccessError('El codigo ha expirado. Solicita uno nuevo.'); setVerifying(false); return; }
-      if (!codeRow.participant_id) { setAccessError('No se encontro participante asociado'); setVerifying(false); return; }
+      if (error || !sessionToken) {
+        setAccessError('Codigo invalido o expirado. Solicita uno nuevo.');
+        setVerifying(false);
+        return;
+      }
 
-      await supabase.from('passport_access_codes').update({ used_at: new Date().toISOString() }).eq('id', codeRow.id);
-      setVerifiedParticipantId(codeRow.participant_id);
+      setPassportSession(sessionToken as string);
     } catch { setAccessError('Error al verificar'); }
     setVerifying(false);
   }
 
-  if (!user && !verifiedParticipantId) {
+  if (!passportSession) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
@@ -285,7 +260,7 @@ const DigitalPassport: React.FC = () => {
     return acc;
   }, {});
   const levelDots: Record<SkillLevel, number> = { basico: 1, intermedio: 2, avanzado: 3, especializado: 4 };
-  const isGuestAccess = !user && !!verifiedParticipantId;
+  const isGuestAccess = !user && !!passportSession;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
@@ -339,7 +314,7 @@ const DigitalPassport: React.FC = () => {
               if (!participant) return;
               setShareToggeling(true);
               const newVal = !profileEnabled;
-              const slug = await togglePublicProfile(participant.id, newVal);
+              const slug = await togglePublicProfile(passportSession, newVal);
               setProfileEnabled(newVal);
               if (slug) setProfileSlug(slug);
               setShareToggeling(false);

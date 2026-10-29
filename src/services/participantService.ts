@@ -833,122 +833,49 @@ export async function publicRegisterForCourse(
   registration: PublicRegistrationData,
   cmsTitle?: string
 ): Promise<PublicRegistrationResult> {
-  const email = normalizeEmail(registration.primary_email);
+  // Registration is performed entirely server-side: course status, capacity and
+  // duplicate enrolment are re-checked in the database, and the browser has no
+  // direct write access to participant or enrolment records.
+  const { data, error } = await supabase.rpc('public_register_for_course', {
+    p_course_slug: courseSlug,
+    p_course_title: cmsTitle ?? courseSlug,
+    p_first_name: registration.first_name.trim(),
+    p_last_name: registration.last_name.trim(),
+    p_email: normalizeEmail(registration.primary_email),
+    p_phone: registration.phone || null,
+    p_gender: registration.gender || null,
+    p_department: registration.department || null,
+    p_municipality: registration.municipality || null,
+    p_sector: registration.sector || null,
+    p_institution: registration.institution || null,
+    p_digital_skill_level: registration.digital_skill_level || null,
+    p_how_found_us: registration.how_found_us || null,
+  });
 
-  let course: { id: string; status: string; max_capacity: number | null } | null;
+  if (error) throw error;
 
-  const { data: found, error: courseErr } = await supabase
-    .from('courses')
-    .select('id, status, max_capacity')
-    .eq('slug', courseSlug)
-    .maybeSingle();
+  const result = data as {
+    success: boolean;
+    already_enrolled: boolean;
+    participant_id: string;
+    enrollment_id?: string;
+  };
 
-  if (courseErr) throw courseErr;
-
-  if (!found) {
-    const created = await ensureCourseFromCMS(courseSlug, cmsTitle);
-    course = { id: created.id, status: created.status, max_capacity: created.max_capacity };
-  } else {
-    course = found;
-  }
-
-  if (course.status !== 'open') {
-    throw new Error('Este curso no tiene inscripciones abiertas en este momento');
-  }
-
-  const { data: existing } = await supabase
-    .from('participants')
-    .select('id')
-    .eq('primary_email', email)
-    .maybeSingle();
-
-  let participantId: string;
-
-  if (existing) {
-    participantId = existing.id;
-  } else {
-    const { data: created, error: createErr } = await supabase
-      .from('participants')
-      .insert({
-        first_name: registration.first_name.trim(),
-        last_name: registration.last_name.trim(),
-        primary_email: email,
-        phone: registration.phone || null,
-        gender: registration.gender || null,
-        department: registration.department || null,
-        municipality: registration.municipality || null,
-        sector: registration.sector || null,
-        institution: registration.institution || null,
-        digital_skill_level: registration.digital_skill_level || null,
-        how_found_us: registration.how_found_us || null,
-        status: 'registered' as const,
-      })
-      .select('id')
-      .single();
-
-    if (createErr) throw createErr;
-    participantId = created.id;
-
-    await supabase.from('participant_emails').insert({
-      participant_id: participantId,
-      email,
-      is_primary: true,
-    });
-
-    await supabase.from('participation_events').insert({
-      participant_id: participantId,
-      event_type: 'registration',
-      event_data: { source: 'public_form', course_slug: courseSlug },
-      created_by: 'public',
+  if (!result.already_enrolled) {
+    sendRegistrationEmail({
+      to: normalizeEmail(registration.primary_email),
+      firstName: registration.first_name.trim(),
+      courseTitle: cmsTitle || courseSlug,
+      courseSlug,
     });
   }
 
-  const { data: existingEnrollment } = await supabase
-    .from('enrollments')
-    .select('id')
-    .eq('participant_id', participantId)
-    .eq('course_id', course.id)
-    .maybeSingle();
-
-  if (existingEnrollment) {
-    return { success: true, alreadyEnrolled: true, participantId };
-  }
-
-  if (course.max_capacity) {
-    const { count } = await supabase
-      .from('enrollments')
-      .select('*', { count: 'exact', head: true })
-      .eq('course_id', course.id)
-      .in('status', ['enrolled', 'in_progress', 'completed']);
-
-    if (count && count >= course.max_capacity) {
-      throw new Error('Este curso ha alcanzado su capacidad máxima');
-    }
-  }
-
-  const { data: enrollment, error: enrollErr } = await supabase
-    .from('enrollments')
-    .insert({ participant_id: participantId, course_id: course.id })
-    .select('id')
-    .single();
-
-  if (enrollErr) throw enrollErr;
-
-  await supabase.from('participation_events').insert({
-    participant_id: participantId,
-    event_type: 'enrollment',
-    event_data: { course_id: course.id, course_slug: courseSlug, source: 'public_form' },
-    created_by: 'public',
-  });
-
-  sendRegistrationEmail({
-    to: email,
-    firstName: registration.first_name.trim(),
-    courseTitle: cmsTitle || courseSlug,
-    courseSlug,
-  });
-
-  return { success: true, alreadyEnrolled: false, participantId, enrollmentId: enrollment.id };
+  return {
+    success: true,
+    alreadyEnrolled: result.already_enrolled,
+    participantId: result.participant_id,
+    enrollmentId: result.enrollment_id,
+  };
 }
 
 // --- Attendance Form Links ---
@@ -979,23 +906,17 @@ export async function getAttendanceLinkByToken(token: string): Promise<{
   session: CourseSession;
   course: Course;
 } | null> {
-  const { data, error } = await supabase
-    .from('attendance_form_links')
-    .select('*, session:course_sessions(*, course:courses(*))')
-    .eq('token', token)
-    .maybeSingle();
+  // Resolved server-side: the table of tokens is not readable from the browser.
+  const { data, error } = await supabase.rpc('public_get_attendance_link', { p_token: token });
 
   if (error || !data) return null;
 
-  const session = (data as any).session;
-  const course = session?.course;
+  const payload = data as any;
+  const session = payload.session;
+  const course = payload.course;
   if (!session || !course) return null;
 
-  return {
-    link: { id: data.id, session_id: data.session_id, token: data.token, is_active: data.is_active, expires_at: data.expires_at, created_at: data.created_at },
-    session,
-    course,
-  };
+  return { link: payload.link, session, course };
 }
 
 export async function toggleAttendanceLinkActive(linkId: string, isActive: boolean): Promise<void> {
@@ -1013,79 +934,24 @@ export async function publicRecordAttendance(
   verifyName?: string,
   verifyInstitution?: string
 ): Promise<{ success: boolean; alreadyRecorded: boolean; participantName?: string }> {
-  const linkData = await getAttendanceLinkByToken(token);
-  if (!linkData) throw new Error('Enlace no válido');
-
-  const { link, session } = linkData;
-
-  if (!link.is_active) throw new Error('Este formulario de asistencia ya no está activo');
-
-  if (link.expires_at && new Date(link.expires_at) < new Date()) {
-    throw new Error('Este enlace ha expirado');
-  }
-
-  const normalizedEmail = email.toLowerCase().trim();
-
-  const { data: participant } = await supabase
-    .from('participants')
-    .select('id, first_name, last_name, institution')
-    .eq('primary_email', normalizedEmail)
-    .maybeSingle();
-
-  if (!participant) {
-    throw new Error('No se encontró un participante registrado con este correo electrónico. Asegúrate de usar el mismo correo con el que te inscribiste al curso.');
-  }
-
-  if (verifyName && verifyName.trim()) {
-    const dbFullName = `${participant.first_name} ${participant.last_name}`.toLowerCase();
-    const inputName = verifyName.trim().toLowerCase();
-    if (!dbFullName.includes(inputName) && !inputName.includes(dbFullName.split(' ')[0])) {
-      throw new Error('El nombre ingresado no coincide con el participante registrado con este correo.');
-    }
-  }
-
-  if (verifyInstitution && verifyInstitution.trim() && (participant as any).institution) {
-    const dbInst = ((participant as any).institution as string).toLowerCase();
-    const inputInst = verifyInstitution.trim().toLowerCase();
-    if (!dbInst.includes(inputInst) && !inputInst.includes(dbInst)) {
-      throw new Error('La institución ingresada no coincide con la registrada para este participante.');
-    }
-  }
-
-  const { data: enrollment } = await supabase
-    .from('enrollments')
-    .select('id')
-    .eq('participant_id', participant.id)
-    .eq('course_id', session.course_id)
-    .maybeSingle();
-
-  if (!enrollment) {
-    throw new Error('No estás inscrito en este curso. Debes inscribirte antes de registrar tu asistencia.');
-  }
-
-  const { data: existingAttendance } = await supabase
-    .from('attendance')
-    .select('id')
-    .eq('participant_id', participant.id)
-    .eq('session_id', session.id)
-    .maybeSingle();
-
-  if (existingAttendance) {
-    return { success: true, alreadyRecorded: true, participantName: `${participant.first_name} ${participant.last_name}` };
-  }
-
-  const { error } = await supabase
-    .from('attendance')
-    .insert({
-      participant_id: participant.id,
-      session_id: session.id,
-      status: 'present',
-      check_in_time: new Date().toISOString(),
-    });
+  // Link validity, expiry, identity and enrolment are all enforced in the
+  // database; recording attendance is idempotent for a given participant/session.
+  const { data, error } = await supabase.rpc('public_record_attendance', {
+    p_token: token,
+    p_email: email,
+    p_name: verifyName ?? null,
+    p_institution: verifyInstitution ?? null,
+  });
 
   if (error) throw error;
 
-  return { success: true, alreadyRecorded: false, participantName: `${participant.first_name} ${participant.last_name}` };
+  const result = data as { already_recorded: boolean; participant_name?: string };
+
+  return {
+    success: true,
+    alreadyRecorded: result.already_recorded,
+    participantName: result.participant_name,
+  };
 }
 
 // --- Certificate Management ---

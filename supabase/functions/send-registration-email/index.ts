@@ -134,7 +134,7 @@ Deno.serve(async (req: Request) => {
   } catch (err) {
     console.error("Edge function error:", err);
     return new Response(
-      JSON.stringify({ error: (err as Error).message }),
+      JSON.stringify({ error: 'No se pudo enviar el correo' }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

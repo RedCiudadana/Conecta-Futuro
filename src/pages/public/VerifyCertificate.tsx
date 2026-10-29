@@ -5,15 +5,13 @@ import { CertificateRecord } from '../../types';
 import Fondo from '../../assets/slider/fondo.png';
 import Seo from '../../components/Seo';
 import { SEO } from '../../config/seo';
-import {
-  searchCertificateByCode,
-  searchCertificatesByName,
-  searchCertificatesByEmail
-} from '../../services/certificateService';
+import { searchCertificateByCode } from '../../services/certificateService';
 import CertificateCard from '../../components/certificates/CertificateCard';
 import { shareToLinkedIn } from '../../utils/linkedinShare';
 
-type SearchType = 'code' | 'name' | 'email';
+// Verification is by certificate code only: listing holders by name or
+// email let anyone harvest the participant roster.
+type SearchType = 'code';
 
 const VerifyCertificate: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -55,23 +53,10 @@ const VerifyCertificate: React.FC = () => {
         } else {
           setError('No se encontró ningún certificado con ese código');
         }
-      } else if (searchTp === 'name') {
-        const results = await searchCertificatesByName(searchVal);
-        if (results.length > 0) {
-          setCertificates(results);
-        } else {
-          setError('No se encontraron certificados para ese nombre');
-        }
-      } else if (searchTp === 'email') {
-        const results = await searchCertificatesByEmail(searchVal);
-        if (results.length > 0) {
-          setCertificates(results);
-        } else {
-          setError('No se encontraron certificados para ese correo electrónico');
-        }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al buscar el certificado');
+      console.error('[VerifyCertificate] search failed:', err);
+      setError('No pudimos completar la búsqueda. Intenta de nuevo en unos minutos.');
     } finally {
       setLoading(false);
     }
@@ -116,7 +101,7 @@ const VerifyCertificate: React.FC = () => {
                 </div>
                 <h4 className="font-semibold mb-2">1. Busca</h4>
                 <p className="text-sm text-primary-100">
-                  Ingresa tu código, nombre o correo electrónico
+                  Ingresa el código de tu certificado
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
@@ -147,51 +132,8 @@ const VerifyCertificate: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  Buscar por:
-                </label>
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setSearchType('code')}
-                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      searchType === 'code'
-                        ? 'bg-black text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Código de Certificado
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSearchType('name')}
-                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      searchType === 'name'
-                        ? 'bg-black text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Nombre del Estudiante
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSearchType('email')}
-                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      searchType === 'email'
-                        ? 'bg-black text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Correo Electrónico
-                  </button>
-                </div>
-              </div>
-
-              <div>
                 <label htmlFor="search" className="block text-sm font-semibold text-gray-700 mb-2">
-                  {searchType === 'code' && 'Código de Certificado (ej: CERT-2024-001)'}
-                  {searchType === 'name' && 'Nombre del Estudiante'}
-                  {searchType === 'email' && 'Correo Electrónico'}
+                  Código de Certificado (ej: CERT-2024-001)
                 </label>
                 <div className="relative">
                   <input
@@ -199,13 +141,7 @@ const VerifyCertificate: React.FC = () => {
                     type="text"
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    placeholder={
-                      searchType === 'code'
-                        ? 'CERT-2024-001'
-                        : searchType === 'name'
-                        ? 'Juan Pérez'
-                        : 'correo@ejemplo.com'
-                    }
+                    placeholder="CERT-2024-001"
                     className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-primary-600 focus:ring-2 focus:ring-primary-200 transition-all duration-200 text-lg"
                   />
                   <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -242,7 +178,7 @@ const VerifyCertificate: React.FC = () => {
                   </h3>
                   <p className="text-red-700">{error}</p>
                   <p className="text-sm text-red-600 mt-2">
-                    Por favor verifica que el {searchType === 'code' ? 'código' : searchType === 'name' ? 'nombre' : 'correo electrónico'} sea correcto e inténtalo de nuevo.
+                    Por favor verifica que el código sea correcto e inténtalo de nuevo.
                   </p>
                 </div>
               </div>

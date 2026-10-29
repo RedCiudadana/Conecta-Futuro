@@ -74,7 +74,8 @@ const CourseRegistration: React.FC = () => {
       const result = await publicRegisterForCourse(slug, form, courseTitle || undefined);
       setStep(result.alreadyEnrolled ? 'already' : 'success');
     } catch (err: any) {
-      setErrorMsg(err.message || 'Ocurrió un error al registrarte');
+      console.error('[CourseRegistration] submit failed:', err);
+      setErrorMsg('No pudimos completar tu registro. Verifica tus datos e intenta de nuevo.');
       setStep('error');
     }
   };

@@ -46,7 +46,9 @@ Deno.serve(async (req: Request) => {
 
     // Always return success even if not found (don't reveal if email exists)
     if (!partData || partData.length === 0) {
-      return new Response(JSON.stringify({ success: true, sent: false }), {
+      // Identical response whether or not the address is registered, so the
+      // endpoint cannot be used to discover who has an account.
+      return new Response(JSON.stringify({ success: true, sent: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -137,7 +139,8 @@ Deno.serve(async (req: Request) => {
     });
   } catch (err) {
     console.error("Edge function error:", err);
-    return new Response(JSON.stringify({ error: (err as Error).message }), {
+    console.error('[send-passport-code]', err);
+    return new Response(JSON.stringify({ error: 'No se pudo enviar el codigo' }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

@@ -63,7 +63,8 @@ const AttendanceForm: React.FC = () => {
       setParticipantName(result.participantName || '');
       setStep(result.alreadyRecorded ? 'already' : 'success');
     } catch (err: any) {
-      setErrorMsg(err.message || 'Ocurrio un error inesperado');
+      console.error('[AttendanceForm] submit failed:', err);
+      setErrorMsg('No pudimos registrar tu asistencia. Verifica tus datos e intenta de nuevo.');
       setStep('error');
     }
   };

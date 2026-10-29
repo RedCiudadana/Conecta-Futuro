@@ -11,17 +11,18 @@ const parseCSV = (csvText: string): CertificateRecord[] => {
   for (let i = 1; i < lines.length; i++) {
     const values = lines[i].split(',');
 
-    if (values.length >= 7) {
+    if (values.length >= 6) {
       certificates.push({
         certificateCode: values[0].trim(),
         studentName: values[1].trim(),
-        studentEmail: values[2].trim(),
-        courseName: values[3].trim(),
-        completionDate: values[4].trim(),
-        issueDate: values[5].trim(),
-        instructorName: values[6].trim(),
-        expirationDate: values[7] ? values[7].trim() : undefined,
-        certificateUrl: values[8] ? values[8].trim() : undefined,
+        // Email addresses are no longer published with the roster.
+        studentEmail: '',
+        courseName: values[2].trim(),
+        completionDate: values[3].trim(),
+        issueDate: values[4].trim(),
+        instructorName: values[5].trim(),
+        expirationDate: values[6] ? values[6].trim() : undefined,
+        certificateUrl: values[7] ? values[7].trim() : undefined,
       });
     }
   }
@@ -60,31 +61,9 @@ export const searchCertificateByCode = async (code: string): Promise<Certificate
   ) || null;
 };
 
-export const searchCertificatesByName = async (name: string): Promise<CertificateRecord[]> => {
-  const certificates = await fetchCertificates();
-  const normalizedName = name.trim().toLowerCase();
-
-  if (normalizedName.length < 2) {
-    return [];
-  }
-
-  return certificates.filter(cert =>
-    cert.studentName.toLowerCase().includes(normalizedName)
-  );
-};
-
-export const searchCertificatesByEmail = async (email: string): Promise<CertificateRecord[]> => {
-  const certificates = await fetchCertificates();
-  const normalizedEmail = email.trim().toLowerCase();
-
-  if (normalizedEmail.length < 3) {
-    return [];
-  }
-
-  return certificates.filter(cert =>
-    cert.studentEmail.toLowerCase().includes(normalizedEmail)
-  );
-};
+// Searching the roster by name or email let anyone harvest participants in
+// bulk, so verification is now by certificate code only: you can confirm a
+// certificate you were given, but you cannot list who holds one.
 
 export const clearCertificateCache = (): void => {
   cachedCertificates = null;

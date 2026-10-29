@@ -43,22 +43,21 @@ const Register: React.FC = () => {
         const [firstName, ...rest] = fullName.trim().split(' ');
         const lastName = rest.join(' ');
 
-        await supabase.from('participants').upsert({
-          id: data.user.id,
-          first_name: firstName,
-          last_name: lastName || '',
-          primary_email: email,
-          gender: gender || null,
-          department: department || null,
-          municipality: municipality || null,
-          age_range: ageRange || null,
-          urban_rural: urbanRural || null,
-          pueblo: pueblo || null,
-          employment_situation: employment || null,
-          business_owner: hasBusiness,
-          profile_data_consent: consent,
-          profile_consent_date: consent ? new Date().toISOString() : null,
-          status: 'registered',
+        // The profile is written server-side for the signed-in account only:
+        // the browser cannot choose which participant record it writes to, and
+        // operational fields stay under staff control.
+        await supabase.rpc('upsert_own_participant_profile', {
+          p_first_name: firstName,
+          p_last_name: lastName || '',
+          p_gender: gender || null,
+          p_department: department || null,
+          p_municipality: municipality || null,
+          p_age_range: ageRange || null,
+          p_urban_rural: urbanRural || null,
+          p_pueblo: pueblo || null,
+          p_employment_situation: employment || null,
+          p_business_owner: hasBusiness,
+          p_consent: consent,
         });
 
         trackEvent('registration', { metadata: { source: 'public_form' } });
@@ -67,7 +66,7 @@ const Register: React.FC = () => {
       setSuccess(true);
     } catch (err: any) {
       console.error('[Register] Error:', err);
-      setError(err.message ?? 'No pudimos crear tu cuenta. Intenta de nuevo.');
+      setError('No pudimos crear tu cuenta. Revisa los datos e intenta de nuevo.');
     } finally {
       setLoading(false);
     }

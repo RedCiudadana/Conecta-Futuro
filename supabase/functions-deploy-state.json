@@ -1,0 +1,13 @@
+{
+  "projectId": "72504774",
+  "functions": {
+    "send-passport-code": {
+      "hasChanged": true,
+      "hash": "47fe17248ceb699d8900094b0f0f4688f6524b497d099013df3b8af059d5e576"
+    },
+    "send-registration-email": {
+      "hasChanged": true,
+      "hash": "350318749108a1752b2833fe5870e1c2ece989f4f5c4fa34d812423b6248d63f"
+    }
+  }
+}

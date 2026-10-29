@@ -56,110 +56,53 @@ export async function getImpactMetrics(): Promise<ImpactMetrics> {
   };
 }
 
+// All four public breakdowns come from one aggregate-only server call. The
+// browser can no longer read participant or survey rows: it receives counts,
+// and small groups are suppressed so nobody can be identified.
+let breakdownsCache: Promise<any> | null = null;
+
+async function loadPublicBreakdowns(): Promise<any> {
+  if (!breakdownsCache) {
+    breakdownsCache = supabase
+      .rpc('get_public_impact_breakdowns')
+      .then(({ data }) => data ?? {});
+  }
+  return breakdownsCache;
+}
+
 export async function getDepartmentBreakdown(): Promise<DepartmentBreakdown[]> {
-  const { data: trained, error: e1 } = await supabase
-    .from('enrollments')
-    .select('participant:participants(department)')
-    .eq('status', 'completed');
-
-  if (e1) throw e1;
-
-  const trainedCounts = new Map<string, number>();
-  for (const row of trained ?? []) {
-    const dept = (row as any)?.participant?.department;
-    if (dept) {
-      trainedCounts.set(dept, (trainedCounts.get(dept) ?? 0) + 1);
-    }
-  }
-
-  const { data: registered, error: e2 } = await supabase
-    .from('participants')
-    .select('department')
-    .not('department', 'is', null);
-
-  if (e2) throw e2;
-
-  const registeredCounts = new Map<string, number>();
-  for (const row of registered ?? []) {
-    const dept = (row as any)?.department;
-    if (dept) {
-      registeredCounts.set(dept, (registeredCounts.get(dept) ?? 0) + 1);
-    }
-  }
-
-  const allDepts = new Set([...trainedCounts.keys(), ...registeredCounts.keys()]);
-  return Array.from(allDepts).map(dept => ({
-    department: dept,
-    trained: trainedCounts.get(dept) ?? 0,
-    registered: registeredCounts.get(dept) ?? 0,
-  })).sort((a, b) => b.trained - a.trained);
+  const payload = await loadPublicBreakdowns();
+  return (payload.departments ?? []).map((d: any) => ({
+    department: d.department,
+    trained: Number(d.trained ?? 0),
+    registered: Number(d.registered ?? 0),
+  }));
 }
 
 export async function getGenderBreakdown(): Promise<GenderBreakdown[]> {
-  const { data, error } = await supabase
-    .from('participants')
-    .select('gender')
-    .not('gender', 'is', null);
-
-  if (error) throw error;
-
-  const counts = new Map<string, number>();
-  for (const row of data ?? []) {
-    const g = (row as any)?.gender;
-    if (g) counts.set(g, (counts.get(g) ?? 0) + 1);
-  }
-
-  return Array.from(counts.entries())
-    .map(([gender, count]) => ({ gender, count }))
-    .filter(r => r.count >= 10)
-    .sort((a, b) => b.count - a.count);
+  const payload = await loadPublicBreakdowns();
+  return (payload.genders ?? []).map((g: any) => ({
+    gender: g.gender,
+    count: Number(g.count ?? 0),
+  }));
 }
 
 export async function getAgeBreakdown(): Promise<AgeBreakdown[]> {
-  const { data, error } = await supabase
-    .from('participants')
-    .select('age_range')
-    .not('age_range', 'is', null);
-
-  if (error) throw error;
-
-  const counts = new Map<string, number>();
-  for (const row of data ?? []) {
-    const ar = (row as any)?.age_range;
-    if (ar) counts.set(ar, (counts.get(ar) ?? 0) + 1);
-  }
-
-  return Array.from(counts.entries())
-    .map(([age_range, count]) => ({ age_range, count }))
-    .filter(r => r.count >= 10)
-    .sort((a, b) => b.count - a.count);
+  const payload = await loadPublicBreakdowns();
+  return (payload.ages ?? []).map((a: any) => ({
+    age_range: a.age_range,
+    count: Number(a.count ?? 0),
+  }));
 }
 
-export async function getSurveyResults(courseId?: string): Promise<SurveyResult[]> {
-  let query = supabase.from('impact_surveys').select('survey_type, responses');
-  if (courseId) query = query.eq('course_id', courseId);
-
-  const { data, error } = await query;
-  if (error) throw error;
-
-  const byType = new Map<string, { satisfaction: number[]; learning: number[]; applied: number[] }>();
-
-  for (const row of data ?? []) {
-    const type = (row as any).survey_type;
-    const responses = (row as any).responses ?? {};
-    if (!byType.has(type)) byType.set(type, { satisfaction: [], learning: [], applied: [] });
-    const bucket = byType.get(type)!;
-    if (typeof responses.satisfaction === 'number') bucket.satisfaction.push(responses.satisfaction);
-    if (typeof responses.learning === 'number') bucket.learning.push(responses.learning);
-    if (typeof responses.applied_intention === 'number') bucket.applied.push(responses.applied_intention);
-  }
-
-  return Array.from(byType.entries()).map(([survey_type, bucket]) => ({
-    survey_type,
-    total: bucket.satisfaction.length + bucket.learning.length,
-    avg_satisfaction: bucket.satisfaction.length ? bucket.satisfaction.reduce((a, b) => a + b, 0) / bucket.satisfaction.length : null,
-    avg_learning: bucket.learning.length ? bucket.learning.reduce((a, b) => a + b, 0) / bucket.learning.length : null,
-    applied_intention: bucket.applied.length ? bucket.applied.reduce((a, b) => a + b, 0) / bucket.applied.length : null,
+export async function getSurveyResults(_courseId?: string): Promise<SurveyResult[]> {
+  const payload = await loadPublicBreakdowns();
+  return (payload.surveys ?? []).map((s2: any) => ({
+    survey_type: s2.survey_type,
+    total: Number(s2.total ?? 0),
+    avg_satisfaction: s2.avg_satisfaction === null || s2.avg_satisfaction === undefined ? null : Number(s2.avg_satisfaction),
+    avg_learning: s2.avg_learning === null || s2.avg_learning === undefined ? null : Number(s2.avg_learning),
+    applied_intention: s2.applied_intention === null || s2.applied_intention === undefined ? null : Number(s2.applied_intention),
   }));
 }
 

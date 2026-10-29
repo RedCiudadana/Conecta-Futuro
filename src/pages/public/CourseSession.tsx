@@ -162,7 +162,11 @@ export default function CourseSession() {
             />
             <button
               onClick={() => {
-                if (inputPassword === course?.password) { // course?.password
+                // NOTE (security): this gate is cosmetic. Course content and its password
+    // are published in the site bundle, so anyone can read them without
+    // entering anything here. Material that must stay private has to be served
+    // from behind a real server-side check, not from this page.
+    if (inputPassword === course?.password) { // course?.password
                   setIsAuthorized(true);
                   localStorage.setItem(STORAGE_KEY + course.slug, 'true'); // persistir acceso
                 } else {
