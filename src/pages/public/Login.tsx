@@ -3,8 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../../config/supabase';
 import { Lock, Mail, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 
-const ALLOWED_EMAIL = 'jherrera@redciudadana.org.gt';
-
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -13,18 +11,12 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const from = (location.state as { from?: string })?.from || '/dashboard';
+  const from = (location.state as { from?: string })?.from || null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
-    if (email.trim().toLowerCase() !== ALLOWED_EMAIL) {
-      setError('Esta cuenta no tiene permisos para acceder al dashboard.');
-      setLoading(false);
-      return;
-    }
 
     try {
       const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -38,7 +30,13 @@ const Login: React.FC = () => {
         return;
       }
 
-      navigate(from, { replace: true });
+      if (from) {
+        navigate(from, { replace: true });
+        return;
+      }
+
+      const { data: isStaff } = await supabase.rpc('is_staff');
+      navigate(isStaff ? '/dashboard' : '/mi-cuenta', { replace: true });
     } catch {
       setError('Error de conexión. Inténtalo de nuevo.');
       setLoading(false);
@@ -54,10 +52,10 @@ const Login: React.FC = () => {
           </div>
         </div>
         <h2 className="text-center text-2xl font-bold text-gray-900">
-          Acceso al Dashboard
+          Iniciar sesión
         </h2>
         <p className="mt-2 text-center text-sm text-gray-500">
-          Ingresa con tu cuenta autorizada
+          Accede a tu cuenta de Conecta Futuro
         </p>
       </div>
 
@@ -125,7 +123,7 @@ const Login: React.FC = () => {
           </form>
 
           <p className="mt-6 text-center text-xs text-gray-400">
-            Acceso restringido. No se permite crear nuevas cuentas.
+            ¿No tienes cuenta? <a href="/register" className="text-primary-600 hover:text-primary-700 font-medium">Regístrate aquí</a>
           </p>
         </div>
       </div>
