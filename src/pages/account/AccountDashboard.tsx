@@ -190,7 +190,7 @@ const AccountDashboard: React.FC = () => {
               <div className="flex flex-wrap gap-2">
                 {accountData.skills.slice(0, 6).map((s) => (
                   <span key={s.id} className="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
-                    {s.skill.name}
+                    {s.skill?.name ?? 'Habilidad'}
                   </span>
                 ))}
               </div>
@@ -202,7 +202,7 @@ const AccountDashboard: React.FC = () => {
               <div className="flex flex-wrap gap-2">
                 {accountData.badges.slice(0, 6).map((b) => (
                   <span key={b.id} className="px-3 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-full">
-                    {b.badge.name}
+                    {b.badge?.name ?? 'Insignia'}
                   </span>
                 ))}
               </div>
