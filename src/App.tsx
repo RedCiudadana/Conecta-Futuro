@@ -32,6 +32,18 @@ import ScrollTopButton from './components/scrolltotopButton';
 import PublicLayout from './components/layouts/PublicLayout';
 import DashboardLayout from './components/layouts/DashboardLayout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import AccountRoute from './components/auth/AccountRoute';
+
+// Mi Cuenta layout + pages
+import AccountLayout from './components/layouts/AccountLayout';
+import AccountDashboard from './pages/account/AccountDashboard';
+import MyCourses from './pages/account/MyCourses';
+import MyCertificates from './pages/account/MyCertificates';
+import MyAttendance from './pages/account/MyAttendance';
+import MyProfile from './pages/account/MyProfile';
+
+// Account context provider
+import { AccountProvider } from './contexts/AccountContext';
 
 // Auth + Dashboard pages
 import Login from './pages/public/Login';
@@ -78,7 +90,7 @@ function App() {
           <Route path="community/:slug" element={<CommunityDetails />} />
         </Route>
 
-        {/* Protected dashboard routes */}
+        {/* Protected admin dashboard routes */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="courses" element={<CourseView />} />
@@ -86,6 +98,21 @@ function App() {
           <Route path="certificates" element={<Certificates />} />
           <Route path="community" element={<CommunityDashboard />} />
           <Route path="impacto" element={<ImpactoAdminPage />} />
+        </Route>
+
+        {/* Mi Cuenta — student self-service portal */}
+        <Route path="/mi-cuenta" element={
+          <AccountProvider>
+            <AccountRoute>
+              <AccountLayout />
+            </AccountRoute>
+          </AccountProvider>
+        }>
+          <Route index element={<AccountDashboard />} />
+          <Route path="cursos" element={<MyCourses />} />
+          <Route path="certificados" element={<MyCertificates />} />
+          <Route path="asistencias" element={<MyAttendance />} />
+          <Route path="perfil" element={<MyProfile />} />
         </Route>
 
         {/* 404 route */}

@@ -53,6 +53,15 @@ import AttendanceForm from './pages/public/AttendanceForm';
 import DigitalPassport from './pages/public/DigitalPassport';
 import PublicProfile from './pages/public/PublicProfile';
 
+// Mi Cuenta (student portal)
+import AccountLayout from './components/layouts/AccountLayout';
+import AccountDashboard from './pages/account/AccountDashboard';
+import MyCourses from './pages/account/MyCourses';
+import MyCertificates from './pages/account/MyCertificates';
+import MyAttendance from './pages/account/MyAttendance';
+import MyProfile from './pages/account/MyProfile';
+import { AccountProvider } from './contexts/AccountContext';
+
 const RootLayout: React.FC = () => (
   <AuthProvider>
     <ScrollToTop />
@@ -172,6 +181,21 @@ export const routes = [
       { path: 'analiticas', element: <AnalyticsPage /> },
       { path: 'impacto', element: <ImpactoAdminPage /> },
       { path: 'base-de-datos', element: <DatabaseManagementPage /> },
+    ],
+  },
+  {
+    path: '/mi-cuenta',
+    element: (
+      <AccountProvider>
+        <AccountLayout />
+      </AccountProvider>
+    ),
+    children: [
+      { index: true, element: <AccountDashboard /> },
+      { path: 'cursos', element: <MyCourses /> },
+      { path: 'certificados', element: <MyCertificates /> },
+      { path: 'asistencias', element: <MyAttendance /> },
+      { path: 'perfil', element: <MyProfile /> },
     ],
   },
   { path: '/*', element: <NotFound /> },

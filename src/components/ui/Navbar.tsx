@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Facebook, Linkedin, Youtube, Video, Instagram } from 'lucide-react';
+import { Menu, X, Facebook, Linkedin, Youtube, Video, Instagram, UserCircle, LogIn } from 'lucide-react';
+import { supabase } from '../../config/supabase';
 import Logo from './Logo';
 import LogoRedNegro from '../../assets/logorednegro.png';
 import LogoPpli from '../../assets/logoppli.png';
@@ -9,7 +10,18 @@ import LogoChiquito from '../../assets/redciudadana.png';
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
+  
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setLoggedIn(!!data.session?.user);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, sess) => {
+      setLoggedIn(!!sess?.user);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -108,6 +120,17 @@ const Navbar: React.FC = () => {
               <Link to="/contact" className="text-gray-700 hover:text-primary-600 font-medium">
                 Contacto
               </Link>
+              {loggedIn ? (
+                <Link to="/mi-cuenta" className="flex items-center gap-1.5 px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 transition-colors">
+                  <UserCircle className="h-4 w-4" />
+                  Mi Cuenta
+                </Link>
+              ) : (
+                <Link to="/login" className="flex items-center gap-1.5 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                  <LogIn className="h-4 w-4" />
+                  Iniciar sesión
+                </Link>
+              )}
             </div>
             
             {/* Mobile Menu Button */}
@@ -142,6 +165,17 @@ const Navbar: React.FC = () => {
               <Link to="/contact" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Contacto
               </Link>
+              {loggedIn ? (
+                <Link to="/mi-cuenta" className="flex items-center gap-2 px-3 py-2 text-base font-medium text-sky-700 hover:bg-sky-50 rounded-md">
+                  <UserCircle className="h-5 w-5" />
+                  Mi Cuenta
+                </Link>
+              ) : (
+                <Link to="/login" className="flex items-center gap-2 px-3 py-2 text-base font-medium text-sky-700 hover:bg-sky-50 rounded-md">
+                  <LogIn className="h-5 w-5" />
+                  Iniciar sesión
+                </Link>
+              )}
               
               {/* Mobile Social Links */}
               <div className="flex items-center space-x-4 px-3 py-2 border-t mt-2">
