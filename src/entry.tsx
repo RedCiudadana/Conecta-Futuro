@@ -52,6 +52,10 @@ import CourseRegistration from './pages/public/CourseRegistration';
 import AttendanceForm from './pages/public/AttendanceForm';
 import DigitalPassport from './pages/public/DigitalPassport';
 import PublicProfile from './pages/public/PublicProfile';
+import Login from './pages/public/Login';
+import Register from './pages/public/Register';
+import ForgotPassword from './pages/public/ForgotPassword';
+import MobileApi from './pages/public/MobileApi';
 
 // Mi Cuenta (student portal)
 import AccountLayout from './components/layouts/AccountLayout';
@@ -76,6 +80,10 @@ export const routes = [
     element: <RootLayout />,
     children: [
       { index: true, element: <LandingPage /> },
+      { path: 'login', element: <Login /> },
+      { path: 'register', element: <Register /> },
+      { path: 'forgot-password', element: <ForgotPassword /> },
+      { path: 'mobile-api', element: <MobileApi /> },
       { path: 'courses', element: <CourseCatalog /> },
       { path: 'course-sessions', element: <CourseSessions /> },
       { path: 'asistencia/:token', element: <AttendanceForm /> },

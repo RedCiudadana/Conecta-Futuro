@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Info, CheckCircle } from 'lucide-react';
-import { supabase } from '../config/supabase';
-import { GUATEMALA_DEPARTMENTS } from '../types/participants';
-import { trackEvent } from '../services/analyticsEventService';
+import { supabase } from '../../config/supabase';
+import { GUATEMALA_DEPARTMENTS } from '../../types/participants';
+import { trackEvent } from '../../services/analyticsEventService';
 
 const AGE_RANGES = ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'];
 const PUEBLOS = ['Maya', 'Garífuna', 'Xinka', 'Ladino/Mestizo', 'Otro', 'Prefiero no decir'];
